@@ -12,6 +12,8 @@ from segment_fetcher_new import (
     GenSegmentConfigSaAN,
     USE_SELECT_SIGN_REPLACE_LUA
 )
+
+from sample_strategy import ChooseTokenStrategy, RemaskTokenStrategy
 from hit_rate_perf import HitRatePerfFlow
 
 TAB_NEBULA = 30000
@@ -442,31 +444,30 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
             """,
         )
     
-    def enrich_infer_params(self):
+    def enrich_decode_params(self):
         self.enrich_attr_by_lua(
-            import_common_attr=["remask_type", "p_topk", "p_topp", "p_temp", "sample_type"],
-            function_for_item="calculate",
-            export_item_attr=['remask_type', "p_topk", "p_topp", "p_temp", "sample_type"],
+            import_common_attr=["random_remask_flag", "p_topk", "p_topp", "p_temp"],
+            export_common_attr=["random_remask_flag", "p_topk", "p_topp", "p_temp"],
+            function_for_common="calculate",
             lua_script="""
             function calculate()
-              local remask_type = remask_type or {0.0}
-              local p_topk = p_topk or {10.0}
-              local p_topp = p_topp or {0.0}
-              local p_temp = p_temp or {1.0}
-              local sample_type = sample_type or {0.0}
-              return remask_type, p_topk, p_topp, p_temp, sample_type
+              local random_remask_flag = random_remask_flag or 0
+              local p_topk = p_topk or 10
+              local p_topp = p_topp or 1.0
+              local p_temp = p_temp or 1.0
+              return random_remask_flag, p_topk, p_topp, p_temp
             end
             """,
         )
         self.log_debug_info(
             log_tag="infer_params",
-            common_attrs=["remask_type", "p_topk", "p_topp", "p_temp", "sample_type"],
+            common_attrs=["random_remask_flag", "p_topk", "p_topp", "p_temp"],
             for_debug_request_only=False,
         )
 
     def extract_feature(self):
         self.enrich_infer_labels()
-        self.enrich_infer_params()
+        self.enrich_decode_params()
         self.extract_kuiba_parameter(
             config=kuiba_parameter_common_config,
             is_common_attr=True,
@@ -648,36 +649,6 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         )
         print("model.outputs: ", model.outputs)
 
-        self.enrich_attr_by_lua(
-            import_item_attr=["topk_indices", "topk_prob"],
-            function_for_item="calculate",
-            export_item_attr=["topk_indices", "topk_prob"],
-            lua_script="""
-            function calculate()
-              local token_num = 16
-              local indices_shape = #topk_indices
-              local prob_shape = #topk_prob
-              local choosed_indices = {}
-              local choosed_probs = {}
-              if indices_shape % token_num == 0 then
-                local topk = indices_shape / token_num
-                for i = 1, token_num do
-                    local index = (i-1) * topk + 1
-                    table.insert(choosed_indices, topk_indices[index])
-                    table.insert(choosed_probs, topk_prob[index])
-                end
-              else
-                for i = 1, token_num do
-                    table.insert(choosed_indices, 512)
-                    table.insert(choosed_probs, 0.0)
-                end
-              end
-
-              return choosed_indices, choosed_probs
-            end
-            """,
-        )
-
     def fill_full_mask_semantic_id_v2(self):
         self.enrich_attr_by_lua(
             function_for_item="calculate",
@@ -695,233 +666,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
             end
             """
         )
-    
-    def sample_by_probs(self):
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            import_item_attr=["probs", "p_topk", "p_topp", "p_temp", "sample_type", "topk_indices", "topk_prob"],
-            export_item_attr=["token_indices", "token_probs"],
-            lua_script="""
 
-            function norm_prob(probs_pair, temp)
-              local sum_prob = 0.0
-              if temp == 0.0 then
-                temp = 0.000001
-              end
-
-              for i = 1, #probs_pair do
-                probs_pair[i].prob = probs_pair[i].prob ^ (1 / temp)
-                sum_prob = sum_prob + probs_pair[i].prob
-              end
-              for i = 1, #probs_pair do
-                probs_pair[i].prob = probs_pair[i].prob / sum_prob
-              end
-              return probs_pair
-            end
-
-            function prob_sample(sorted_probs_pair)
-              local rand_value = math.random()
-              local sample_sum_prob = 0.0
-              for i = 1, #sorted_probs_pair do
-                sample_sum_prob = sample_sum_prob + sorted_probs_pair[i].prob
-                if rand_value <= sample_sum_prob then
-                  return sorted_probs_pair[i].index, sorted_probs_pair[i].prob, sorted_probs_pair[i].ori_prob
-                end
-              end
-              return sorted_probs_pair[#sorted_probs_pair].index, sorted_probs_pair[#sorted_probs_pair].prob, sorted_probs_pair[#sorted_probs_pair].ori_prob
-            end
-
-            function uniform_sample(probs_pair)
-              local rand_idx = math.random(1, #probs_pair)
-              return probs_pair[rand_idx].index, probs_pair[rand_idx].prob, probs_pair[rand_idx].ori_prob
-            end
-
-            function topk_sample(probs_pair, topk)
-              local topk_pairs = {}
-              table.sort(probs_pair, function(a, b)
-                return a.prob > b.prob
-              end)
-              if topk == #probs_pair then
-                return probs_pair
-              end
-              print("topk_sample: ", topk)
-              print("topk1_probs: ", probs_pair[1].prob)
-              print("topk2_probs: ", probs_pair[2].prob)
-              print("topk3_probs: ", probs_pair[3].prob)
-
-              for i = 1, topk do
-                table.insert(topk_pairs, probs_pair[i])
-              end
-              return topk_pairs
-
-            end
-
-            function topp_sample(sorted_probs_pair, topp)
-              local topp_pairs = {}
-              local sum_prob = 0.0
-              for i = 1, #sorted_probs_pair do
-                if sum_prob + sorted_probs_pair[i].prob < topp then
-                  sum_prob = sum_prob + sorted_probs_pair[i].prob
-                  table.insert(topp_pairs, sorted_probs_pair[i])
-                else
-                  break
-                end
-              end
-              if #topp_pairs == 0 then
-                table.insert(topp_pairs, sorted_probs_pair[1])
-              end
-              return topp_pairs
-            end
-
-            function calculate()
-              local token_num = 16
-              local vocab_size = 512
-              local probs_shape = #probs
-
-              local token_indices = {}
-              local token_probs = {}
-
-              for i = 1, token_num do
-                local probs_i = {}
-                for j = 1, vocab_size do
-                  local idx = (i-1) * vocab_size + j
-                  table.insert(probs_i, {prob = probs[idx], index = j - 1, ori_prob = probs[idx]})
-                end
-
-                print("probs_shape", i, #probs_i, probs_shape)
-
-                probs_i = topk_sample(probs_i, p_topk[1])
-
-                print("topk_sample: ", #probs_i, probs_i[1].prob, probs_i[1].index)
-                print("topk_from_infer: ", topk_indices[i], topk_prob[i])
-
-                if p_topp[1] ~= 1.0 then
-                  print("topp_sample: ", p_topp[1])
-                  probs_i = norm_prob(probs_i, 1.0)
-                  probs_i = topp_sample(probs_i, p_topp[1])
-                end
-
-                if p_temp[1] ~= 1.0 then
-                  print("norm_prob: ", p_temp[1])
-                  probs_i = norm_prob(probs_i, p_temp[1])
-                end
-
-                if sample_type[1] == 0 then
-                  print("uniform_sample: ", #probs_i)
-                  local token_index, token_prob, token_ori_prob = uniform_sample(probs_i)
-                  table.insert(token_indices, token_index)
-                  table.insert(token_probs, token_ori_prob)
-                else
-                  print("prob_sample: ", #probs_i)
-                  local token_index, token_prob, token_ori_prob = prob_sample(probs_i)
-                  table.insert(token_indices, token_index)
-                  table.insert(token_probs, token_ori_prob)
-                end
-              end
-              return token_indices, token_probs
-            end
-            """
-        )
-        # self.log_debug_info(
-        #     log_tag="sample_by_probs",
-        #     item_attrs=["probs"],
-        #     for_debug_request_only=False,
-        # )
-        self.log_debug_info(
-            log_tag="sample_by_probs",
-            item_attrs=["token_indices", "token_probs"],
-            for_debug_request_only=False,
-        )
-
-    def remask_semantic_id_v2(self, infer_step, i):
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            import_item_attr=["semantic_id_v2", "semantic_id_v2_mask", 
-                              "token_indices", "token_probs", "remask_type"],
-            export_item_attr=["semantic_id_v2", "semantic_id_v2_mask"],
-            lua_script="""
-                function low_confidence_remask()
-                  local infer_step = %d
-                  local current_step = %d
-                  local token_num = 16
-
-                  local t = 1.0 - (current_step + 0.0) / infer_step
-                  local s = t - (1.0 / infer_step)
-                  local mask_token_num = math.floor(token_num * s)
-
-                  local prob_indices = {}
-                  for i = 1, token_num do
-                    if semantic_id_v2_mask[i] == 1.0 then
-                      table.insert(prob_indices, {
-                        index = i,
-                        prob = token_probs[i]
-                      })
-                    end
-                  end
-
-                  table.sort(prob_indices, function(a, b)
-                    return a.prob < b.prob
-                  end)
-
-                  local semantic_id_v2_new = {}
-                  local semantic_id_v2_mask_new = {}
-                  for i = 1, token_num do
-                    if semantic_id_v2_mask[i] == 0.0 then
-                      table.insert(semantic_id_v2_new, semantic_id_v2[i])
-                      table.insert(semantic_id_v2_mask_new, 0.0)
-                    else
-                      table.insert(semantic_id_v2_new, token_indices[i] + 0.0)
-                      table.insert(semantic_id_v2_mask_new, 0.0)
-                    end
-                  end
-
-                  for i = 1, mask_token_num do
-                    semantic_id_v2_new[prob_indices[i].index] = 512.0
-                    semantic_id_v2_mask_new[prob_indices[i].index] = 1.0
-                  end
-
-                  return semantic_id_v2_new, semantic_id_v2_mask_new
-                end
-
-                function random_remask()
-                  local infer_step = %d
-                  local current_step = %d
-                  local token_num = 16
-
-                  local t = 1.0 - (current_step + 0.0) / infer_step
-                  local s = t - (1.0 / infer_step)
-                  local mask_ratio = s / t
-
-                  local semantic_id_v2_new = {}
-                  local semantic_id_v2_mask_new = {}
-
-                  for i = 1, token_num do
-                    if semantic_id_v2_mask[i] == 0.0 then
-                      table.insert(semantic_id_v2_new, semantic_id_v2[i])
-                      table.insert(semantic_id_v2_mask_new, 0.0)
-                    else
-                      if math.random() < mask_ratio then
-                        table.insert(semantic_id_v2_new, 512.0)
-                        table.insert(semantic_id_v2_mask_new, 1.0)
-                      else
-                        table.insert(semantic_id_v2_new, token_indices[i] + 0.0)
-                        table.insert(semantic_id_v2_mask_new, 0.0)
-                      end
-                    end
-                  end
-
-                  return semantic_id_v2_new, semantic_id_v2_mask_new
-                end
-
-                function calculate()
-                  if remask_type[1] == 0 then
-                    return low_confidence_remask()
-                  else
-                    return random_remask()
-                  end
-                end
-            """ % (infer_step, i, infer_step, i)
-        )
 
     def retrieve_from_tokens(self):
         self.pack_item_attr(
@@ -972,6 +717,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
       
     def prepare_infer_params(self):
         self.if_("is_debug == nil or is_debug == 0")
+        # https://kconf.corp.kuaishou.com/#/reco/model2/reco_llada_params
         self.get_kconf_params(
             kconf_configs=[
               {
@@ -1030,33 +776,27 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
               },
               {
                   "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "remask_type",
-                  "json_path": "remask_type",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
                   "export_common_attr": "p_topk",
                   "json_path": "p_topk",
-                  "default_value": [10.0],
+                  "default_value": 10,
               },
               {
                   "kconf_key": "reco.model2.reco_llada_params",
                   "export_common_attr": "p_topp",
                   "json_path": "p_topp",
-                  "default_value": [0.8],
+                  "default_value": 1.0,
               },
               {
                   "kconf_key": "reco.model2.reco_llada_params",
                   "export_common_attr": "p_temp",
                   "json_path": "p_temp",
-                  "default_value": [1.0],
+                  "default_value": 1.0,
               },
               {
                   "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "sample_type",
-                  "json_path": "sample_type",
-                  "default_value": [0.0],
+                  "export_common_attr": "random_remask_flag",
+                  "json_path": "random_remask_flag",
+                  "default_value": 0,
               },
             ]
         )
@@ -1090,16 +830,30 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 for_debug_request_only=False,
             )
             self.infer()
-            self.sample_by_probs() # output: token_indices, token_probs
-            self.remask_semantic_id_v2(infer_step, i)
+            self.enrich_attr_by_py(
+                function_set=ChooseTokenStrategy,
+                py_function=ChooseTokenStrategy.choose_token
+            )
+            self.enrich_attr_by_lua(
+                function_for_common="calculate",
+                export_common_attr=["infer_step", "current_step"],
+                lua_script="""
+                    function calculate()
+                      return %d, %d
+                    end
+                """ % (infer_step, i)
+            )
+            self.enrich_attr_by_py(
+                function_set=RemaskTokenStrategy,
+                py_function=RemaskTokenStrategy.remask_token
+            )
             self.log_debug_info(
                 log_tag="infer_step_%d_mask" % i,
                 item_attrs=[
                     "semantic_id_v2",
                     "semantic_id_v2_mask",
                     "token_indices",
-                    "token_probs",
-                    "remask_type",
+                    "token_probs"
                 ],
                 for_debug_request_only=False,
             )
@@ -1120,7 +874,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         )
         self.log_debug_info(
             log_tag="final_output",
-            item_attrs=["token_indices", "token_probs"],
+            item_attrs=["token_indices"],
             for_debug_request_only=False,
         )
         self.retrieve_from_tokens()
@@ -1132,7 +886,7 @@ predict_for_all = PredictServerFlow(name="predict_for_all").main()
 eval_flow = HitRatePerfFlow(name="hit_rate_perf").hit_rate_perf()
 
 service = LeafService(
-    kess_name="grpc_RecoLlada",  # 该 kess 不生效，由 krp 替换
+    kess_name="grpc_RecoLlada_Debug",  # 该 kess 不生效，由 krp 替换
     item_attrs_from_request=["reco_photo_info_str", "living"],
     common_attrs_from_request=[
         "is_debug",
@@ -1156,11 +910,10 @@ service.common_attrs_from_request += [
     "long_view",
     "short_view",
     "play_complete",
-    "remask_type",
     "p_topk",
     "p_topp",
     "p_temp",
-    "sample_type",
+    "random_remask_flag",
     "eval_pos_photo_id_list",
 ]
 service.return_item_attrs(["token_indices", "token_probs"])
