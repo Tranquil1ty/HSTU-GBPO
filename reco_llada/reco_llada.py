@@ -2838,25 +2838,28 @@ else:
     # item_pred_logits: [b, item_seq_len, vocab_size - 1]
     # item_token_mask: [b, item_seq_len]
     # item_token_label: [b, item_seq_len]
-    return_probs = True
+    return_logits = True
 
     token_num = senmantic_id_token_num
     item_pred_logits, item_token_mask, item_token_label, _ = fr_model()
     item_pred_logits = tf.cast(item_pred_logits, tf.float32)
 
-    if return_probs:
+    if return_logits:
         top_k = 10
         batch_size = tf.shape(item_pred_logits)[0]
         pred_token_num = item_pred_logits.shape[1]
         vocab_size = item_pred_logits.shape[2]
-        item_probs = tf.nn.softmax(item_pred_logits, axis=-1)
-        topk_prob, topk_indices = tf.nn.top_k(item_probs, k=top_k)  # [b, item_seq_len, top_k]
+        item_logits = tf.reshape(item_pred_logits, (batch_size, pred_token_num * vocab_size))
+        targets = [("logits", item_logits)]
         
-        topk_prob = tf.reshape(topk_prob, (batch_size, top_k * token_num ))
-        topk_indices = tf.reshape(topk_indices, (batch_size, top_k * token_num))
-        item_probs = tf.reshape(item_probs, (batch_size, pred_token_num * vocab_size))
+        # item_probs = tf.nn.softmax(item_pred_logits, axis=-1)
+        # topk_prob, topk_indices = tf.nn.top_k(item_probs, k=top_k)  # [b, item_seq_len, top_k]
+        
+        # topk_prob = tf.reshape(topk_prob, (batch_size, top_k * token_num ))
+        # topk_indices = tf.reshape(topk_indices, (batch_size, top_k * token_num))
+        # item_probs = tf.reshape(item_probs, (batch_size, pred_token_num * vocab_size))
 
-        targets = [("probs", item_probs), ("topk_prob", topk_prob), ("topk_indices", topk_indices)]
+        # targets = [("logits", item_logits), ("probs", item_probs), ("topk_prob", topk_prob), ("topk_indices", topk_indices)]
     else:
         top_k = 10
         temperature = 0.0
