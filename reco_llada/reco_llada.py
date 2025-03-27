@@ -412,17 +412,7 @@ if args.with_kai_v2 and not args.local_debug:
         remap=True, data_source_name=['train', 'test'],
         channel_name=reco_channel)
 
-    # def filter_mask_wrapper(dataset):
-    #     dataset.add_feature('sample_type', dataset.DENSE, tf.int64, 1)
 
-    #     def mask_fn(batch):
-    #         sample_type = batch['sample_type']
-    #         mask = tf.math.logical_or(tf.math.equal(sample_type, 1),
-    #                                   tf.math.greater(sample_type, 2))
-    #         return mask
-    #     return mask_fn
-    # config.declare_sample_filter(
-    #     filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
     use_flash_attention = False if config.Config().runtime_option.mode == "train" else False
 
     # for act 1w 64*512 for million 1K interest embedding
@@ -440,6 +430,18 @@ if args.with_kai_v2 and not args.local_debug:
     #     output_column_type="list<float16>",
     #     data_source_name = ['train', 'test'],
     #     channel_name = reco_channel)
+
+    def filter_mask_wrapper(dataset):
+        dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
+
+        def mask_fn(batch):
+            sample_type = batch['stid_mix_filter_flag']
+            mask = tf.math.equal(sample_type, 1)
+            return mask
+        return mask_fn
+    
+    config.declare_sample_filter(
+        filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
 
 
 elif args.local_debug:
