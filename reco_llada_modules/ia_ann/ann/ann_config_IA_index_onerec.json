@@ -1,0 +1,306 @@
+{
+  "_CONFIG_VERSION": "aeeac96d7010600b5c27f3ca4116de33_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-03-27 13:44:39",
+  "_DRAGONFLY_VERSION": "0.8.3",
+  "ann_config": {
+    "ann_pool": {
+      "index_update_interval_second": 60
+    },
+    "auto_calc": [
+      {
+        "dest_bucket": "photo_index",
+        "expire_second": 600,
+        "max_item_num": 50000,
+        "recalc_interval_second": 0,
+        "src_data_type": "photo"
+      }
+    ],
+    "buckets": {
+      "photo_index": {
+        "ann": {
+          "max_index_size": 0,
+          "min_index_size": 0,
+          "parameter": {
+            "dim": 128,
+            "space": "ip"
+          },
+          "threshold": {
+            "anisotropic_quantization_threshold": 0.4,
+            "final_neighbors_num": 1000,
+            "leaves_num": 1100,
+            "leaves_to_search": 55,
+            "pre_reorder_neighbors_num": 2400,
+            "training_sample_size": 300000
+          },
+          "type_name": "scannAnnFloat"
+        },
+        "data_type": "photo",
+        "dynamic_threshold": {
+          "threshold_kconf_key": "rinf.rlRunner.i2i_ann_ia_128_index_config"
+        }
+      }
+    },
+    "datas": {
+      "photo": {
+        "kv": {
+          "cache_expire_second": 21600,
+          "dim": 128,
+          "max_item_num": 10000000
+        },
+        "offline_id_converter": {
+          "type_name": "mioEmbeddingIdConverter"
+        },
+        "online_id_converter": {
+          "type_name": "mioEmbeddingIdConverter"
+        }
+      }
+    },
+    "kess_config": {},
+    "meta_parser": {
+      "bucket_slot_map": {
+        "photo": 17
+      },
+      "enable_fixed_slot_bits": false,
+      "enable_kuiba_sign": false,
+      "enforce_use_slot_form_item": false,
+      "parse_data_in_float": false,
+      "slot_bits": 0,
+      "slot_bits_map": {
+        "17": {
+          "begin_bit": 0,
+          "end_bit": 128
+        }
+      },
+      "type_name": "mioEmbeddingParser"
+    },
+    "mq_consumer": {
+      "queue_names": [
+        "ia_emb_128_for_ann0",
+        "ia_emb_128_for_ann1",
+        "ia_emb_128_for_ann2",
+        "ia_emb_128_for_ann3"
+      ],
+      "thread_num": 8,
+      "type_name": "btqueueMqConsumer"
+    },
+    "precision_eval": [
+      {
+        "dest_bucket": "photo_index",
+        "space": "ip",
+        "src_data_type": "photo"
+      }
+    ],
+    "server_role": 0
+  },
+  "attrs_from_request": {
+    "common_attr": [
+      "i2i_ann_topk",
+      "photo_emb_list",
+      "photo_id_list"
+    ]
+  },
+  "default_request_type": "cpu_knn",
+  "kess_config": {
+    "service_name": "grpc_ann_ia_128_index"
+  },
+  "pipeline_manager_config": {
+    "base_pipeline": {
+      "processor": {
+        "copy_item_meta_info_6653EF": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "ann_score",
+              "src_item",
+              "src_num"
+            ],
+            "$downstream_new_result": true,
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "ann_pid"
+            ]
+          },
+          "save_item_id_to_attr": "ann_pid",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "enrich_attr_by_lua_1AC9E5": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "photo_id_list"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "photo_id_list_key"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "photo_id_list_key"
+          ],
+          "function_for_common": "func",
+          "import_common_attr": [
+            "photo_id_list"
+          ],
+          "lua_script": "function func()\n                    local photo_id_list_key = {}\n                    local semantic_id_str = \"\"\n                    for i=1,#photo_id_list do\n                        if i % 16 == 1 then\n                            semantic_id_str = tostring(photo_id_list[i])\n                        else\n                            semantic_id_str = semantic_id_str ..'.'..tostring(photo_id_list[i])\n                        end\n                        if i % 16 == 0 then\n                            table.insert(photo_id_list_key, util.CityHash64(semantic_id_str))\n                        end\n                    end\n                return photo_id_list_key\n                end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "log_debug_info_E26AE0": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "ann_pid",
+              "ann_score",
+              "src_item",
+              "src_num"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "src_num",
+            "src_item",
+            "ann_pid",
+            "ann_score"
+          ],
+          "respect_sample_logging": false,
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "pack_item_attr_C25869": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "ann_pid",
+              "ann_score",
+              "src_item",
+              "src_num"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "sim_photo_ids",
+              "sim_photo_num",
+              "sim_photo_scores",
+              "sim_photo_src"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "concat",
+              "from_item_attr": "ann_pid",
+              "to_common_attr": "sim_photo_ids"
+            },
+            {
+              "aggregator": "concat",
+              "from_item_attr": "ann_score",
+              "to_common_attr": "sim_photo_scores"
+            },
+            {
+              "aggregator": "concat",
+              "from_item_attr": "src_item",
+              "to_common_attr": "sim_photo_src"
+            },
+            {
+              "aggregator": "concat",
+              "from_item_attr": "src_num",
+              "to_common_attr": "sim_photo_num"
+            }
+          ],
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "retrieve_by_local_ann_2B1F19": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "i2i_ann_topk",
+              "photo_emb_list",
+              "photo_id_list_key"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "ann_score",
+              "src_item",
+              "src_num"
+            ]
+          },
+          "dest_bucket": "photo_index",
+          "downstream_processor": "copy_item_meta_info_6653EF",
+          "reason": 1,
+          "save_distance_to_attr": "ann_score",
+          "save_seq_num_to_attr": "src_num",
+          "save_src_item_to_attr": "src_item",
+          "src_data_type": "photo",
+          "src_embedding_list_attr": "photo_emb_list",
+          "src_items_attr": "photo_id_list_key",
+          "top_k": "{{i2i_ann_topk}}",
+          "type_name": "CommonRecoLocalAnnRetriever"
+        },
+        "truncate_EA6E76": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "size_limit": 0,
+          "type_name": "CommonRecoTruncateArranger"
+        }
+      },
+      "type_name": "CommonRecoPipeline"
+    },
+    "pipeline_map": {
+      "cpu_knn_retr": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "enrich_attr_by_lua_1AC9E5",
+          "truncate_EA6E76",
+          "retrieve_by_local_ann_2B1F19",
+          "copy_item_meta_info_6653EF",
+          "log_debug_info_E26AE0",
+          "pack_item_attr_C25869"
+        ]
+      },
+      "cpu_knn_retr_demo": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "enrich_attr_by_lua_1AC9E5",
+          "truncate_EA6E76",
+          "retrieve_by_local_ann_2B1F19",
+          "copy_item_meta_info_6653EF",
+          "log_debug_info_E26AE0",
+          "pack_item_attr_C25869"
+        ]
+      }
+    }
+  },
+  "request_type_config": {
+    "cpu_knn": [
+      "cpu_knn_retr"
+    ],
+    "cpu_knn_demo": [
+      "cpu_knn_retr_demo"
+    ]
+  },
+  "return_common_attrs": [
+    "sim_photo_ids",
+    "sim_photo_num",
+    "sim_photo_scores",
+    "sim_photo_src"
+  ],
+  "return_item_attrs": [
+    "ann_pid",
+    "ann_score",
+    "src_item"
+  ]
+}

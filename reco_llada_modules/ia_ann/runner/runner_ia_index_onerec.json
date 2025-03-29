@@ -1,0 +1,1341 @@
+{
+  "_CONFIG_VERSION": "9702e280350d5406893e7d447f4c817d_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-03-21 17:28:15",
+  "_DRAGONFLY_VERSION": "0.8.3",
+  "kess_config": {},
+  "pipeline_manager_config": {
+    "base_pipeline": {
+      "processor": {
+        "_branch_controller_CB0CDDBB": {
+          "$branch_start": "_branch_controller_CB0CDDBB",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_201"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_201"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_1": {
+          "$branch_start": "_branch_controller_CB0CDDBB_1",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_remote_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_202"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_202"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_2": {
+          "$branch_start": "_branch_controller_CB0CDDBB_2",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _send_btq_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_203"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_203"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_3": {
+          "$branch_start": "_branch_controller_CB0CDDBB_3",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_204"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_204"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_4": {
+          "$branch_start": "_branch_controller_CB0CDDBB_4",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_remote_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_205"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_205"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_5": {
+          "$branch_start": "_branch_controller_CB0CDDBB_5",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _send_btq_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_206"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_206"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_6": {
+          "$branch_start": "_branch_controller_CB0CDDBB_6",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_207"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_207"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_7": {
+          "$branch_start": "_branch_controller_CB0CDDBB_7",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_remote_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_208"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_208"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_8": {
+          "$branch_start": "_branch_controller_CB0CDDBB_8",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _send_btq_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_209"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_209"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_9": {
+          "$branch_start": "_branch_controller_CB0CDDBB_9",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec.py in _get_remote_embedding(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_210"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_210"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "copy_item_meta_info_59BDA4": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "item_seq"
+            ]
+          },
+          "save_item_seq_to_attr": "item_seq",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "copy_item_meta_info_6A6FD1": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "photo_id"
+            ]
+          },
+          "save_item_id_to_attr": "photo_id",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "count_reco_result_B061F6": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "item_num"
+            ],
+            "$output_item_attrs": []
+          },
+          "save_result_size_to_common_attr": "item_num",
+          "type_name": "CommonRecoCountRecoResultEnricher"
+        },
+        "deduplicate_BBE8FF": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "type_name": "CommonRecoResultsDeduplicateArranger"
+        },
+        "enrich_attr_by_lua_1B4EAF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "select_lv_rate_threshold",
+              "select_show_count_threshold"
+            ],
+            "$input_item_attrs": [
+              "long_play_count",
+              "show_count"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_lv",
+              "lv_rate"
+            ]
+          },
+          "export_item_attr": [
+            "is_lv",
+            "lv_rate"
+          ],
+          "function_for_item": "calc",
+          "import_common_attr": [
+            "select_lv_rate_threshold",
+            "select_show_count_threshold"
+          ],
+          "import_item_attr": [
+            "long_play_count",
+            "show_count"
+          ],
+          "lua_script": "function calc()\n                local is_lv = 1;\n                local lv_rate = long_play_count/show_count;\n                if (lv_rate < select_lv_rate_threshold) or (show_count < select_show_count_threshold) then\n                    is_lv = 0;\n                end \n                return is_lv, lv_rate;\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_9C2E89": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "trigger_string"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "photo_id_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "photo_id_list"
+          ],
+          "function_for_common": "stringToIntArray",
+          "import_common_attr": [
+            "trigger_string"
+          ],
+          "lua_script": "function stringToIntArray()\n                local photo_id_list = {}\n                for pid_str in string.gmatch(trigger_string, \"[^,]+\") do\n                    local pid = tonumber(pid_str)\n                    if pid then\n                        table.insert(photo_id_list, pid)\n                    end\n                end\n                return photo_id_list\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_BC2DFA": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_lv_count",
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "is_lv_rate"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "is_lv_rate"
+          ],
+          "function_for_common": "gen_common_attrs",
+          "import_common_attr": [
+            "is_lv_count",
+            "item_num"
+          ],
+          "lua_script": "function gen_common_attrs() return (is_lv_count/item_num) end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_C729C0": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "duration_ms",
+              "e_vv_cnt",
+              "g_vv_cnt",
+              "long_play_count",
+              "n_vv_cnt",
+              "photo_id",
+              "show_count",
+              "upload_time"
+            ],
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "duration_ms",
+              "e_vv_cnt",
+              "g_vv_cnt",
+              "n_vv_cnt",
+              "photo_id",
+              "upload_time"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_remove"
+            ]
+          },
+          "export_item_attr": [
+            "is_remove"
+          ],
+          "function_for_item": "calc",
+          "import_item_attr": [
+            "e_vv_cnt",
+            "n_vv_cnt",
+            "g_vv_cnt",
+            "photo_id",
+            "duration_ms",
+            "upload_time"
+          ],
+          "lua_script": "function calc()\n                local is_remove = 0;\n                local e_vv = e_vv_cnt or 0;\n                local n_vv = n_vv_cnt or 0;\n                local g_vv = g_vv_cnt or 0;\n                local total_vv = n_vv + g_vv + e_vv;\n                local duration = duration_ms or -1;\n                local pid = photo_id or -1;\n                local upload_t = upload_time or 0;\n                local now_in_ms = os.time() * 1000;\n                local ms_per_day = 24 * 60 * 60 * 1000;\n                \n                if ((pid < 0) or (duration < 0) or (total_vv < 100)) then\n                    is_remove = 1;\n                end \n                -- if (upload_t < now_in_ms - 30 * ms_per_day) then\n                -- is_remove = 1; \n                -- end \n                return is_remove;\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "fetch_message_7347EE": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "trigger_string"
+            ],
+            "$output_item_attrs": []
+          },
+          "btq_batch_size": 1,
+          "btq_prefix": "missed_trigger_pid",
+          "group_id": "test",
+          "output_attr": "trigger_string",
+          "type_name": "OfflineMessageFetchEnricher"
+        },
+        "fetch_remote_embedding_C2D02F": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_id"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "photo_emb"
+            ]
+          },
+          "colossusdb_embd_model_name": "wxm_mm_sim_gsu_emb",
+          "colossusdb_embd_table_name": "emb_wxm_mm_sim_gsu_128_new",
+          "downstream_processor": "pack_attr_to_bytes_B10D5A",
+          "id_converter": {
+            "type_name": "plainIdConverter"
+          },
+          "input_attr_name": "photo_id",
+          "is_raw_data": true,
+          "output_attr_name": "photo_emb",
+          "protocol": 1,
+          "query_source_type": "item_attr",
+          "raw_data_type": "int16",
+          "size": 128,
+          "timeout_ms": 50,
+          "type_name": "FetchRemoteEmbeddingEnricher"
+        },
+        "filter_by_attr_388379": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_emb"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "photo_emb",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_D65A99": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_remove"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_remove",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "generate_update_message_798005": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_lv",
+              "photo_emb",
+              "photo_id"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "update_message0",
+              "update_message1",
+              "update_message2",
+              "update_message3"
+            ],
+            "$output_item_attrs": []
+          },
+          "compress_type": "mio_int16",
+          "expire_seconds": 172800,
+          "id_converter": {
+            "type_name": "mioEmbeddingIdConverter"
+          },
+          "inputs": [
+            {
+              "embedding_attr": "photo_emb",
+              "sign_attr": "photo_id",
+              "slot": 17
+            }
+          ],
+          "save_result_to_common_attr": "update_message",
+          "shards": 4,
+          "target_item": {
+            "is_lv": 1
+          },
+          "type_name": "MioUpdateMessageEnricher",
+          "use_raw_embedding": false
+        },
+        "get_item_attr_by_distributed_index_77ACF2": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "duration_ms",
+              "e_vv_cnt",
+              "g_vv_cnt",
+              "long_play_count",
+              "n_vv_cnt",
+              "photo_id",
+              "show_count",
+              "upload_time"
+            ]
+          },
+          "attrs": [
+            "photo_id",
+            "upload_time",
+            "duration_ms",
+            {
+              "name": "e_vv_cnt",
+              "path": "explore_stat.real_show_count"
+            },
+            {
+              "name": "n_vv_cnt",
+              "path": "nebula_stats.real_show_count"
+            },
+            {
+              "name": "g_vv_cnt",
+              "path": "thanos_stats.real_show_count"
+            },
+            "long_play_count",
+            "show_count"
+          ],
+          "downstream_processor": "enrich_attr_by_lua_C729C0",
+          "photo_store_kconf_key": "reco.distributedIndex.hotPhotoStoreConfig",
+          "type_name": "CommonRecoDistributedIndexItemAttrEnricher",
+          "use_dynamic_photo_store": true
+        },
+        "get_kconf_params_2A0509": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "i2i_ann_topk"
+            ],
+            "$output_item_attrs": []
+          },
+          "kconf_configs": [
+            {
+              "default_value": 50,
+              "export_common_attr": "i2i_ann_topk",
+              "json_path": "ann_retrieve_num",
+              "kconf_key": "rinf.rlRunner.i2i_ann_ia_128_index_config"
+            }
+          ],
+          "type_name": "CommonRecoKconfCommonAttrEnricher"
+        },
+        "get_kconf_params_3868C5": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "select_lv_rate_threshold",
+              "select_show_count_threshold"
+            ],
+            "$output_item_attrs": []
+          },
+          "kconf_configs": [
+            {
+              "default_value": 0.1,
+              "export_common_attr": "select_lv_rate_threshold",
+              "json_path": "select_lv_rate_threshold",
+              "kconf_key": "rinf.rlRunner.i2i_ann_ia_128_index_config"
+            },
+            {
+              "default_value": 1000,
+              "export_common_attr": "select_show_count_threshold",
+              "json_path": "select_show_count_threshold",
+              "kconf_key": "rinf.rlRunner.i2i_ann_ia_128_index_config"
+            }
+          ],
+          "type_name": "CommonRecoKconfCommonAttrEnricher"
+        },
+        "log_debug_info_5029FD": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_lv_count",
+              "is_lv_rate"
+            ],
+            "$input_item_attrs": [
+              "is_lv",
+              "long_play_count",
+              "lv_rate",
+              "show_count"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "is_lv_count",
+            "is_lv_rate"
+          ],
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "long_play_count",
+            "show_count",
+            "is_lv",
+            "lv_rate"
+          ],
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_B60366": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num",
+              "update_message0",
+              "update_message1",
+              "update_message2",
+              "update_message3"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "item_num",
+            "update_message0",
+            "update_message1",
+            "update_message2",
+            "update_message3"
+          ],
+          "for_debug_request_only": true,
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_BD03C8": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "duration_ms",
+              "e_vv_cnt",
+              "g_vv_cnt",
+              "is_remove",
+              "n_vv_cnt",
+              "photo_id"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "photo_id",
+            "duration_ms",
+            "g_vv_cnt",
+            "n_vv_cnt",
+            "e_vv_cnt",
+            "photo_id",
+            "is_remove"
+          ],
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "pack_attr_to_bytes_B10D5A": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "photo_emb"
+            ],
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_emb"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "bytes"
+            ]
+          },
+          "is_common": false,
+          "output_attr_name": "bytes",
+          "schema": [
+            {
+              "attr_name": "photo_emb",
+              "dtype": "int16"
+            }
+          ],
+          "type_name": "CommonRecoPackBytesEnricher"
+        },
+        "pack_item_attr_B37BC4": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_id"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "photo_id_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "from_item_attr": "photo_id",
+              "to_common_attr": "photo_id_list"
+            }
+          ],
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "pack_item_attr_FEBD2F": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_lv"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "is_lv_count"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "sum",
+              "from_item_attr": "is_lv",
+              "to_common_attr": "is_lv_count"
+            }
+          ],
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "perflog_attr_value_2CCD69": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_lv_rate"
+            ],
+            "$input_item_attrs": [
+              "lv_rate"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_point": "realtime_update_flow.select_lv_item",
+          "common_attrs": [
+            "is_lv_rate"
+          ],
+          "item_attrs": [
+            "lv_rate"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "perflog_attr_value_D28B5F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_lv_rate"
+            ],
+            "$input_item_attrs": [
+              "lv_rate"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_point": "bt_shm_update_flow.select_lv_item",
+          "common_attrs": [
+            "is_lv_rate"
+          ],
+          "item_attrs": [
+            "lv_rate"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "perflog_attr_value_F4AA2E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_lv_rate"
+            ],
+            "$input_item_attrs": [
+              "lv_rate"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_point": "lite_photo_map_update_flow.select_lv_item",
+          "common_attrs": [
+            "is_lv_rate"
+          ],
+          "item_attrs": [
+            "lv_rate"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "retrieve_by_common_attr_E8155E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "photo_id_list"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attrs": [
+            {
+              "name": "photo_id_list",
+              "reason": 1
+            }
+          ],
+          "type_name": "CommonRecoCommonAttrRetriever"
+        },
+        "retrieve_from_bt_shm_kv_60CD27": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "kess_service": "grpc_hotBTShmKV8sOffline",
+          "num_parts": 512000,
+          "num_shards": 8,
+          "reason": 0,
+          "shard_name": "grpc_hotPhotoInfoServiceOffline",
+          "timeout_ms": 150,
+          "type_name": "OfflineBTShmKVRetriever"
+        },
+        "retrieve_photo_from_lite_photo_map_EBA54F": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "batch_size": 20,
+          "photo_map_capacity": 10000000,
+          "photo_upload_expire_sec": 1800,
+          "reason": 2,
+          "type_name": "OfflineLitePhotoMapRetriever",
+          "update_interval_sec": 1
+        },
+        "retrieve_photo_info_from_btq_087185": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "photo_info"
+            ]
+          },
+          "batch_size": 20,
+          "enable_lite_photo_map": true,
+          "just_run_at_shard0": false,
+          "photo_map_capacity": 10000000,
+          "photo_upload_expire_sec": 1800,
+          "queue_name": "reco_index_builder_hot_photo_realtime",
+          "reason": 1,
+          "save_item_info_to_attr": "photo_info",
+          "sleep_for_wait_btq_ms": 100,
+          "type_name": "OfflineBTQPhotoInfoRetriever"
+        },
+        "return__051613": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_205"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_205}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__2C896E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_208"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_208}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__3D5F3D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_202"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_202}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__501DEA": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_201"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_201}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__6327A3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_206"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_206}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__6BFCE7": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_204"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_204}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__7A4174": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_210"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_210}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__A9C565": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_209"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_209}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__B2D473": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_203"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_203}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__BAF0FC": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_207"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_207}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "send_with_btq_791001": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "update_message3"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": "update_message3",
+          "queue_name": "ia_emb_128_for_ann3",
+          "type_name": "CommonRecoBTQueueObserver"
+        },
+        "send_with_btq_DC3F0B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "update_message0"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": "update_message0",
+          "queue_name": "ia_emb_128_for_ann0",
+          "type_name": "CommonRecoBTQueueObserver"
+        },
+        "send_with_btq_E10B20": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "update_message2"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": "update_message2",
+          "queue_name": "ia_emb_128_for_ann2",
+          "type_name": "CommonRecoBTQueueObserver"
+        },
+        "send_with_btq_F5E174": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "update_message1"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": "update_message1",
+          "queue_name": "ia_emb_128_for_ann1",
+          "type_name": "CommonRecoBTQueueObserver"
+        },
+        "truncate_EA6E76": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "size_limit": 0,
+          "type_name": "CommonRecoTruncateArranger"
+        },
+        "unpack_bytes_to_attr_69FC39": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "bytes"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "photo_emb"
+            ]
+          },
+          "is_array": true,
+          "is_common": false,
+          "schema": [
+            {
+              "attr_name": "photo_emb",
+              "dtype": "fp16"
+            }
+          ],
+          "source_attr_name": "bytes",
+          "type_name": "CommonRecoUnpackBytesEnricher"
+        }
+      },
+      "type_name": "CommonRecoPipeline"
+    },
+    "pipeline_map": {
+      "bt_shm_update_flow": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_kconf_params_2A0509",
+          "retrieve_from_bt_shm_kv_60CD27",
+          "get_item_attr_by_distributed_index_77ACF2",
+          "enrich_attr_by_lua_C729C0",
+          "log_debug_info_BD03C8",
+          "filter_by_attr_D65A99",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_3",
+          "return__6BFCE7",
+          "pack_item_attr_B37BC4",
+          "truncate_EA6E76",
+          "retrieve_by_common_attr_E8155E",
+          "deduplicate_BBE8FF",
+          "copy_item_meta_info_6A6FD1",
+          "fetch_remote_embedding_C2D02F",
+          "pack_attr_to_bytes_B10D5A",
+          "unpack_bytes_to_attr_69FC39",
+          "filter_by_attr_388379",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_4",
+          "return__051613",
+          "copy_item_meta_info_59BDA4",
+          "_branch_controller_CB0CDDBB_5",
+          "return__6327A3",
+          "get_kconf_params_3868C5",
+          "enrich_attr_by_lua_1B4EAF",
+          "pack_item_attr_FEBD2F",
+          "enrich_attr_by_lua_BC2DFA",
+          "log_debug_info_5029FD",
+          "perflog_attr_value_D28B5F",
+          "generate_update_message_798005",
+          "send_with_btq_DC3F0B",
+          "send_with_btq_F5E174",
+          "send_with_btq_E10B20",
+          "send_with_btq_791001",
+          "log_debug_info_B60366"
+        ]
+      },
+      "lite_photo_map_update_flow": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_kconf_params_2A0509",
+          "retrieve_photo_from_lite_photo_map_EBA54F",
+          "get_item_attr_by_distributed_index_77ACF2",
+          "enrich_attr_by_lua_C729C0",
+          "log_debug_info_BD03C8",
+          "filter_by_attr_D65A99",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_6",
+          "return__BAF0FC",
+          "pack_item_attr_B37BC4",
+          "truncate_EA6E76",
+          "retrieve_by_common_attr_E8155E",
+          "deduplicate_BBE8FF",
+          "copy_item_meta_info_6A6FD1",
+          "fetch_remote_embedding_C2D02F",
+          "pack_attr_to_bytes_B10D5A",
+          "unpack_bytes_to_attr_69FC39",
+          "filter_by_attr_388379",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_7",
+          "return__2C896E",
+          "copy_item_meta_info_59BDA4",
+          "_branch_controller_CB0CDDBB_8",
+          "return__A9C565",
+          "get_kconf_params_3868C5",
+          "enrich_attr_by_lua_1B4EAF",
+          "pack_item_attr_FEBD2F",
+          "enrich_attr_by_lua_BC2DFA",
+          "log_debug_info_5029FD",
+          "perflog_attr_value_F4AA2E",
+          "generate_update_message_798005",
+          "send_with_btq_DC3F0B",
+          "send_with_btq_F5E174",
+          "send_with_btq_E10B20",
+          "send_with_btq_791001",
+          "log_debug_info_B60366"
+        ]
+      },
+      "missed_trigger_flow": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_kconf_params_2A0509",
+          "fetch_message_7347EE",
+          "enrich_attr_by_lua_9C2E89",
+          "truncate_EA6E76",
+          "retrieve_by_common_attr_E8155E",
+          "deduplicate_BBE8FF",
+          "copy_item_meta_info_6A6FD1",
+          "fetch_remote_embedding_C2D02F",
+          "pack_attr_to_bytes_B10D5A",
+          "unpack_bytes_to_attr_69FC39",
+          "filter_by_attr_388379",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_9",
+          "return__7A4174",
+          "copy_item_meta_info_59BDA4"
+        ]
+      },
+      "realtime_update_flow": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_kconf_params_2A0509",
+          "retrieve_photo_info_from_btq_087185",
+          "get_item_attr_by_distributed_index_77ACF2",
+          "enrich_attr_by_lua_C729C0",
+          "log_debug_info_BD03C8",
+          "filter_by_attr_D65A99",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB",
+          "return__501DEA",
+          "pack_item_attr_B37BC4",
+          "truncate_EA6E76",
+          "retrieve_by_common_attr_E8155E",
+          "deduplicate_BBE8FF",
+          "copy_item_meta_info_6A6FD1",
+          "fetch_remote_embedding_C2D02F",
+          "pack_attr_to_bytes_B10D5A",
+          "unpack_bytes_to_attr_69FC39",
+          "filter_by_attr_388379",
+          "count_reco_result_B061F6",
+          "_branch_controller_CB0CDDBB_1",
+          "return__3D5F3D",
+          "copy_item_meta_info_59BDA4",
+          "_branch_controller_CB0CDDBB_2",
+          "return__B2D473",
+          "get_kconf_params_3868C5",
+          "enrich_attr_by_lua_1B4EAF",
+          "pack_item_attr_FEBD2F",
+          "enrich_attr_by_lua_BC2DFA",
+          "log_debug_info_5029FD",
+          "perflog_attr_value_2CCD69",
+          "generate_update_message_798005",
+          "send_with_btq_DC3F0B",
+          "send_with_btq_F5E174",
+          "send_with_btq_E10B20",
+          "send_with_btq_791001",
+          "log_debug_info_B60366"
+        ]
+      }
+    }
+  },
+  "runner_pipeline_group": {
+    "bt_shm_update_flow": {
+      "core_num_thread_ratio": 0.0,
+      "pipeline": [
+        "bt_shm_update_flow"
+      ],
+      "thread_num": 64
+    },
+    "lite_photo_map_update_flow": {
+      "core_num_thread_ratio": 0.0,
+      "pipeline": [
+        "lite_photo_map_update_flow"
+      ],
+      "thread_num": 4
+    },
+    "missed_trigger_flow": {
+      "core_num_thread_ratio": 0.0,
+      "pipeline": [
+        "missed_trigger_flow"
+      ],
+      "thread_num": 8
+    },
+    "realtime_update_flow": {
+      "core_num_thread_ratio": 0.0,
+      "pipeline": [
+        "realtime_update_flow"
+      ],
+      "thread_num": 64
+    }
+  },
+  "service_identifier": "ann_ia_128_index_runner"
+}
