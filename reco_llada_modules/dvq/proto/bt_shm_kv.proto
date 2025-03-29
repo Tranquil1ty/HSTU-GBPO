@@ -1,0 +1,48 @@
+syntax = "proto2";
+package base.bt_shm_kv;
+
+message GetKeyRequest {
+  optional int32 part_num = 1;
+  optional int32 part_id = 2;
+};
+
+message GetKeyResponse {
+  repeated uint64 key = 1;
+  optional bool too_many = 2;
+};
+
+message ReadRequest {
+  repeated uint64 key = 1;
+};
+
+message ReadResponse {
+  repeated uint64 key = 1;
+  repeated bytes value = 2;
+  repeated uint32 expire_timet = 3;
+  optional bool too_many = 4;
+  optional bool io_too_much = 5;
+};
+
+message GetMetaRequest {
+}
+
+message GetMetaResponse {
+  optional int64 version = 1;
+  optional bytes external_data = 2;
+}
+
+message GetMetaV2Request {
+  optional bytes token = 1;
+}
+
+message GetMetaV2Response {
+  optional bytes token = 1;
+  optional bool more = 2;
+  optional bytes data = 3;
+}
+
+service BTShmKVService {
+  rpc GetKey(GetKeyRequest) returns (GetKeyResponse);
+  rpc Read(ReadRequest) returns (ReadResponse);
+  rpc GetMeta(GetMetaRequest) returns (GetMetaResponse);
+};

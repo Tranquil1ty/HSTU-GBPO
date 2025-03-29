@@ -1,0 +1,5107 @@
+embedding:
+  slots_config:
+  - dim: 64
+    dtype: float32
+    input_name: hot_top_ctr_did
+    slots: '564'
+  - dim: 64
+    dtype: float32
+    input_name: hot_top_ctr_pids
+    slots: 544 882
+  - dim: 64
+    dtype: float32
+    input_name: hot_ctr_fc_uid
+    slots: '584'
+  - dim: 64
+    dtype: float32
+    input_name: hot_ctr_fc_did
+    slots: '834'
+  - dim: 64
+    dtype: float32
+    input_name: hot_ctr_fc_pids
+    slots: 824 886
+  - dim: 64
+    dtype: float32
+    input_name: hot_ctr_photo_add_64
+    slots: 426 428
+  - dim: 8
+    dtype: float32
+    input_name: hot_ctr_photo_add_8
+    slots: 18 1082
+  - dim: 64
+    dtype: float32
+    input_name: one_slide_pid
+    learning_rate: 0.1
+    slots: '223'
+  - dim: 64
+    dtype: float32
+    input_name: one_slide_aid
+    slots: '224'
+  - dim: 64
+    dtype: float32
+    input_name: one_photo_input
+    slots: 26 128
+  - dim: 8
+    dtype: float32
+    input_name: one_photo_input2
+    slots: 17 25 146 185 147 430 241 288 18 112 416 417 418 419 71 93
+  - dim: 8
+    dtype: float32
+    input_name: one_photo_input3
+    slots: 682 683
+  - dim: 64
+    dtype: float32
+    input_name: longterm_evtr_fm_aid
+    slots: '807'
+  - dim: 32
+    dtype: float32
+    input_name: longterm_evtr_fm_tag_one
+    slots: '685'
+  - dim: 32
+    dtype: float32
+    input_name: longterm_evtr_fm_tag_two
+    slots: '686'
+  - dim: 64
+    dtype: float32
+    input_name: evtr_pids
+    slots: 876 863
+  - dim: 64
+    dtype: float32
+    input_name: top_evtr_pids
+    slots: 877 864
+  - dim: 64
+    dtype: float32
+    input_name: evtr_label_pids
+    slots: 809 819
+  - dim: 64
+    dtype: float32
+    input_name: lvtr_label_pids
+    slots: 810 820
+  - dim: 64
+    dtype: float32
+    input_name: svtr_label_pids
+    slots: 811 821
+  - dim: 64
+    dtype: float32
+    input_name: pc_label_pids
+    slots: 532 542
+  - dim: 64
+    dtype: float32
+    input_name: vtr_label_pids
+    slots: 880 867
+  - dim: 64
+    dtype: float32
+    input_name: wtd_v2_label_pids
+    slots: 879 866
+  - dim: 64
+    dtype: float32
+    input_name: vtr_v2_label_pids
+    slots: 878 865
+  - dim: 64
+    dtype: float32
+    input_name: gap_label_pids
+    slots: 882 869
+  - dim: 64
+    dtype: float32
+    input_name: collection_click_label_pids
+    slots: 808 871
+  - dim: 64
+    dtype: float32
+    input_name: collection_time_label_pids
+    slots: 814 500
+  - dim: 160
+    dtype: float32
+    input_name: evtr_layer_pid
+    slots: '868'
+  - dim: 160
+    dtype: float32
+    input_name: evtr_layer_aid
+    slots: '881'
+  - dim: 64
+    dtype: float32
+    input_name: photo_attention_ids
+    slots: 454 883
+  - dim: 4
+    dtype: float32
+    input_name: photo_attention_bias
+    slots: 506 612 691 692 790 791 792 793
+  - dim: 128
+    dtype: float32
+    input_name: user_recent_sim_pid
+    slots: '1016'
+  - dim: 64
+    dtype: float32
+    input_name: teacher_pid
+    slots: '870'
+  - dim: 64
+    dtype: float32
+    input_name: teacher_aid
+    slots: '885'
+  - dim: 64
+    dtype: float32
+    expand: 50
+    input_name: sim_pids
+    slots: '1646'
+  - dim: 64
+    dtype: float32
+    expand: 50
+    input_name: sim_aids
+    slots: '1647'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_tags
+    slots: '1649'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_times
+    slots: '1650'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_play
+    slots: '1648'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_channel
+    slots: '1651'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_label
+    slots: '1652'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_profile_stay_time
+    slots: '1653'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_comment_stay_time
+    slots: '1654'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_profile_feed_mode_stay_time
+    slots: '1655'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_real_show_index
+    slots: '1656'
+  - dim: 8
+    dtype: float32
+    expand: 50
+    input_name: sim_hour_diff
+    slots: '1657'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_times_bias
+    slots: '1645'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_play_bias
+    slots: '1644'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_label_bias
+    slots: '1642'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_channel_bias
+    slots: '1643'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_profile_stay_time_bias
+    slots: '1641'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_comment_stay_time_bias
+    slots: '1640'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_profile_feed_mode_stay_time_bias
+    slots: '1639'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_real_show_index_bias
+    slots: '1638'
+  - dim: 1
+    dtype: float32
+    expand: 50
+    input_name: sim_hour_diff_bias
+    slots: '1637'
+  - dim: 64
+    dtype: float32
+    expand: 100
+    input_name: million_pids
+    slots: '1746'
+  - dim: 64
+    dtype: float32
+    expand: 100
+    input_name: million_aids
+    slots: '1747'
+  - dim: 8
+    dtype: float32
+    expand: 100
+    input_name: million_tags
+    slots: '1749'
+  - dim: 8
+    dtype: float32
+    expand: 100
+    input_name: million_times
+    slots: '1750'
+  - dim: 8
+    dtype: float32
+    expand: 100
+    input_name: million_play
+    slots: '1748'
+  - dim: 1
+    dtype: float32
+    expand: 100
+    input_name: million_times_bias
+    slots: '1745'
+  - dim: 1
+    dtype: float32
+    expand: 100
+    input_name: million_play_bias
+    slots: '1744'
+  - dim: 32
+    dtype: float32
+    input_name: top_bias_pid
+    learning_rate: 0.1
+    slots: '818'
+  - dim: 32
+    dtype: float32
+    input_name: top_bias_aid
+    slots: '884'
+  - dim: 128
+    dtype: float32
+    input_name: gene_photo_features_one
+    learning_rate: 0.001
+    slots: 510
+  - dim: 128
+    dtype: float32
+    input_name: gene_photo_features_two
+    learning_rate: 0.001
+    slots: 610
+  - dim: 128
+    dtype: float32
+    input_name: gene_photo_features_three
+    learning_rate: 0.001
+    slots: 693
+  - dim: 128
+    dtype: float32
+    input_name: gene_photo_features_four
+    learning_rate: 0.001
+    slots: 694
+  - dim: 32
+    dtype: float32
+    input_name: evtr_rfm_ids
+    slots: 527 537 557
+  - dim: 32
+    dtype: float32
+    input_name: lvtr_rfm_ids
+    slots: 528 538 558
+  - dim: 32
+    dtype: float32
+    input_name: svtr_rfm_ids
+    slots: 529 539 559
+  - dim: 32
+    dtype: float32
+    input_name: top_gate_ids
+    slots: 530 540 560
+  - dim: 32
+    dtype: float32
+    input_name: pc_rfm_ids
+    slots: 531 541 561
+  - dim: 32
+    dtype: float32
+    input_name: adp_evtr_rfm_ids
+    slots: 533 543 563
+  - dim: 32
+    dtype: float32
+    input_name: wtd_v2_rfm_ids
+    slots: 813 823 833
+  - dim: 32
+    dtype: float32
+    input_name: vtr_v2_rfm_ids
+    slots: 812 822 832
+  - dim: 160
+    dtype: float32
+    input_name: ltr_layer_pid
+    slots: '825'
+  - dim: 160
+    dtype: float32
+    input_name: ltr_layer_aid
+    slots: '534'
+  - dim: 32
+    dtype: float32
+    input_name: pcr_lvr_pid
+    slots: '376'
+  - dim: 32
+    dtype: float32
+    input_name: pcr_svr_pid
+    slots: '377'
+  - dim: 32
+    dtype: float32
+    input_name: pcr_lvr_aid
+    slots: '383'
+  - dim: 32
+    dtype: float32
+    input_name: pcr_svr_aid
+    slots: '385'
+  - dim: 64
+    dtype: float32
+    input_name: lad_xtr_pid
+    slots: '451'
+  - dim: 64
+    dtype: float32
+    input_name: lad_xtr_aid
+    slots: '497'
+extra_params: []
+graph: ../tower_photo_predict/graph.pb
+graph_output_labels:
+- Cast_10:0
+- Cast_11:0
+- Cast_32:0
+- Cast_33:0
+- Cast_36:0
+- Cast_37:0
+- Cast_43:0
+- Cast_44:0
+- Select_11:0
+- Select_2:0
+- Select_3:0
+- Select_5:0
+- Select_8:0
+- add_6:0
+- ctr_tower/IdentityN:0
+- ctr_tower/IdentityN_10:0
+- ctr_tower/IdentityN_3:0
+- ctr_tower/IdentityN_5:0
+- dense_input_scale_watch_time:0
+- dense_input_watch_time_dist_v2:0
+- mul:0
+- mul_10:0
+- mul_1:0
+- mul_2:0
+- mul_30:0
+- mul_3:0
+- mul_4:0
+- mul_6:0
+- mul_8:0
+- truediv_14:0
+- truediv_16:0
+- truediv_1:0
+graph_q_valid:
+  adp_ctr_tower: mul_44:0
+  adp_lvtr_tower: mul_45:0
+  ces: mul_55:0
+  click_live: mul_57:0
+  collection_click: mul_68:0
+  collection_stay_time: mul_71:0
+  context_gap: mul_66:0
+  context_vtr: mul_64:0
+  ctr_distill_main: mul_76:0
+  ctr_distill_sub: mul_77:0
+  ctr_tower: mul_37:0
+  effective_watch_live_time: mul_59:0
+  ftr: mul_53:0
+  hot_ctr_tower: mul_50:0
+  lad_lvr_distill_main: mul_81:0
+  lad_lvr_distill_sub: mul_80:0
+  lad_lvtr_tower: mul_82:0
+  longterm_evtr_fm: sub_2:0
+  ltr: mul_51:0
+  lvr_distill_main: mul_78:0
+  lvr_distill_sub: mul_79:0
+  lvtr_tower: mul_39:0
+  mha_update: mul_35:0
+  mtmpc_after: mul_75:0
+  mtmpc_click: mul_73:0
+  pc_tower: mul_43:0
+  pcr_lvr: mul_61:0
+  pcr_svr: mul_62:0
+  pes: mul_54:0
+  production: mul_72:0
+  slide_evtr_fm: sub_2:0
+  svtr_tower: mul_41:0
+  vtr_distill_main: mul_83:0
+  vtr_distill_sub: mul_84:0
+  vtr_tower: mul_42:0
+  vtr_v2: mul_49:0
+  wtd_v2: mul_48:0
+  wtr: mul_52:0
+graph_tensor_mapping:
+  photo_top_layer: clip_by_value:0
+hyperparameter_kconf: null
+input_type: 3
+is_train_placeholder: is_train:0
+param:
+- coln: 512
+  init_mean: 0
+  init_range: 1
+  name: tab_layer1_param
+  opt_type: MioDense
+  rown: 81
+  scale_by_rown: true
+  shape:
+  - 81
+  - 512
+  update_type: gradient
+- coln: 9456
+  init_mean: 0
+  init_range: 1
+  name: tab_layer2_param
+  opt_type: MioDense
+  rown: 513
+  scale_by_rown: true
+  shape:
+  - 513
+  - 9456
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: context_attention_q_trans
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 32
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: context_attention_k_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 32
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: context_attention_v_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 64
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: q_short_trans_matrix
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: k_short_trans_matrix
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: v_short_trans_matrix
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 128
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: short_glu_weight_u
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: short_glu_weight_v
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: short_glu_weight_o
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: photo_attention__q_trans
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 32
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: photo_attention__k_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 32
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention__v_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: long_glu_weight_u
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: long_glu_weight_v
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: long_glu_weight_o
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__q_trans
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 32
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__k_trans
+  opt_type: MioDense
+  rown: 136
+  scale_by_rown: true
+  shape:
+  - 136
+  - 32
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra0_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra1_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra2_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra3_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra4_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra5_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: photo_attention_long__v_extra6_trans
+  opt_type: MioDense
+  rown: 8
+  scale_by_rown: true
+  shape:
+  - 8
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: million_glu_weight_u
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: million_glu_weight_v
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: million_glu_weight_o
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 160
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: million_attention_long_q_trans
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 32
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: million_attention_long_k_trans
+  opt_type: MioDense
+  rown: 136
+  scale_by_rown: true
+  shape:
+  - 136
+  - 32
+  update_type: gradient
+- coln: 160
+  init_mean: 0
+  init_range: 1
+  name: million_attention_long_v_trans
+  opt_type: MioDense
+  rown: 152
+  scale_by_rown: true
+  shape:
+  - 152
+  - 160
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: million_attention_long_k_extra0_trans
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 32
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: million_attention_long_k_extra1_trans
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 32
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_user_input1
+  opt_type: MioDense
+  rown: 5
+  scale_by_rown: true
+  shape:
+  - 5
+  - 64
+  update_type: gradient
+- coln: 8
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_user_input2
+  opt_type: MioDense
+  rown: 6
+  scale_by_rown: true
+  shape:
+  - 6
+  - 8
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_slide_uid
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 64
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_slide_did
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 64
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_after_uid_input
+  opt_type: MioDense
+  rown: 2
+  scale_by_rown: true
+  shape:
+  - 2
+  - 64
+  update_type: gradient
+- coln: 152
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_user_click_list_input_sum
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 152
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_user_input3
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 32
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_longterm_evtr_fm_did
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 64
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_photo_input
+  opt_type: MioDense
+  rown: 2
+  scale_by_rown: true
+  shape:
+  - 2
+  - 64
+  update_type: gradient
+- coln: 8
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_photo_input2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 8
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_slide_pid
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 64
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_slide_aid
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 64
+  update_type: gradient
+- coln: 16
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_one_p_input3
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 16
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: squeeze_w_longterm_evtr_fm_p_cp
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 128
+  update_type: gradient
+- coln: 18
+  init_mean: 0
+  init_range: 1
+  name: one_u_squeeze_layer1_param
+  opt_type: MioDense
+  rown: 51
+  scale_by_rown: true
+  shape:
+  - 51
+  - 18
+  update_type: gradient
+- coln: 18
+  init_mean: 0
+  init_range: 1
+  name: one_u_squeeze_layer2_param
+  opt_type: MioDense
+  rown: 19
+  scale_by_rown: true
+  shape:
+  - 19
+  - 18
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: kernel_extra_one_u_squeeze_0_layer2_param
+  opt_type: MioDense
+  rown: 19
+  scale_by_rown: true
+  shape:
+  - 19
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: kernel_extra_one_u_squeeze_1_layer2_param
+  opt_type: MioDense
+  rown: 19
+  scale_by_rown: true
+  shape:
+  - 19
+  - 1
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: dcn_trans_one_user_input2
+  opt_type: MioDense
+  rown: 6
+  scale_by_rown: true
+  shape:
+  - 6
+  - 64
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: dcn_trans_mha_output
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: dcn_trans_one_u_input3
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 32
+  update_type: gradient
+- coln: 208
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_kernerl_1
+  opt_type: MioDense
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  - 208
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_bias_1
+  opt_type: MioDense
+  rank: 1
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  update_type: gradient
+- coln: 208
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_kernerl_2
+  opt_type: MioDense
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  - 208
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_bias_2
+  opt_type: MioDense
+  rank: 1
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  update_type: gradient
+- coln: 208
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_kernerl_3
+  opt_type: MioDense
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  - 208
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_u_bias_3
+  opt_type: MioDense
+  rank: 1
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  update_type: gradient
+- coln: 22
+  init_mean: 0
+  init_range: 1
+  name: one_p_squeeze_layer1_param
+  opt_type: MioDense
+  rown: 151
+  scale_by_rown: true
+  shape:
+  - 151
+  - 22
+  update_type: gradient
+- coln: 22
+  init_mean: 0
+  init_range: 1
+  name: one_p_squeeze_layer2_param
+  opt_type: MioDense
+  rown: 23
+  scale_by_rown: true
+  shape:
+  - 23
+  - 22
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: kernel_extra_one_p_squeeze_0_layer2_param
+  opt_type: MioDense
+  rown: 23
+  scale_by_rown: true
+  shape:
+  - 23
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: kernel_extra_one_p_squeeze_1_layer2_param
+  opt_type: MioDense
+  rown: 23
+  scale_by_rown: true
+  shape:
+  - 23
+  - 1
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: dcn_trans_one_photo_input2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 64
+  update_type: gradient
+- coln: 16
+  init_mean: 0
+  init_range: 1
+  name: dcn_trans_one_p_input3
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 16
+  update_type: gradient
+- coln: 144
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_kernerl_1
+  opt_type: MioDense
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  - 144
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_bias_1
+  opt_type: MioDense
+  rank: 1
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  update_type: gradient
+- coln: 144
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_kernerl_2
+  opt_type: MioDense
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  - 144
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_bias_2
+  opt_type: MioDense
+  rank: 1
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  update_type: gradient
+- coln: 144
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_kernerl_3
+  opt_type: MioDense
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  - 144
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: dcn_one_p_bias_3
+  opt_type: MioDense
+  rank: 1
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  update_type: gradient
+- coln: 24
+  init_mean: 0
+  init_range: 1
+  name: bias_net_h1_param
+  opt_type: MioDense
+  rown: 48
+  scale_by_rown: true
+  shape:
+  - 48
+  - 24
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ctr_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lvtr_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lad_lvtr_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: svtr_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pc_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: gap_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_click_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_time_bias_param
+  opt_type: MioDense
+  rown: 24
+  scale_by_rown: true
+  shape:
+  - 24
+  - 1
+  update_type: gradient
+- coln: 32
+  init_mean: 0
+  init_range: 1
+  name: photo_bias_h1_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 32
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ctr_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lvr_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: svr_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pc_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: gap_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_click_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_time_p_bias_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 1
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: add_hot_ctr_u_gate_layer1_param
+  opt_type: MioDense
+  rown: 409
+  scale_by_rown: true
+  shape:
+  - 409
+  - 511
+  update_type: gradient
+- coln: 8
+  init_mean: 0
+  init_range: 1
+  name: add_hot_ctr_u_gate_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 8
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u1_param
+  opt_type: MioDense
+  rown: 969
+  scale_by_rown: true
+  shape:
+  - 969
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_1/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_1/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 255
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u3_param
+  opt_type: MioDense
+  rown: 256
+  scale_by_rown: true
+  shape:
+  - 256
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_2/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_2/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u4_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_3/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_3/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u5_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_4/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_4/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_user_tower_4/kernel_extra_2
+  opt_type: MioDense
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  - 127
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_u_layer1_param
+  opt_type: MioDense
+  rown: 1212
+  scale_by_rown: true
+  shape:
+  - 1212
+  - 511
+  update_type: gradient
+- coln: 5
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_u_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 5
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: hot_one_u6_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: one_u1_param
+  opt_type: MioDense
+  rown: 625
+  scale_by_rown: true
+  shape:
+  - 625
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: one_u2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_1/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_1/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 255
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_u3_param
+  opt_type: MioDense
+  rown: 256
+  scale_by_rown: true
+  shape:
+  - 256
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_2/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_2/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_u4_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_3/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_3/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_u5_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_4/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_4/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_user_tower_4/kernel_extra_2
+  opt_type: MioDense
+  rown: 208
+  scale_by_rown: true
+  shape:
+  - 208
+  - 127
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_u_layer1_param
+  opt_type: MioDense
+  rown: 1180
+  scale_by_rown: true
+  shape:
+  - 1180
+  - 511
+  update_type: gradient
+- coln: 5
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_u_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 5
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: ctr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: ctr_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_adp_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_ctr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: lvr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: lvr_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_lad_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_short_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: svr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_pc_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: pc_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: pc_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_u6_replay_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_adp_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_lvr_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_wtd_v2_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_vtr_v2_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 2
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_ugene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 2
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_gap_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: gap_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_collection_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_click_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_u6_collection_time_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_time_user_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 128
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: add_hot_ctr_p_gate_layer1_param
+  opt_type: MioDense
+  rown: 273
+  scale_by_rown: true
+  shape:
+  - 273
+  - 511
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: add_hot_ctr_p_gate_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 4
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p1_param
+  opt_type: MioDense
+  rown: 529
+  scale_by_rown: true
+  shape:
+  - 529
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_1/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_1/kernel_extra_1
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_1/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 255
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p3_param
+  opt_type: MioDense
+  rown: 256
+  scale_by_rown: true
+  shape:
+  - 256
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_2/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_2/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_2/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p4_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_3/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_3/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_3/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p5_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_4/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_4/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_4/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_photo_tower_4/kernel_extra_3
+  opt_type: MioDense
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  - 127
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_p_layer1_param
+  opt_type: MioDense
+  rown: 1276
+  scale_by_rown: true
+  shape:
+  - 1276
+  - 511
+  update_type: gradient
+- coln: 5
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_p_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 5
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: hot_one_p6_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: one_p1_param
+  opt_type: MioDense
+  rown: 385
+  scale_by_rown: true
+  shape:
+  - 385
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 511
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: one_p2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_1/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_1/kernel_extra_1
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 255
+  update_type: gradient
+- coln: 255
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_1/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 255
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_p3_param
+  opt_type: MioDense
+  rown: 256
+  scale_by_rown: true
+  shape:
+  - 256
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_2/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_2/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_2/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_p4_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_3/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_3/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_3/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: one_p5_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_4/kernel_extra_0
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_4/kernel_extra_1
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_4/kernel_extra_2
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_photo_tower_4/kernel_extra_3
+  opt_type: MioDense
+  rown: 144
+  scale_by_rown: true
+  shape:
+  - 144
+  - 127
+  update_type: gradient
+- coln: 511
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_p_layer1_param
+  opt_type: MioDense
+  rown: 1276
+  scale_by_rown: true
+  shape:
+  - 1276
+  - 511
+  update_type: gradient
+- coln: 5
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_p_layer2_param
+  opt_type: MioDense
+  rown: 512
+  scale_by_rown: true
+  shape:
+  - 512
+  - 5
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: ctr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: ctr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: ctr_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_adp_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_ctr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_ctr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: lvr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: lvr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: lvr_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_lad_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_short_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: svr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: svr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_pc_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: pc_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: pc_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: pc_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_p6_replay_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_adp_long_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_lvr_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: adp_lvr_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_wtd_v2_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_vtr_v2_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 4
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_pgene_bias_param
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 4
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_gap_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: gap_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: gap_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_collection_click_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_click_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_click_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: one_p6_collection_time_param
+  opt_type: MioDense
+  rown: 1148
+  scale_by_rown: true
+  shape:
+  - 1148
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_time_photo_top/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 128
+  update_type: gradient
+- coln: 128
+  init_mean: 0
+  init_range: 1
+  name: collection_time_photo_top/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 128
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: context_vtr_h1_param
+  opt_type: MioDense
+  rown: 841
+  scale_by_rown: true
+  shape:
+  - 841
+  - 64
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: context_vtr_top_param
+  opt_type: MioDense
+  rown: 65
+  scale_by_rown: true
+  shape:
+  - 65
+  - 1
+  update_type: gradient
+- coln: 64
+  init_mean: 0
+  init_range: 1
+  name: context_gap_h1_param
+  opt_type: MioDense
+  rown: 841
+  scale_by_rown: true
+  shape:
+  - 841
+  - 64
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: context_gap_top_param
+  opt_type: MioDense
+  rown: 65
+  scale_by_rown: true
+  shape:
+  - 65
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_top_fc_layer_0/kernel_extra_6
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ctr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: adp_ctr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_ctr_top_fc_layer_0/kernel_extra_6
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: adp_ctr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: collection_click_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_click_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_click_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_click_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_click_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_click_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: collection_time_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_time_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_time_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_time_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_collection_time_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: collection_time_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: lvr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lvr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lvr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lvr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lvr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lvr_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lvr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lad_lvr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lad_lvr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lad_lvr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lad_lvr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_lad_lvr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: lad_lvr_fc_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: pcr_lvr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pcr_lvr_top_fc_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pcr_lvr_fc_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: adp_lvr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_adp_lvr_top_fc_layer_0/kernel_extra_6
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: adp_lvr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: svr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_svr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_svr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_svr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_svr_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_svr_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: svr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: pcr_svr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pcr_svr_top_fc_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pcr_svr_fc_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: pc_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pc_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pc_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pc_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pc_top_fc_layer_0/kernel_extra_4
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pc_top_fc_layer_0/kernel_extra_5
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pc_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: vtr_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_wtd_v2_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_wtd_v2_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: wtd_v2_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_top_fc1_param
+  opt_type: MioDense
+  rown: 297
+  scale_by_rown: true
+  shape:
+  - 297
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_v2_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_vtr_v2_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 96
+  scale_by_rown: true
+  shape:
+  - 96
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: vtr_v2_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_fc1_param
+  opt_type: MioDense
+  rown: 289
+  scale_by_rown: true
+  shape:
+  - 289
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 160
+  scale_by_rown: true
+  shape:
+  - 160
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_hot_ctr_top_fc_layer_0/kernel_extra_3
+  opt_type: MioDense
+  rown: 64
+  scale_by_rown: true
+  shape:
+  - 64
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: hot_ctr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: ltr_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ltr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ltr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ltr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ltr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: wtr_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_wtr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_wtr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_wtr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: wtr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: ftr_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ftr_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ftr_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ftr_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ftr_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: pes_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pes_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pes_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_pes_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: pes_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: ces_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ces_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ces_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_ces_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: ces_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: enter_live_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_enter_live_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_enter_live_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_enter_live_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: enter_live_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: effective_watch_live_time_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_effective_watch_live_time_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_effective_watch_live_time_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_effective_watch_live_time_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: effective_watch_live_time_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: product_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_product_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_product_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_product_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: product_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: mtmpc_click_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_click_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_click_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_click_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: mtmpc_click_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: mtmpc_after_top_fc1_param
+  opt_type: MioDense
+  rown: 382
+  scale_by_rown: true
+  shape:
+  - 382
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_after_top_fc_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_after_top_fc_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 127
+  init_mean: 0
+  init_range: 1
+  name: dense_mtmpc_after_top_fc_layer_0/kernel_extra_2
+  opt_type: MioDense
+  rown: 16
+  scale_by_rown: true
+  shape:
+  - 16
+  - 127
+  update_type: gradient
+- coln: 1
+  init_mean: 0
+  init_range: 1
+  name: mtmpc_after_top_fc2_param
+  opt_type: MioDense
+  rown: 128
+  scale_by_rown: true
+  shape:
+  - 128
+  - 1
+  update_type: gradient
+- coln: 31
+  init_mean: 0
+  init_range: 1
+  name: ctr_tower_perception_h1_param
+  opt_type: MioDense
+  rown: 100
+  scale_by_rown: true
+  shape:
+  - 100
+  - 31
+  update_type: gradient
+- coln: 31
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_tower_perception_layer_0/kernel_extra_0
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 31
+  update_type: gradient
+- coln: 31
+  init_mean: 0
+  init_range: 1
+  name: dense_ctr_tower_perception_layer_0/kernel_extra_1
+  opt_type: MioDense
+  rown: 1
+  scale_by_rown: true
+  shape:
+  - 1
+  - 31
+  update_type: gradient
+- coln: 31
+  init_mean: 0
+  init_range: 1
+  name: ctr_tower_perception_h2_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 31
+  update_type: gradient
+- coln: 5
+  init_mean: 0
+  init_range: 1
+  name: ctr_tower_perception_layerxa_param
+  opt_type: MioDense
+  rown: 32
+  scale_by_rown: true
+  shape:
+  - 32
+  - 5
+  update_type: gradient
+q_names: photo_top_layer
+vec_input: []

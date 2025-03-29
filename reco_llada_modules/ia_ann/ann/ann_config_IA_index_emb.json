@@ -1,0 +1,493 @@
+{
+  "_CONFIG_VERSION": "8e21e6fe717623f9f77ae9b85f1d0c0e_local",
+  "_DRAGONFLY_CREATE_TIME": "2024-10-17 20:50:12",
+  "_DRAGONFLY_VERSION": "0.8.3",
+  "ann_config": {
+    "ann_pool": {
+      "index_update_interval_second": 60
+    },
+    "auto_calc": [
+      {
+        "dest_bucket": "photo_index",
+        "expire_second": 600,
+        "max_item_num": 50000,
+        "recalc_interval_second": 0,
+        "src_data_type": "photo"
+      }
+    ],
+    "buckets": {
+      "photo_index": {
+        "ann": {
+          "max_index_size": 0,
+          "min_index_size": 0,
+          "parameter": {
+            "dim": 512,
+            "space": "ip"
+          },
+          "threshold": {
+            "anisotropic_quantization_threshold": 0.4,
+            "final_neighbors_num": 1000,
+            "leaves_num": 1100,
+            "leaves_to_search": 55,
+            "pre_reorder_neighbors_num": 2400,
+            "training_sample_size": 300000
+          },
+          "type_name": "scannAnnFloat"
+        },
+        "data_type": "photo",
+        "dynamic_threshold": {
+          "threshold_kconf_key": "rinf.rlRunner.i2i_ia_index_ann_config"
+        }
+      }
+    },
+    "datas": {
+      "photo": {
+        "kv": {
+          "cache_expire_second": 21600,
+          "dim": 512,
+          "max_item_num": 10000000
+        },
+        "offline_id_converter": {
+          "type_name": "mioEmbeddingIdConverter"
+        },
+        "online_id_converter": {
+          "type_name": "mioEmbeddingIdConverter"
+        }
+      }
+    },
+    "kess_config": {},
+    "meta_parser": {
+      "bucket_slot_map": {
+        "photo": 17
+      },
+      "enable_fixed_slot_bits": false,
+      "enable_kuiba_sign": false,
+      "enforce_use_slot_form_item": false,
+      "parse_data_in_float": false,
+      "slot_bits": 0,
+      "slot_bits_map": {
+        "17": {
+          "begin_bit": 0,
+          "end_bit": 512
+        }
+      },
+      "type_name": "mioEmbeddingParser"
+    },
+    "mq_consumer": {
+      "queue_names": [
+        "ia_index_emb0"
+      ],
+      "thread_num": 8,
+      "type_name": "btqueueMqConsumer"
+    },
+    "precision_eval": [
+      {
+        "dest_bucket": "photo_index",
+        "space": "ip",
+        "src_data_type": "photo"
+      }
+    ],
+    "server_role": 0
+  },
+  "attrs_from_request": {
+    "common_attr": [
+      "i2i_ann_topk",
+      "photo_emb_list",
+      "photo_id_list"
+    ]
+  },
+  "default_request_type": "cpu_knn",
+  "kess_config": {
+    "service_name": "grpc_AnnIAIndexEmb"
+  },
+  "pipeline_manager_config": {
+    "base_pipeline": {
+      "processor": {
+        "copy_item_meta_info_129724": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "pid"
+            ]
+          },
+          "save_item_id_to_attr": "pid",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "copy_item_meta_info_A05761": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "ann_score",
+              "src_item"
+            ],
+            "$downstream_new_result": true,
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "ann_pid"
+            ]
+          },
+          "save_item_id_to_attr": "ann_pid",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "count_reco_result_2EC638": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "photo_num"
+            ],
+            "$output_item_attrs": []
+          },
+          "save_result_size_to_common_attr": "photo_num",
+          "type_name": "CommonRecoCountRecoResultEnricher"
+        },
+        "deduplicate_BBE8FF": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "type_name": "CommonRecoResultsDeduplicateArranger"
+        },
+        "enrich_attr_by_lua_2D88A7": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "ann_score",
+              "src_item"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "filtered_ann_score",
+              "filtered_src_item",
+              "low_ann_score"
+            ]
+          },
+          "export_item_attr": [
+            "filtered_src_item",
+            "filtered_ann_score",
+            "low_ann_score"
+          ],
+          "function_for_item": "FilterLowScore",
+          "import_item_attr": [
+            "src_item",
+            "ann_score"
+          ],
+          "lua_script": "function FilterLowScore()\n                -- 过滤低分的 ANN 召回\n                local filtered_src_item = {}\n                local filtered_ann_score = {}\n                local low_ann_score = 0\n                for i = 1, #ann_score do\n                    if ann_score[i] >= 0.8 then\n                        if src_item[i] ~= nil then\n                            table.insert(filtered_ann_score, ann_score[i])\n                            table.insert(filtered_src_item, src_item[i])\n                        end\n                    else\n                        low_ann_score = 1\n                    end   \n                end\n                return filtered_src_item, filtered_ann_score, low_ann_score\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_81C9A2": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "sim_photo_ids",
+              "sim_photo_scores"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "sim_photo_id_num",
+              "sim_photo_score_num"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "sim_photo_id_num",
+            "sim_photo_score_num"
+          ],
+          "function_for_common": "gen_common_attrs",
+          "import_common_attr": [
+            "sim_photo_ids",
+            "sim_photo_scores"
+          ],
+          "lua_script": "function gen_common_attrs() return (#(sim_photo_ids or {})), (#(sim_photo_scores or {})) end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "filter_by_attr_9563BA": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "ann_pid"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "ann_pid",
+          "compare_to": 0,
+          "remove_if": "<=",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_AF9F7B": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "low_ann_score"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "low_ann_score",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_E6E607": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "photo_emb"
+            ],
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_emb"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "photo_emb",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "get_remote_embedding_lite_v2_EEB650": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "pid"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "photo_emb"
+            ]
+          },
+          "client_side_shard": true,
+          "downstream_processor": "filter_by_attr_E6E607",
+          "id_converter": {
+            "type_name": "plainIdConverter"
+          },
+          "input_attr_name": "pid",
+          "is_raw_data": true,
+          "kess_service": "grpc_mmu_e2e_i2i_PsCloud_online",
+          "output_attr_name": "photo_emb",
+          "query_source_type": "item_attr",
+          "raw_data_type": "float32",
+          "shard_num": 32,
+          "size": 512,
+          "timeout_ms": 200,
+          "type_name": "CommonRecoRemoteEmbeddingAttrRawLiteEnricher"
+        },
+        "pack_item_attr_200FDE": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_emb"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "photo_emb_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "concat",
+              "from_item_attr": "photo_emb",
+              "to_common_attr": "photo_emb_list"
+            }
+          ],
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "pack_item_attr_9085BB": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "ann_pid",
+              "filtered_ann_score"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "sim_photo_ids",
+              "sim_photo_scores"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "concat",
+              "from_item_attr": "ann_pid",
+              "to_common_attr": "sim_photo_ids"
+            },
+            {
+              "aggregator": "concat",
+              "from_item_attr": "filtered_ann_score",
+              "to_common_attr": "sim_photo_scores"
+            }
+          ],
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "perflog_attr_value_F7FC45": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "i2i_ann_topk",
+              "sim_photo_id_num",
+              "sim_photo_score_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_point": "i2i_ia_index_ann_config.result",
+          "common_attrs": [
+            "sim_photo_id_num",
+            "sim_photo_score_num",
+            "i2i_ann_topk"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "retrieve_by_common_attr_E8155E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "photo_id_list"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attrs": [
+            {
+              "name": "photo_id_list",
+              "reason": 1
+            }
+          ],
+          "type_name": "CommonRecoCommonAttrRetriever"
+        },
+        "retrieve_by_local_ann_940394": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "i2i_ann_topk",
+              "photo_emb_list",
+              "photo_id_list"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "ann_score",
+              "src_item"
+            ]
+          },
+          "dest_bucket": "photo_index",
+          "downstream_processor": "copy_item_meta_info_A05761",
+          "reason": 1,
+          "save_distance_to_attr": "ann_score",
+          "save_src_item_to_attr": "src_item",
+          "src_data_type": "photo",
+          "src_embedding_list_attr": "photo_emb_list",
+          "src_items_attr": "photo_id_list",
+          "top_k": "{{i2i_ann_topk}}",
+          "type_name": "CommonRecoLocalAnnRetriever"
+        },
+        "truncate_EA6E76": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "size_limit": 0,
+          "type_name": "CommonRecoTruncateArranger"
+        }
+      },
+      "type_name": "CommonRecoPipeline"
+    },
+    "pipeline_map": {
+      "cpu_knn_retr": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "retrieve_by_common_attr_E8155E",
+          "copy_item_meta_info_129724",
+          "count_reco_result_2EC638",
+          "truncate_EA6E76",
+          "retrieve_by_local_ann_940394",
+          "copy_item_meta_info_A05761",
+          "filter_by_attr_9563BA",
+          "deduplicate_BBE8FF",
+          "enrich_attr_by_lua_2D88A7",
+          "filter_by_attr_AF9F7B",
+          "pack_item_attr_9085BB",
+          "enrich_attr_by_lua_81C9A2",
+          "perflog_attr_value_F7FC45"
+        ]
+      },
+      "cpu_knn_retr_demo": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "retrieve_by_common_attr_E8155E",
+          "copy_item_meta_info_129724",
+          "get_remote_embedding_lite_v2_EEB650",
+          "filter_by_attr_E6E607",
+          "pack_item_attr_200FDE",
+          "count_reco_result_2EC638",
+          "truncate_EA6E76",
+          "retrieve_by_local_ann_940394",
+          "copy_item_meta_info_A05761",
+          "filter_by_attr_9563BA",
+          "deduplicate_BBE8FF",
+          "enrich_attr_by_lua_2D88A7",
+          "filter_by_attr_AF9F7B",
+          "pack_item_attr_9085BB",
+          "enrich_attr_by_lua_81C9A2",
+          "perflog_attr_value_F7FC45"
+        ]
+      }
+    }
+  },
+  "request_type_config": {
+    "cpu_knn": [
+      "cpu_knn_retr"
+    ],
+    "cpu_knn_demo": [
+      "cpu_knn_retr_demo"
+    ]
+  },
+  "return_common_attrs": [
+    "sim_photo_ids",
+    "sim_photo_scores"
+  ],
+  "return_item_attrs": [
+    "ann_pid",
+    "filtered_ann_score",
+    "filtered_src_item"
+  ]
+}

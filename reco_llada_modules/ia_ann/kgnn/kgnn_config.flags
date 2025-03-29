@@ -1,0 +1,19 @@
+--log_dir=../log/
+
+# shm 路径前缀.
+--gnn_storage_shm_dir=/media/aep1/gnn,/media/aep2/gnn
+# rpc 服务端口
+--gnn_rpc_port=28012
+# http 查询端口号.
+--gnn_http_port=28013
+# 全局采样类型.
+--global_sample_type=normal
+# 内存分配因子, 初始长度, 增长因子和最大长度.
+--cpt_dynamic_growth_factor=4
+--cpt_dynamic_growth_base=100
+# 使用新版本 krp 配置格式.
+--use_new_config_format=true
+--gnn_rpc_sync_thread=200
+--elst_max_edge_list_size=80000
+--cpt_weight_min=0.000001
+# --partial_rand_sample_type=counter

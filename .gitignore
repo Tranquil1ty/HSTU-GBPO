@@ -381,3 +381,4 @@ unlinked.ds
 unlinked_spec.ds
 
 ########################## Custom ##########################
+lightning_logs/
