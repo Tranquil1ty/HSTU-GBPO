@@ -381,4 +381,6 @@ unlinked.ds
 unlinked_spec.ds
 
 ########################## Custom ##########################
+
+tools/models
 lightning_logs/
