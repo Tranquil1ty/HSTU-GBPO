@@ -276,11 +276,12 @@ embedding:
     input_name: user_short_term_play
     slots: '252'
 extra_params: []
-extra_preds: logits
+extra_preds: topk_prob topk_indices
 graph: ../config/graph.pb
 graph_output_labels: []
 graph_tensor_mapping:
-  logits: Reshape_31:0
+  topk_indices: Reshape_32:0
+  topk_prob: Reshape_31:0
 hyperparameter_kconf: null
 input_type: 3
 param:
@@ -1653,7 +1654,7 @@ param:
   rank: 1
   rown: 512
   scale_by_rown: true
-q_names: logits
+q_names: topk_prob topk_indices
 vec_input:
 - common: false
   dim: 16
@@ -1685,3 +1686,6 @@ vec_input:
 - common: false
   dim: 1
   name: play_complete
+- common: false
+  dim: 1
+  name: p_temp

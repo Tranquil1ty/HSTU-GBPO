@@ -1,9 +1,16 @@
+import os
+
+os.environ["DRAGON_MATX_USE_REMOTE_DSO"] = "true"
+
 from dragonfly.common_leaf_dsl import LeafService, LeafFlow
 from dragonfly.ext.offline.offline_api_mixin import OfflineApiMixin
 from dragonfly.ext.common.common_api_mixin import CommonApiMixin
 from dragonfly.ext.kuiba.kuiba_api_mixin import KuibaApiMixin
 from dragonfly.ext.mio.mio_api_mixin import MioApiMixin
 from dragonfly.ext.uni_predict.uni_predict_api_mixin import UniPredictApiMixin
+from dragonfly.ext.embedding.embedding_api_mixin import EmbeddingApiMixin
+from dragonfly.decorators import for_loop
+
 from infer_base import (
     photo_store_config, extra_reco_photo_info_attrs,
     load_model, extract_input_from_slot_config, kuiba_list_converter_config_limit50
@@ -53,7 +60,7 @@ model_config = dict(
         #'MatmulBiasaddReluFusion',
         # 'CascadeMatMulFusion',
     ],
-    explicit_batchsizes=[1],
+    explicit_batchsizes=[1, 2, 8, 16, 32],
     explicit_max_enqueued_batches=1,
     use_tvm=False
 )
@@ -101,7 +108,111 @@ kuiba_parameter_common_config = {
   "adp_did": {"attrs": [{"key_type": 568, "attr": ["device_id"], "converter": "id"}]},
 }
 
-class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, UniPredictApiMixin):
+class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, UniPredictApiMixin, EmbeddingApiMixin):
+
+
+    def prepare_infer_params(self):
+        # https://kconf.corp.kuaishou.com/#/reco/model2/reco_llada_params
+        self.get_kconf_params(
+            kconf_configs=[
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "adp_effective_view_fix",
+                    "json_path": "adp_effective_view_fix",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "click",
+                    "json_path": "click",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "like",
+                    "json_path": "like",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "follow",
+                    "json_path": "follow",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "forward",
+                    "json_path": "forward",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "comment",
+                    "json_path": "comment",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "long_view",
+                    "json_path": "long_view",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "short_view",
+                    "json_path": "short_view",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "play_complete",
+                    "json_path": "play_complete",
+                    "default_value": [0.0],
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "p_topk",
+                    "json_path": "p_topk",
+                    "default_value": 10,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "p_topp",
+                    "json_path": "p_topp",
+                    "default_value": 1.0,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "p_temp",
+                    "json_path": "p_temp",
+                    "default_value": 1.0,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "random_remask_flag",
+                    "json_path": "random_remask_flag",
+                    "default_value": 0,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "i2i_ann_topk",
+                    "json_path": "i2i_ann_topk",
+                    "default_value": 10,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "infer_step",
+                    "json_path": "infer_step",
+                    "default_value": 8,
+                },
+                {
+                    "kconf_key": "reco.model2.reco_llada_params",
+                    "export_common_attr": "fake_item_num",
+                    "json_path": "fake_item_num",
+                    "default_value": 6,
+                }
+            ]
+        )
 
     def extract_from_feature_list(self, feature_list, is_common=False, **kwargs):
         need_source_photo_info = False
@@ -352,7 +463,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         self.limit(1)
         self.copy_user_meta_info(save_result_size_to_attr="item_num")
         self.if_("item_num == 0")
-        self.fake_retrieve(item_keys=[111], reason=666)
+        self.fake_retrieve(num="{{fake_item_num}}", reason=666)
         self.end_if_()
 
     def prepare_user_info(self):
@@ -423,11 +534,15 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
 
     def enrich_infer_labels(self):
         self.enrich_attr_by_lua(
-            import_common_attr=["adp_effective_view_fix", "click", "like", "follow", "forward", "comment", "long_view", "short_view", "play_complete"],
+            import_common_attr=[
+                "adp_effective_view_fix", "click", "like", 
+                "follow", "forward", "comment", "long_view", 
+                "short_view", "play_complete",
+                "p_temp"],
             function_for_item="calculate",
             export_item_attr=['adp_effective_view_fix', "click", "like", 
                                 "follow","forward","comment","long_view",
-                                "short_view","play_complete"],
+                                "short_view","play_complete", "p_temp"],
             lua_script="""
             function calculate()
               local item_adp_effective_view_fix = adp_effective_view_fix or {1.0}
@@ -439,11 +554,12 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
               local item_long_view = long_view or {0.0}
               local item_short_view = short_view or {0.0}
               local item_play_complete = play_complete or {0.0}
-              return item_adp_effective_view_fix, item_click, item_like, item_follow, item_forward, item_comment, item_long_view, item_short_view, item_play_complete
+              local item_p_temp = {p_temp}
+              return item_adp_effective_view_fix, item_click, item_like, item_follow, item_forward, item_comment, item_long_view, item_short_view, item_play_complete, item_p_temp
             end
             """,
         )
-    
+
     def enrich_decode_params(self):
         self.enrich_attr_by_lua(
             import_common_attr=["random_remask_flag", "p_topk", "p_topp", "p_temp"],
@@ -483,7 +599,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         self.log_debug_info(
             common_attrs=["common_slots", "common_signs", "kuiba_common_slots", "kuiba_common_signs", "user_info"],
             for_debug_request_only=False,
-            respect_sample_logging=False
+            # respect_sample_logging=False
         )
         self.copy_features(
             common_slots_input="common_slots",
@@ -588,6 +704,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         fused_input.append(dict(attr_name="long_view", tensor_name="long_view", common=False, dim=1))
         fused_input.append(dict(attr_name="short_view", tensor_name="short_view", common=False, dim=1))
         fused_input.append(dict(attr_name="play_complete", tensor_name="play_complete", common=False, dim=1))
+        fused_input.append(dict(attr_name="p_temp", tensor_name="p_temp", common=False, dim=1))
 
         print("fused_input: ", fused_input)
         max_batchsize = max(explicit_batchsizes)
@@ -652,7 +769,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
     def fill_full_mask_semantic_id_v2(self):
         self.enrich_attr_by_lua(
             function_for_item="calculate",
-            export_item_attr=["semantic_id_v2", "semantic_id_v2_mask"],
+            export_item_attr=["init_semantic_id_v2", "init_semantic_id_v2_mask"],
             lua_script="""
             function calculate()
               local token_num = 16
@@ -667,7 +784,6 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
             """
         )
 
-
     def retrieve_from_tokens(self):
         self.pack_item_attr(
             item_source={
@@ -677,130 +793,197 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 {
                     "from_item_attr": "token_indices",
                     "to_common_attr": "tokens",
+                },
+                {
+                    "from_item_attr": "token_probs",
+                    "to_common_attr": "token_probs",
                 }
             ]
+        )
+        self.enrich_attr_by_lua(
+            import_item_attr=["token_indices"],
+            export_item_attr=["semantic_id_v2_hash"],
+            function_for_item="func",
+            lua_script="""
+            function func()
+                semantic_id_v2_hash = tostring(token_indices[1])
+                for i=2,16 do
+                    semantic_id_v2_hash = semantic_id_v2_hash .. '.' .. tostring(token_indices[i])
+                end
+                return util.CityHash64(semantic_id_v2_hash)
+            end
+            """
+        )
+        self.fetch_remote_embedding(
+            protocol=1,
+            colossusdb_embd_model_name="rlj-24q2-norm-exp",
+            colossusdb_embd_table_name="code2id_parallel_semantic_id",
+            id_converter={"type_name": "plainIdConverter"},
+            input_attr_name="semantic_id_v2_hash",
+            slot=1,
+            output_attr_name="pids",
+            query_source_type="item_attr",
+            is_raw_data=True,
+            raw_data_type="uint64",
+            timeout_ms=20,
+            size=1,
+        )
+        self.pack_item_attr(
+            item_source={
+                "reco_results": True,
+            },
+            mappings=[
+                {
+                    "from_item_attr": "pids",
+                    "to_common_attr": "pids",
+                }
+            ]
+        )
+        self.enrich_attr_by_lua(
+            import_item_attr=["pids"],
+            export_item_attr=["valid_token_rate"],
+            function_for_item="func",
+            lua_script="""
+            function func()
+                return pids ~= nil
+            end
+            """ 
+        )
+        self.perflog_attr_value(
+            check_point="reco_llada.valid_token_rate",
+            item_attrs=["valid_token_rate"],
         )
         self.delegate_enrich(
             name="semantic_id_decoder",  # 统一命名格式: 策略名缩写#processor 名
             kess_service="grpc_semantic_id_decoder",
             timeout_ms=50,
-            send_common_attrs = [
-                "tokens"
-            ],
-            recv_common_attrs=["embs"],
-            request_type="default",
+            send_item_attrs=[{
+                "name": "token_indices",
+                "as": "tokens",
+            }],
+            recv_item_attrs=["embs"],
         )
-        self.gen_common_attr_by_lua(
-            attr_map={
-                "i2i_ann_topk": "10",
-            }
+        self.pack_item_attr(
+            item_source={
+                "reco_results": True,
+            },
+            mappings=[
+                {
+                    "from_item_attr": "embs",
+                    "to_common_attr": "embs_list",
+                },
+                {
+                    "from_item_attr": "token_indices",
+                    "to_common_attr": "tokens_list",
+                }
+            ]
         )
         self.limit(0)
-        self.delegate_enrich(
+        self.enrich_attr_by_lua(
+            import_common_attr=["i2i_ann_topk", "fake_item_num"],
+            export_common_attr=["request_num"],
+            function_for_common="calculate",
+            lua_script="""
+            function calculate()
+                return i2i_ann_topk * fake_item_num
+            end
+            """
+        )
+        self.delegate_retrieve(
             name="ann",  # 统一命名格式: 策略名缩写#processor 名
             kess_service="grpc_ann_ia_128_index",
             timeout_ms=50,
             send_common_attrs=[
-                {"name": "embs", "as": "photo_emb_list"},
-                {"name": "tokens", "as": "photo_id_list"},
+                {"name": "embs_list", "as": "photo_emb_list"},
+                {"name": "tokens_list", "as": "photo_id_list"},
                 "i2i_ann_topk",
             ],
-            recv_common_attrs=["sim_photo_ids"],
-            # recv_item_attrs=["ann_pid", "filtered_ann_score", "filtered_src_item"],
+            recv_item_attrs=[
+                "ann_score", "src_item"
+            ],
             request_type="cpu_knn",
+            request_num="{{request_num}}",
+            reason=3
         )
         self.retrieve_by_common_attr(
-            attr="sim_photo_ids",
-            reason=1,
+            attr="pids",
+            reason=2,
         )
+        self.copy_item_meta_info(save_item_key_to_attr="pid")
+        self.log_debug_info(
+            common_attrs=["pids"],
+            item_attrs=["pid", "ann_score", "src_item"],
+            for_debug_request_only=False,
+        )
+        self.sort_by(attr="ann_score")
         return self
-      
-    def prepare_infer_params(self):
-        self.if_("is_debug == nil or is_debug == 0")
-        # https://kconf.corp.kuaishou.com/#/reco/model2/reco_llada_params
-        self.get_kconf_params(
-            kconf_configs=[
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "adp_effective_view_fix",
-                  "json_path": "adp_effective_view_fix",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "click",
-                  "json_path": "clik",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "like",
-                  "json_path": "like",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "follow",
-                  "json_path": "follow",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "forward",
-                  "json_path": "forward",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "comment",
-                  "json_path": "comment",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "long_view",
-                  "json_path": "long_view",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "short_view",
-                  "json_path": "short_view",
-                  "default_value": [0.0],
-              },
-              { 
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "play_complete",
-                  "json_path": "play_complete",
-                  "default_value": [0.0],
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "p_topk",
-                  "json_path": "p_topk",
-                  "default_value": 10,
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "p_topp",
-                  "json_path": "p_topp",
-                  "default_value": 1.0,
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "p_temp",
-                  "json_path": "p_temp",
-                  "default_value": 1.0,
-              },
-              {
-                  "kconf_key": "reco.model2.reco_llada_params",
-                  "export_common_attr": "random_remask_flag",
-                  "json_path": "random_remask_flag",
-                  "default_value": 0,
-              },
+
+    @for_loop(loop_on="infer_steps", loop_value="current_step")
+    def infer_step(self):
+        self.if_("current_step == 0")
+        self.copy_attr(
+            attrs=[
+                {"from_item": "init_semantic_id_v2", "to_item": "semantic_id_v2"},
+                {"from_item": "init_semantic_id_v2_mask", "to_item": "semantic_id_v2_mask"},
             ]
         )
         self.end_if_()
+        self.log_debug_info(
+            common_attrs=[
+                "adp_effective_view_fix",
+                "click",
+                "like",
+                "follow",
+                "forward",
+                "comment",
+                "long_view",
+                "short_view",
+                "play_complete",
+                "p_topk",
+                "p_topp",
+                "p_temp",
+                "random_remask_flag",
+                "current_step",
+            ],
+            item_attrs=[
+                "semantic_id_v2",
+                "semantic_id_v2_mask",
+                "adp_effective_view_fix",
+                "click",
+                "like",
+                "follow",
+                "forward",
+                "comment",
+                "long_view",
+                "short_view",
+                "play_complete",
+                "p_temp",
+            ],
+            for_debug_request_only=False,
+        )
+        self.infer()
+        self.enrich_attr_by_py(
+            function_set=ChooseTokenStrategy,
+            py_function=ChooseTokenStrategy.choose_token_v2,
+        )
+        self.enrich_attr_by_py(
+            function_set=RemaskTokenStrategy,
+            py_function=RemaskTokenStrategy.remask_token,
+        )
+        self.log_debug_info(
+            common_attrs=[
+                "current_step",
+            ],
+            item_attrs=[
+                "semantic_id_v2",
+                "semantic_id_v2_mask",
+                "token_indices",
+                "token_probs",
+                "topk_prob",
+                "topk_indices",
+            ],
+            for_debug_request_only=False,
+        )
 
     def main(self):
         self.set_tab_id(tab_id=TAB_NEBULA)
@@ -810,53 +993,21 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         self.extract_feature()
         self.fill_full_mask_semantic_id_v2()
 
-        infer_step = 8
-        for i in range(infer_step):
-            self.log_debug_info(
-                log_tag="infer_step_%d_input" % i,
-                item_attrs=[
-                    "semantic_id_v2",
-                    "semantic_id_v2_mask",
-                    "adp_effective_view_fix",
-                    "click",
-                    "like",
-                    "follow",
-                    "forward",
-                    "comment",
-                    "long_view",
-                    "short_view",
-                    "play_complete",
-                ],
-                for_debug_request_only=False,
-            )
-            self.infer()
-            self.enrich_attr_by_py(
-                function_set=ChooseTokenStrategy,
-                py_function=ChooseTokenStrategy.choose_token
-            )
-            self.enrich_attr_by_lua(
-                function_for_common="calculate",
-                export_common_attr=["infer_step", "current_step"],
-                lua_script="""
-                    function calculate()
-                      return %d, %d
+        self.enrich_attr_by_lua(
+            import_common_attr=["infer_step"],
+            export_common_attr=["infer_steps"],
+            function_for_common="calculate",
+            lua_script="""
+                function calculate()
+                    local infer_steps = {}
+                    for i = 1, infer_step do
+                        table.insert(infer_steps, i - 1)
                     end
-                """ % (infer_step, i)
-            )
-            self.enrich_attr_by_py(
-                function_set=RemaskTokenStrategy,
-                py_function=RemaskTokenStrategy.remask_token
-            )
-            self.log_debug_info(
-                log_tag="infer_step_%d_mask" % i,
-                item_attrs=[
-                    "semantic_id_v2",
-                    "semantic_id_v2_mask",
-                    "token_indices",
-                    "token_probs"
-                ],
-                for_debug_request_only=False,
-            )
+                    return infer_steps
+                end
+            """,
+        )
+        self.infer_step()
 
         self.enrich_attr_by_lua(
             function_for_item="calculate",
@@ -886,7 +1037,7 @@ predict_for_all = PredictServerFlow(name="predict_for_all").main()
 eval_flow = HitRatePerfFlow(name="hit_rate_perf").hit_rate_perf()
 
 service = LeafService(
-    kess_name="grpc_RecoLlada_Debug",  # 该 kess 不生效，由 krp 替换
+    kess_name="grpc_RecoLlada",  # 该 kess 不生效，由 krp 替换
     item_attrs_from_request=["reco_photo_info_str", "living"],
     common_attrs_from_request=[
         "is_debug",
@@ -916,13 +1067,16 @@ service.common_attrs_from_request += [
     "random_remask_flag",
     "eval_pos_photo_id_list",
 ]
-service.return_item_attrs(["token_indices", "token_probs"])
+service.return_common_attrs(["i2i_ann_topk", "tokens", "token_probs"])
+service.return_item_attrs(["pid", "ann_score", "src_item"])
 
 # 不要修改
 service.AUTO_INJECT_ITEM_ATTR = False
 service.AUTO_INJECT_SAMPLE_LIST_USER_ATTR = False
 
-service.add_leaf_flows(leaf_flows=[predict_for_all, eval_flow], request_type="predict_for_all")
+service.add_leaf_flows(
+    leaf_flows=[predict_for_all, eval_flow], request_type="predict_for_all"
+)
 
 if __name__ == "__main__":
     out_file = str(__file__).replace("py", "json")
