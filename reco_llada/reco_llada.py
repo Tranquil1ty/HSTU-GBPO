@@ -513,7 +513,7 @@ else:
     logging.basicConfig()
 
     base_config = os.path.join(os.path.dirname(
-        os.path.realpath(__file__)), "./dnn-plugin.yaml")
+        os.path.realpath(__file__)), "./dnn-plugin.yaml.bak")
 
     if args.mode == "predict":
         config = MioConfig.from_base_yaml(base_config, clear_embeddings=True, clear_params=True,
@@ -2840,30 +2840,32 @@ else:
     # item_pred_logits: [b, item_seq_len, vocab_size - 1]
     # item_token_mask: [b, item_seq_len]
     # item_token_label: [b, item_seq_len]
-    return_logits = True
+    # return_logits = True
+    return_type = "vallina_topk" # ["logits", "vallina_topk", "gumble_topk"]
 
     token_num = senmantic_id_token_num
     item_pred_logits, item_token_mask, item_token_label, _ = fr_model()
     item_pred_logits = tf.cast(item_pred_logits, tf.float32)
 
-    if return_logits:
-        top_k = 10
-        batch_size = tf.shape(item_pred_logits)[0]
-        pred_token_num = item_pred_logits.shape[1]
-        vocab_size = item_pred_logits.shape[2]
+    top_k = 50
+    batch_size = tf.shape(item_pred_logits)[0]
+    pred_token_num = item_pred_logits.shape[1]
+    vocab_size = item_pred_logits.shape[2]
+    if return_type == "logits":
         item_logits = tf.reshape(item_pred_logits, (batch_size, pred_token_num * vocab_size))
         targets = [("logits", item_logits)]
-        
-        # item_probs = tf.nn.softmax(item_pred_logits, axis=-1)
-        # topk_prob, topk_indices = tf.nn.top_k(item_probs, k=top_k)  # [b, item_seq_len, top_k]
-        
-        # topk_prob = tf.reshape(topk_prob, (batch_size, top_k * token_num ))
-        # topk_indices = tf.reshape(topk_indices, (batch_size, top_k * token_num))
-        # item_probs = tf.reshape(item_probs, (batch_size, pred_token_num * vocab_size))
-
-        # targets = [("logits", item_logits), ("probs", item_probs), ("topk_prob", topk_prob), ("topk_indices", topk_indices)]
-    else:
-        top_k = 10
+    elif return_type == "vallina_topk":
+        p_temp = config.get_dense_fea("p_temp", 1, dtype=tf.float32)
+        p_temp = tf.cast(p_temp[0][0], tf.float32)
+        item_pred_prob = tf.nn.softmax(item_pred_logits / p_temp, axis=-1)
+        topk_prob, topk_indices = tf.nn.top_k(item_pred_prob, k=top_k)
+        topk_prob = tf.reshape(topk_prob, (batch_size, pred_token_num * top_k))
+        topk_indices = tf.reshape(topk_indices, (batch_size, pred_token_num * top_k))
+        targets = [
+            ("topk_prob", topk_prob),
+            ("topk_indices", topk_indices),
+        ]
+    elif return_type == "gumble_topk":
         temperature = 0.0
 
         # add gumbel noise
@@ -2880,6 +2882,8 @@ else:
         topk_indices = tf.reshape(topk_indices, (batch_size, top_k * token_num))
 
         targets = [("topk_prob", topk_prob), ("topk_indices", topk_indices)]
+    else:
+        raise ValueError(f"not supported return type {return_type}")
     
     q_names, preds = zip(*targets)
 

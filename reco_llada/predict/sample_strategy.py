@@ -40,6 +40,15 @@ class ChooseTokenStrategy:
                 return probs_i[i]
         return probs_i[-1]
     
+    def prob_sample_index(self, probs: FTList[float]) -> int:
+        probs_sum = 0.0
+        rand_val = random.random()
+        for i in range(len(probs)):
+            probs_sum += (probs[i])
+            if rand_val <= probs_sum:
+                return i
+        return len(probs) - 1
+    
     def topk_sample(self, probs_i: list, topk: int) -> list:
         probs_i.sort(key=self._sort_by_prob, reverse=True)
         return probs_i[:topk]
@@ -57,6 +66,15 @@ class ChooseTokenStrategy:
             result.append(probs_i[0])
         return result
     
+    def topp_sample_index(self, probs: FTList[float], topp: float) -> int:
+        probs_sum = 0.0
+        for i in range(len(probs)):
+            if probs[i] + probs_sum < topp:
+                probs_sum += probs[i]
+            else:
+                return i
+        return len(probs) - 1
+    
     def prob_norm(self, probs_i: list) -> list:
         probs_sum = 0.0
         for i in range(len(probs_i)):
@@ -65,6 +83,61 @@ class ChooseTokenStrategy:
         for i in range(len(probs_i)):
             probs_i[i]["prob"] = probs_i[i]["prob"] / probs_sum
         return probs_i
+    
+    def prob_norm_v2(self, probs: FTList[float]) -> FTList[float]:
+        probs_sum = 0.0
+        for i in range(len(probs)):
+            probs_sum += (probs[i])
+
+        for i in range(len(probs)):
+            probs[i] = probs[i] / probs_sum
+        return probs
+    
+    def choose_token_v2(self, ctx: DragonflyContext) -> None:
+        p_topk = ctx.GetInt(b"p_topk", self.default_topk)
+        p_topp = ctx.GetDouble(b"p_topp", self.default_topp)
+        p_temp = ctx.GetDouble(b"p_temp", self.default_temp)
+
+        pre_topk = 50
+
+        topk_prob_getter = ctx.ItemAttrGetter(b"topk_prob")
+        topk_indices_getter = ctx.ItemAttrGetter(b"topk_indices")
+
+        token_probs_setter = ctx.ItemAttrSetter(b"token_probs")
+        token_ids_setter = ctx.ItemAttrSetter(b"token_indices")
+
+        result_size = ctx.GetItemNum()
+        for idx in range(result_size):
+            pre_topk_prob = topk_prob_getter.GetDoubleList(idx)
+            pre_topk_indices = topk_indices_getter.GetIntList(idx)
+
+            choosed_token_probs: FTList[float] = []
+            choosed_token_ids: FTList[int] = []
+
+            for i in range(self.token_num):
+                c_prob = pre_topk_prob[i * pre_topk:(i + 1) * pre_topk]
+                c_indices = pre_topk_indices[i * pre_topk:(i + 1) * pre_topk]
+
+                # tensorflow topk 已经排序了
+                topk_prob = c_prob[:p_topk]
+                topk_indices = c_indices[:p_topk]
+
+                topk_prob = self.prob_norm_v2(topk_prob)
+
+                topp_index = self.topp_sample_index(topk_prob, p_topp)
+
+                topp_prob = topk_prob[:topp_index+1]
+                topp_indices = topk_indices[:topp_index+1]
+
+                topp_prob = self.prob_norm_v2(topp_prob)
+
+                sidx = self.prob_sample_index(topp_prob)
+
+                choosed_token_ids.append(topp_indices[sidx])
+                choosed_token_probs.append(topp_prob[sidx])
+        
+            token_probs_setter.SetDoubleList(idx, choosed_token_probs)
+            token_ids_setter.SetIntList(idx, choosed_token_ids)
 
     def choose_token(self, ctx: DragonflyContext) -> None:
         p_topk = ctx.GetInt(b"p_topk", self.default_topk)
@@ -169,7 +242,7 @@ class RemaskTokenStrategy:
                         remask_token_info.append(mti)
             # low confidence remask
             else:
-                sorted_info = sorted(mask_token_info, key=self._get_prob_for_sorted, reverse=True)
+                sorted_info = sorted(mask_token_info, key=self._get_prob_for_sorted, reverse=False)
                 for i in range(mask_token_num):
                     if i < len(sorted_info):
                         remask_token_info.append(sorted_info[i])

@@ -10,7 +10,7 @@ class EvalFunctions:
         pass
 
     def calc_hit_rate(self, ctx: DragonflyContext) -> None:
-        result_pids = ctx.GetIntList(b"sim_photo_ids")
+        result_pids = ctx.GetIntList(b"result_pids")
         pos_pids = ctx.GetIntList(b"eval_pos_photo_id_list")
         is_hit = False
         pos_pids_set = set()
@@ -27,9 +27,20 @@ class HitRatePerfFlow(LeafFlow,OfflineApiMixin, CommonApiMixin):
 
     def hit_rate_perf(self):
         self.if_("eval_pos_photo_id_list ~= nil")
+        self.pack_item_attr(
+            item_source={
+                "reco_results": True,
+            },
+            mappings=[
+                {
+                    "from_item_attr": "pid",
+                    "to_common_attr": "result_pids",
+                }
+            ]
+        )
         self._calc_hit_rate()
         self.log_debug_info(
-            common_attrs=["is_hit", "eval_pos_photo_id_list", "sim_photo_ids"],
+            common_attrs=["is_hit", "eval_pos_photo_id_list", "result_pids"],
             for_debug_request_only=False,
         )
         self.copy_attr(
