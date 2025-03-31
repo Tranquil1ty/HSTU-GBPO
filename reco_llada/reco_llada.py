@@ -28,6 +28,8 @@ import functools
 import contextlib
 
 senmantic_id_token_num = 16
+long_term_seq_len = 512
+item_rag_size = 32
 
 # 在本地调试模式下，首先导入TensorFlow
 if args.local_debug:
@@ -108,8 +110,7 @@ if args.local_debug:
                                                       name="item_user_lhuc")
             tensors['item_vtr_bias'] = tf.random.normal([batch_size, dims['dim8']], 
                                                       mean=0.0, stddev=0.1, dtype=tf.float32, 
-                                                      name="item_vtr_bias")
-                                                      
+                                                      name="item_vtr_bias")                                          
         # 更多可能需要的张量可以在这里添加...
         
         # 保存创建的模拟张量到全局字典
@@ -152,6 +153,10 @@ if args.local_debug:
             mock_tensors[name] = random_feature
             
             return random_feature
+    
+        def get_step(self):
+            """模拟获取step"""
+            return 0
             
         def get_label(self, name):
             """模拟获取标签"""
@@ -180,8 +185,12 @@ if args.local_debug:
                 return embedding
             
             # 如果在mock_tensors中找不到对应embedding，则创建一个警告并创建新的随机tensor
-            print(f"[MockKai] 警告：在mock_tensors中未找到embedding '{name}'，创建新的随机tensor")
-            shape = [self.batch_size, dim]  # 假设批次大小为self.batch_size
+            if "expand" in kwargs:
+                shape = [self.batch_size, kwargs["expand"], dim]  # 假设批次大小为self.batch_size
+            else:
+                shape = [self.batch_size, dim]  # 假设批次大小为self.batch_size
+
+            print(f"[MockKai] 警告：在mock_tensors中未找到embedding '{name}'，创建新的随机tensor, shape={shape}")
             with tf.variable_scope(f"embedding_{name}"):
                 random_embedding = tf.random.normal(shape, mean=0.0, stddev=0.1, dtype=tf.float32, name=name)
             self.embeddings[name] = random_embedding
@@ -334,30 +343,6 @@ if args.with_kai_v2 and not args.local_debug:
     import kai.tensorflow as config
     import tensorflow.compat.v1 as tf
 
-    # TODO: filter not work
-    # def filter_mask_wrapper(dataset):
-    #     # 1. 声明字段
-    #     #  sample_type为字段名，特征类型dataset.DENSE表示稠密，tf.int64为数据类型，dim为1
-    #     dataset.add_feature('semantic_id_v2', dataset.DENSE, tf.int64, senmantic_id_token_num)
-    #     # 2.声明mask，batch是一个dict，key为声明的字段名，value根据特征类型分为2种情况：
-    #     # dataset.DENSE: 值为tf.Tensor
-    #     # dataset.SPARSE: 值为元组: (tf.Tensor, tf.Tensor)，
-    #     #   其中第一个tensor表示feasign，第二个tensor表示cumsum
-    #     #   可以使用tf.RaggedTensor.from_row_splits转成RaggedTensor
-    #     def mask_fn(batch):
-    #         print("zzxdebug batch=", batch)
-    #         print("zzxdebug semantic_id_v2=", batch['semantic_id_v2'])
-    #         semantic_id_v2 = tf.cast(batch['semantic_id_v2'], tf.int32)
-    #         zero_nums = tf.reduce_sum(
-    #                         tf.cast(tf.equal(semantic_id_v2, 0), tf.int32), axis=1)
-    #         mask = tf.math.equal(zero_nums, 0)
-    #         return mask
-    #     # 3.返回mask_fn
-    #     return mask_fn
-
-    # # 注册过滤条件
-    # config.declare_sample_filter(filter_mask_wrapper, data_source_name='train')
-
     reco_channel = [
         'reco.reco_log_fine_sort_feature',
         'reco.reco_log_fine_sort_feature_exp',
@@ -412,36 +397,49 @@ if args.with_kai_v2 and not args.local_debug:
         remap=True, data_source_name=['train', 'test'],
         channel_name=reco_channel)
 
-
     use_flash_attention = False if config.Config().runtime_option.mode == "train" else False
 
     # for act 1w 64*512 for million 1K interest embedding
     user_id_or_device_id = config.get_dense_fea("user_id_or_device_id", 1, dtype=tf.int64)
     llsid = config.get_dense_fea("llsid", dim=1, dtype=tf.int64)
     photo_id = config.get_dense_fea("photo_id", dim=1, dtype=tf.int64)
-    # config.declare_remote_rodis(
-    #     kess_service = "grpc_rodisGptEmbCase",
-    #     domain="GPT_EMB_CASE",
-    #     payload_id=16,
-    #     key_attr="user_id_or_device_id",
-    #     value_attr="gpt_output_str",
-    #     timeout_ms=10000,
-    #     valid_duration_ms=-1,
-    #     output_column_type="list<float16>",
-    #     data_source_name = ['train', 'test'],
-    #     channel_name = reco_channel)
-
-    def filter_mask_wrapper(dataset):
-        dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
-
-        def mask_fn(batch):
-            sample_type = batch['stid_mix_filter_flag']
-            mask = tf.math.equal(sample_type, 1)
-            return mask
-        return mask_fn
+    time_ms = config.get_dense_fea("time_ms", 1, dtype=tf.int64)
+    user_id = config.get_dense_fea("user_id", 1, dtype=tf.int64)
     
-    config.declare_sample_filter(
-        filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
+    # remove: "1520"，"93", 
+    item_rag_magic_num = 30000
+    item_rag_output_slots = ["1606", "1607", "26", "128", "71", "141", 
+                             "142", "143", "417", "430", "776", "777", "778", 
+                             "779", "780", "781", "782"]
+    item_rag_output_slots = [str(item_rag_magic_num + int(slot)) for slot in item_rag_output_slots]
+
+    gsu_output_slots = ["1001", "1002", "1004", "1006", "1007", "1008", "1009", "1010", "1011", "1013", "1014"]
+    
+    config.declare_remote_gsu(
+        kess_service = "grpc_item_rag_user_longterm",
+        request_type = "train_request",
+        llsid_attr = "user_id_or_device_id",
+        uid_attr="user_id",
+        pid_attr="photo_id",
+        input_attrs=["semantic_id_v2", "time_ms", "user_id"],
+        input_common_flags=[False, False, True],
+        output_attrs=["tokens", "colossus_time_s"] + item_rag_output_slots + gsu_output_slots,
+        output_column_types=["list<int64>", "list<int64>"] + ["list<int64>"] * len(item_rag_output_slots) + ["list<int64>"] * len(gsu_output_slots),
+        output_common_flags=[False, False] + [False] * len(item_rag_output_slots) + [False] * len(gsu_output_slots),
+        data_source_name="train",
+        timeout_ms=10000)
+
+    # def filter_mask_wrapper(dataset):
+    #     dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
+
+    #     def mask_fn(batch):
+    #         sample_type = batch['stid_mix_filter_flag']
+    #         mask = tf.math.equal(sample_type, 1)
+    #         return mask
+    #     return mask_fn
+    
+    # config.declare_sample_filter(
+    #     filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
 
 
 elif args.local_debug:
@@ -2014,9 +2012,98 @@ user_short_term_times = config.new_embedding("user_short_term_times", dim=8, exp
 user_short_term_play = config.new_embedding("user_short_term_play", dim=8, expand=short_term_list_seq_len,
                                             slots=[252], **compress_kwargs)
 
-### item_embedding
 if args.mode == "train":
-    senmantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.int64)
+    with tf.xla.experimental.jit_scope(compile_ops=False):
+        item_long_term_pids3, user_id_or_device_id_index = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001], compress_group="user_id_or_device_id")
+        item_long_term_aids3, user_id_or_device_id_index = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002], compress_group="user_id_or_device_id")
+        item_long_term_label3, user_id_or_device_id_index = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004], compress_group="user_id_or_device_id")
+        item_long_term_tag3, user_id_or_device_id_index = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006], compress_group="user_id_or_device_id")
+        item_long_term_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007], compress_group="user_id_or_device_id")
+        item_long_term_play_time3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008], compress_group="user_id_or_device_id")
+        item_long_term_channel3, user_id_or_device_id_index = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009], compress_group="user_id_or_device_id")
+        item_long_term_play_x_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010], compress_group="user_id_or_device_id")
+        item_long_term_day_diff3, user_id_or_device_id_index = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011], compress_group="user_id_or_device_id")
+        item_long_term_mindiff3, user_id_or_device_id_index = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013], compress_group="user_id_or_device_id")
+        item_long_term_abspose3, user_id_or_device_id_index = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014], compress_group="user_id_or_device_id")
+        colossus_time_s, user_id_or_device_id_index = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64, compress_group="user_id_or_device_id")
+else:
+    item_long_term_pids3 = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001])
+    item_long_term_aids3 = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002])
+    item_long_term_label3 = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004])
+    item_long_term_tag3 = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006])
+    item_long_term_duration3 = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007])
+    item_long_term_play_time3 = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008])
+    item_long_term_channel3 = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009])
+    item_long_term_play_x_duration3 = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010])
+    item_long_term_day_diff3 = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011])
+    item_long_term_mindiff3 = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013])
+    item_long_term_abspose3 = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014])
+    colossus_time_s = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64)
+
+### item RAG embedding
+# item_rag_item_age_hour = config.new_embedding("item_rag_1520", dim=16, expand=item_rag_size, slots=[1520])
+rag_item_local_life_id_1 = config.new_embedding("rag_item_local_life_id_1", dim=8, 
+                                                expand=item_rag_size, slots=[item_rag_magic_num + 1606])
+rag_item_local_life_id_2 = config.new_embedding("rag_item_local_life_id_2", dim=8, 
+                                                expand=item_rag_size, slots=[item_rag_magic_num + 1607])
+
+rag_item_local_life_emb = tf.concat([
+    tf.reshape(rag_item_local_life_id_1, (-1, item_rag_size, 8)), 
+    tf.reshape(rag_item_local_life_id_2, (-1, item_rag_size, 8))
+], axis=-1)
+
+rag_item_embedding_64_pid = config.new_embedding("rag_item_embedding_64_pid", dim=64, 
+                                                 expand=item_rag_size, slots=[item_rag_magic_num + 26])
+rag_item_embedding_64_aid = config.new_embedding("rag_item_embedding_64_aid", dim=64, 
+                                                 expand=item_rag_size, slots=[item_rag_magic_num + 128])
+rag_item_embedding_64 = tf.concat([
+    tf.reshape(rag_item_embedding_64_pid, (-1, item_rag_size, 64)), 
+    tf.reshape(rag_item_embedding_64_aid, (-1, item_rag_size, 64))
+], axis=-1)
+
+rag_item_embedding_8_list = []
+rag_item_embedding_slot_list = [71, 141, 142, 143, 430, 417]
+rag_item_embedding_slot_list = [item_rag_magic_num + slot for slot in rag_item_embedding_slot_list]
+for slot_id in rag_item_embedding_slot_list:
+    
+    if slot_id == 93:
+        expand_size = item_rag_size * 2
+    elif slot_id == 418:
+        expand_size = item_rag_size * 3
+    else:
+        expand_size = item_rag_size
+
+    slot_embedding = config.new_embedding(f"rag_item_embedding_8_{slot_id}", dim=8, 
+                            expand=expand_size, slots=[slot_id])
+    
+    if slot_id == 93:
+        slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 2, 8))
+        slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
+    elif slot_id == 418:
+        slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 3, 8))
+        slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
+    else:
+        slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
+
+    rag_item_embedding_8_list.append(slot_embedding)
+rag_item_embedding_8 = tf.concat(rag_item_embedding_8_list, axis=-1)
+
+rag_item_nebula_stats_list = []
+rag_item_nebula_stats_slot_list = [776, 777, 778, 779, 780, 781, 782]
+rag_item_nebula_stats_slot_list = [item_rag_magic_num + slot for slot in rag_item_nebula_stats_slot_list]
+for slot_id in rag_item_nebula_stats_slot_list:
+    expand_size = item_rag_size
+    slot_embedding = config.new_embedding(f"rag_item_nebula_stats_{slot_id}", dim=8, 
+                            expand=expand_size, slots=[slot_id])
+    slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
+    rag_item_nebula_stats_list.append(slot_embedding)
+rag_item_nebula_stats = tf.concat(rag_item_nebula_stats_list, axis=-1)
+
+if args.mode == "train":
+    semantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.int64)
+
+    # semanic id with mask
+    masked_tokens = config.get_dense_fea("tokens", dim=senmantic_id_token_num, dtype=tf.int64)
     labels_map = {
         "adp_effective_view_fix": config.get_dense_fea('adp_effective_view_fix', 1, dtype=tf.int64),
         "click": config.get_label("click"),
@@ -2029,10 +2116,11 @@ if args.mode == "train":
         "play_complete": config.get_label("play_complete")
     }
 
-    senmantic_id_v2 = tf.reshape(tf.cast(senmantic_id_v2, tf.int32), (-1, senmantic_id_token_num))
+    semantic_id_v2 = tf.reshape(tf.cast(semantic_id_v2, tf.int32), (-1, senmantic_id_token_num))
+    masked_tokens = tf.reshape(tf.cast(masked_tokens, tf.int32), (-1, senmantic_id_token_num))
     labels = [tf.reshape(tf.cast(labels_map[key], tf.float32), (-1, 1)) for key in labels_map]  
 else:
-    senmantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.float32)
+    semantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.float32)
     labels = [
         config.get_dense_fea('adp_effective_view_fix', 1, dtype=tf.float32),
         config.get_dense_fea("click", 1, dtype=tf.float32),
@@ -2044,7 +2132,7 @@ else:
         config.get_dense_fea("short_view", 1, dtype=tf.float32),
         config.get_dense_fea("play_complete", 1, dtype=tf.float32)
     ]
-    senmantic_id_v2 = tf.reshape(tf.cast(senmantic_id_v2, tf.int32), (-1, senmantic_id_token_num))    
+    semantic_id_v2 = tf.reshape(tf.cast(semantic_id_v2, tf.int32), (-1, senmantic_id_token_num))    
     labels = [tf.reshape(l, (-1, 1)) for l in labels]
 
 ### slots list
@@ -2056,11 +2144,18 @@ else:
 ############# feature prepare #############
 new_initializer = lambda *args, **kwargs: 0.01*tf.glorot_uniform_initializer()(*args, **kwargs)
 
+def get_stid_mix_mask():
+    stid_mix_flag = config.get_dense_fea("stid_mix_filter_flag", dim=1, dtype=tf.int64) # [b, 1]
+    stid_mix_mask = tf.cast(tf.equal(stid_mix_flag, 1), tf.int32) # [b, 1]
+    return stid_mix_mask
+
+
 def dense_proj_tokens(input, token_num, token_dim, name):
     # input: [b, concat_dim]
     # output: [b, token_num, token_dim]
     input = mio_dense_layer(input, token_dim * token_num, 
-                            None, f"{name}_proj_tokens", f"{name}_proj_tokens_param")
+                            None, f"{name}_proj_tokens", f"{name}_proj_tokens_param", 
+                            bias=False)
     input = tf.reshape(input, (-1, token_num, token_dim))
     return input
 
@@ -2068,43 +2163,46 @@ def token_proj_tokens(input, token_dim, name):
     # input: [b, seq_len, concat_dim]
     # output: [b, seq_len, token_dim]
     input = mio_dense_layer(input, token_dim, 
-                            None, f"{name}_proj_tokens", f"{name}_proj_tokens_param")
+                            None, f"{name}_proj_tokens", f"{name}_proj_tokens_param",
+                            bias=False)
     return input
-def prepare_item_tokens(vocab_size, token_num, d_model, senmantic_id_v2):
-    # senmantic_id_v2: [b, token_num]
+def prepare_item_tokens(vocab_size, token_num, d_model):
+    # semantic_id_v2: [b, token_num]
     # build item token embedding
-    batch_size = tf.shape(senmantic_id_v2)[0]
+    batch_size = tf.shape(semantic_id_v2)[0]
 
     item_token_embedding = tf.get_variable("item_token_embedding", (vocab_size, d_model))
     mask_token_id = tf.constant(vocab_size - 1, dtype=tf.int32)
     
     if args.mode == "train":
         # build all zeros mask
-        zeros_id_num = tf.reduce_sum(tf.cast(tf.equal(senmantic_id_v2, 0), tf.int32), axis=-1) # [b]
+        # zeros_id_num = tf.reduce_sum(tf.cast(tf.equal(semantic_id_v2, 0), tf.int32), axis=-1) # [b]
+        zeros_id_num = tf.reduce_sum(tf.cast(tf.equal(masked_tokens, 0), tf.int32), axis=-1) # [b]
         all_zeros_mask = tf.cast(tf.equal(zeros_id_num, token_num), tf.int32) # [b] 1 for all zeros
         
-        # generate mask: 1. uniform t; 2. uniform mask by t
-        t = tf.random.uniform(shape=[batch_size, 1], minval=0.0, maxval=1.0, 
-                            dtype=tf.float32, name="mask_t")
-        t = tf.tile(t, [1, token_num])
-        m_prob_matrix = tf.random.uniform(shape=[batch_size, token_num], minval=0.0, maxval=1.0, 
-                                        dtype=tf.float32, name="mask_prob_matrix")
-        mask = tf.cast(tf.less(m_prob_matrix, t), tf.int32) # [b, token_num] 1 for mask 0 for no mask
+        # # generate mask: 1. uniform t; 2. uniform mask by t
+        # t = tf.random.uniform(shape=[batch_size, 1], minval=0.0, maxval=1.0, 
+        #                     dtype=tf.float32, name="mask_t")
+        # t = tf.tile(t, [1, token_num])
+        # m_prob_matrix = tf.random.uniform(shape=[batch_size, token_num], minval=0.0, maxval=1.0, 
+        #                                 dtype=tf.float32, name="mask_prob_matrix")
+        # mask = tf.cast(tf.less(m_prob_matrix, t), tf.int32) # [b, token_num] 1 for mask 0 for no mask
 
-        masked_token = senmantic_id_v2 * (1 - mask) + mask_token_id * mask
+        # masked_token = semantic_id_v2 * (1 - mask) + mask_token_id * mask
 
+        mask = tf.cast(tf.equal(masked_tokens, mask_token_id), tf.int32)
         # [b, token_num, emb]   
-        masked_token_embedding = tf.nn.embedding_lookup(item_token_embedding, masked_token)
+        masked_token_embedding = tf.nn.embedding_lookup(item_token_embedding, masked_tokens)
         
-        return masked_token_embedding, mask, senmantic_id_v2, all_zeros_mask
+        return masked_token_embedding, mask, all_zeros_mask
     
     else:
         # build item token embedding
-        item_token_embedding = tf.nn.embedding_lookup(item_token_embedding, senmantic_id_v2)
-        mask = tf.cast(tf.equal(senmantic_id_v2, mask_token_id), tf.int32)
+        item_token_embedding = tf.nn.embedding_lookup(item_token_embedding, semantic_id_v2)
+        mask = tf.cast(tf.equal(semantic_id_v2, mask_token_id), tf.int32)
         all_zeros_mask = tf.zeros((batch_size, 1), dtype=tf.int32)
 
-        return item_token_embedding, mask, senmantic_id_v2, all_zeros_mask
+        return item_token_embedding, mask, all_zeros_mask
 
 def prepare_query_input():
     if args.local_debug:
@@ -2146,14 +2244,10 @@ def prepare_query_input():
 def prepare_label_input(label_inputs, token_dim):
     labels = tf.concat(label_inputs, axis=-1)
     label_token = mio_dense_layer(labels, token_dim, None,  
-                                  "label_token", "label_token_param")
+                                  "label_token", "label_token_param",
+                                  bias=False)
     label_token = tf.expand_dims(label_token, axis=1)
     return label_token
-
-def prepare_item_gsu():
-    # TODO: add item gsu
-    item_gsu = tf.zeros((tf.shape(senmantic_id_v2)[0], 1, 1), dtype=tf.float32) # mock item gsu
-    return item_gsu
 
 def prepare_user_profile_ctx(token_dim):
     # dense feas
@@ -2175,7 +2269,7 @@ def prepare_user_profile_ctx(token_dim):
         token_list.append(
             tf.expand_dims(mio_dense_layer(fea, token_dim, None, 
                             f"dense_token_proj_fea_{idx}", 
-                            f"dense_token_proj_fea_{idx}_param"), 1)
+                            f"dense_token_proj_fea_{idx}_param", bias=False), 1)
         )
     
     # seq feas
@@ -2191,24 +2285,88 @@ def prepare_user_profile_ctx(token_dim):
     token_list.append(
         mio_dense_layer(short_term_list_input, token_dim, None, 
                         f"dense_token_proj_short_term_list_input", 
-                        f"dense_token_proj_short_term_list_input_param")
+                        f"dense_token_proj_short_term_list_input_param", bias=False)
     )
     return tf.concat(token_list, 1)
 
-def prepare_user_1k_history():
-    # TODO: add user 1k history
-    user_1k_history = tf.zeros((tf.shape(senmantic_id_v2)[0], 1, 1), dtype=tf.float32) # mock user 1k history
-    return user_1k_history
+def prepare_user_long_term_history(d_model):
+    if args.mode == "train":
+        # compress by user_id_or_device_id_index
+        with tf.xla.experimental.jit_scope(compile_ops=False):
+            user_batch_size = tf.shape(item_long_term_pids3)[0]
+            long_term_pids3 = tf.reshape(item_long_term_pids3, (user_batch_size, long_term_seq_len, 64))
+            long_term_aids3 = tf.reshape(item_long_term_aids3, (user_batch_size, long_term_seq_len, 64))
+            long_term_label3 = tf.reshape(item_long_term_label3, (user_batch_size, long_term_seq_len, 8))
+            long_term_tag3 = tf.reshape(item_long_term_tag3, (user_batch_size, long_term_seq_len, 8))
+            long_term_duration3 = tf.reshape(item_long_term_duration3, (user_batch_size, long_term_seq_len, 8))
+            long_term_play_time3 = tf.reshape(item_long_term_play_time3, (user_batch_size, long_term_seq_len, 8))
+            long_term_channel3 = tf.reshape(item_long_term_channel3, (user_batch_size, long_term_seq_len, 8))
+            long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (user_batch_size, long_term_seq_len, 8))
+            long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (user_batch_size, long_term_seq_len, 8))
+            long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (user_batch_size, long_term_seq_len, 8))
+            long_term_abspose3 = tf.reshape(item_long_term_abspose3, (user_batch_size, long_term_seq_len, 8))
+
+            long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [user_batch_size, long_term_seq_len]
+            user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
+                                            long_term_tag3, long_term_duration3, long_term_play_time3, 
+                                            long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
+                                            long_term_mindiff3, long_term_abspose3], 2) # [user_batch_size, long_term_seq_len, 123]
+            user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [user_batch_size, long_term_seq_len, d_model]
+            user_long_term_mask = tf.reshape(long_term_mask, (user_batch_size, long_term_seq_len))
+
+            user_long_term_history = tf.gather(user_long_term_history, user_id_or_device_id_index) 
+            user_long_term_mask = tf.gather(user_long_term_mask, user_id_or_device_id_index)
+    else:
+        # expand, batch size
+        batch_size = tf.shape(item_long_term_pids3)[0]
+        long_term_pids3 = tf.reshape(item_long_term_pids3, (batch_size, long_term_seq_len, 64))
+        long_term_aids3 = tf.reshape(item_long_term_aids3, (batch_size, long_term_seq_len, 64))
+        long_term_label3 = tf.reshape(item_long_term_label3, (batch_size, long_term_seq_len, 8))
+        long_term_tag3 = tf.reshape(item_long_term_tag3, (batch_size, long_term_seq_len, 8))
+        long_term_duration3 = tf.reshape(item_long_term_duration3, (batch_size, long_term_seq_len, 8))
+        long_term_play_time3 = tf.reshape(item_long_term_play_time3, (batch_size, long_term_seq_len, 8))
+        long_term_channel3 = tf.reshape(item_long_term_channel3, (batch_size, long_term_seq_len, 8))
+        long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (batch_size, long_term_seq_len, 8))
+        long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (batch_size, long_term_seq_len, 8))
+        long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (batch_size, long_term_seq_len, 8))
+        long_term_abspose3 = tf.reshape(item_long_term_abspose3, (batch_size, long_term_seq_len, 8))
+
+        long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [batch_size, long_term_seq_len]
+        user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
+                                            long_term_tag3, long_term_duration3, long_term_play_time3, 
+                                            long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
+                                            long_term_mindiff3, long_term_abspose3], 2) # [batch_size, long_term_seq_len, 123]
+        user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [batch_size, long_term_seq_len, d_model]
+        user_long_term_mask = tf.reshape(long_term_mask, (batch_size, long_term_seq_len))
+
+    return user_long_term_history, user_long_term_mask
 
 def prepare_user_gsu_ctx():
     # TODO: add user gsu ctx
-    user_gsu_ctx = tf.zeros((tf.shape(senmantic_id_v2)[0], 1, 1), dtype=tf.float32) # mock user gsu ctx
+    user_gsu_ctx = tf.zeros((tf.shape(semantic_id_v2)[0], 1, 1), dtype=tf.float32) # mock user gsu ctx
     return user_gsu_ctx
 
-def prepare_item_gsu_ctx():
-    # TODO: add item gsu ctx
-    item_gsu_ctx = tf.zeros((tf.shape(senmantic_id_v2)[0], 1, 1), dtype=tf.float32) # mock item gsu ctx
-    return item_gsu_ctx
+def prepare_item_gsu_ctx(d_model):
+    rag_list = [rag_item_local_life_emb, rag_item_embedding_64, 
+                rag_item_embedding_8, rag_item_nebula_stats]
+
+    # seq tokens
+    rag_items = tf.concat(rag_list, axis=-1) # [b, item_rag_size, dim]
+    rag_item_tokens = token_proj_tokens(rag_items, d_model, "rag_item_tokens") # [b, item_rag_size, d_model]
+
+    # pooling tokens
+    pooling_token_list = []
+    for fea_idx, fea in enumerate(rag_list):
+        fea_emb = tf.reduce_mean(fea, axis=1) # [b, dim]
+        fea_emb = tf.expand_dims(fea_emb, axis=1) # [b, 1, dim]
+        fea_emb = mio_dense_layer(fea_emb, d_model, None, 
+                                  f"rag_item_pooling_token_proj_fea_{fea_idx}", 
+                                  f"rag_item_pooling_token_proj_fea_{fea_idx}_param", 
+                                  bias=False)
+        pooling_token_list.append(fea_emb)
+    rag_item_pooling_tokens = tf.concat(pooling_token_list, axis=1) # [b, 4, d_model]
+
+    return rag_item_tokens, rag_item_pooling_tokens
 
 ########### feature prepare end ###########
 
@@ -2221,16 +2379,16 @@ def rms_norm(x, scope_name, eps=1e-6):
 def ffn_layer(x, ffn_dim, hidden_dim, name):
     g = mio_dense_layer(x, ffn_dim, None, 
                         f"{name}_ffn_gate", 
-                        f"{name}_ffn_gate_param")
+                        f"{name}_ffn_gate_param", bias=False)
     
     v = mio_dense_layer(x, ffn_dim, None, 
                         f"{name}_ffn_value", 
-                        f"{name}_ffn_value_param")
+                        f"{name}_ffn_value_param", bias=False)
     
     x = swish(g) * v
     x = mio_dense_layer(x, hidden_dim, None, 
                         f"{name}_ffn_output", 
-                        f"{name}_ffn_output_param")
+                        f"{name}_ffn_output_param", bias=False)
     return x
 
 def attention_layer(query, key, value, num_heads, att_emb_size, name, kv_mask=None):
@@ -2243,6 +2401,7 @@ def attention_layer(query, key, value, num_heads, att_emb_size, name, kv_mask=No
     batch_size = tf.shape(query)[0]
     seq_len_q = query.get_shape()[1]
     seq_len_k = key.get_shape()[1]
+    print(f"seq_len_q: {seq_len_q}, seq_len_k: {seq_len_k}")
 
     hidden_dim = int(num_heads * att_emb_size)
 
@@ -2252,9 +2411,9 @@ def attention_layer(query, key, value, num_heads, att_emb_size, name, kv_mask=No
     kv_mask = tf.cast(kv_mask, dtype=query.dtype)
     kv_mask = (1.0 - kv_mask) * -1e9
 
-    q = mio_dense_layer(query, hidden_dim, None, f"{name}_q_weight", f"{name}_q_weight_param")
-    k = mio_dense_layer(key, hidden_dim, None, f"{name}_k_weight", f"{name}_k_weight_param")
-    v = mio_dense_layer(value, hidden_dim, None, f"{name}_v_weight", f"{name}_v_weight_param")
+    q = mio_dense_layer(query, hidden_dim, None, f"{name}_q_weight", f"{name}_q_weight_param", bias=False)
+    k = mio_dense_layer(key, hidden_dim, None, f"{name}_k_weight", f"{name}_k_weight_param", bias=False)
+    v = mio_dense_layer(value, hidden_dim, None, f"{name}_v_weight", f"{name}_v_weight_param", bias=False)
 
     q = tf.reshape(q, [batch_size, seq_len_q, num_heads, att_emb_size])
     k = tf.reshape(k, [batch_size, seq_len_k, num_heads, att_emb_size])
@@ -2278,7 +2437,7 @@ def attention_layer(query, key, value, num_heads, att_emb_size, name, kv_mask=No
 
     attn_output = mio_dense_layer(attn_output, query.get_shape()[-1], None, 
                                   f"{name}_attn_output", 
-                                  f"{name}_attn_output_param")
+                                  f"{name}_attn_output_param", bias=False)
     return attn_output
 
 def build_flash_input(inputs, mask=None):
@@ -2346,9 +2505,9 @@ def attention_layer_flash(query, key, value, num_heads, att_emb_size, name, q_se
 
     hidden_dim = int(num_heads * att_emb_size)
 
-    q_flat = mio_dense_layer(query, hidden_dim, None, f"{name}_q_weight", f"{name}_q_weight_param")
-    k_flat = mio_dense_layer(key, hidden_dim, None, f"{name}_k_weight", f"{name}_k_weight_param")
-    v_flat = mio_dense_layer(value, hidden_dim, None, f"{name}_v_weight", f"{name}_v_weight_param")
+    q_flat = mio_dense_layer(query, hidden_dim, None, f"{name}_q_weight", f"{name}_q_weight_param", bias=False)
+    k_flat = mio_dense_layer(key, hidden_dim, None, f"{name}_k_weight", f"{name}_k_weight_param", bias=False)
+    v_flat = mio_dense_layer(value, hidden_dim, None, f"{name}_v_weight", f"{name}_v_weight_param", bias=False)
 
     q_flat = tf.reshape(q_flat, [1, -1, num_heads, att_emb_size]) # [1, valid_q, h, head_dim]
     k_flat = tf.reshape(k_flat, [1, -1, num_heads, att_emb_size]) # [1, valid_k, h, head_dim]
@@ -2363,7 +2522,7 @@ def attention_layer_flash(query, key, value, num_heads, att_emb_size, name, q_se
     attn_out = tf.reshape(attn_out, [-1, valid_q_token_num, num_heads * att_emb_size]) # [valid_q, emb]
     attn_out = mio_dense_layer(attn_out, query.get_shape()[-1], None, 
                               f"{name}_attn_output", 
-                              f"{name}_attn_output_param")
+                              f"{name}_attn_output_param", bias=False)
     
     return attn_out
 
@@ -2503,20 +2662,29 @@ def cross_former_layer(q, kv, ffn_dim, hidden_dim, name, num_heads, kv_mask=None
     q = res + q
     return q    
 
-def build_cross_former_layers(q, kv, ffn_dim, hidden_dim, name, num_heads, num_layers, kv_mask=None, dropout_rate=0.0):
+def build_cross_former_layers(q, kv, ffn_dim, hidden_dim, 
+                              name, 
+                              num_heads, num_layers, 
+                              kv_mask=None, dropout_rate=0.0):
     # kv pre norm
     kv = rms_norm(kv, f"{name}_kv_norm")
     for layer_idx in range(num_layers):
         q = cross_former_layer(q, kv, ffn_dim, hidden_dim, f"{name}_layer_{layer_idx}", num_heads, kv_mask, dropout_rate)
     return q
 
-def build_query_former_layers(inputs, query_num, ffn_dim, hidden_dim, name, num_heads, num_layers, kv_mask=None, dropout_rate=0.0):
+def build_query_former_layers(inputs, query_num, ffn_dim, hidden_dim, 
+                              name, 
+                              num_heads, num_layers, 
+                              kv_mask=None, dropout_rate=0.0):
     batch_size = tf.shape(inputs)[0]
 
     # build_query
     query_embs = tf.get_variable(f"{name}_query_embs", (query_num, hidden_dim))
     query_embs = tf.tile(tf.expand_dims(query_embs, 0), [batch_size, 1, 1])
-    query_embs = build_cross_former_layers(query_embs, inputs, ffn_dim, hidden_dim, name, num_heads, num_layers, kv_mask, dropout_rate)
+    query_embs = build_cross_former_layers(query_embs, inputs, ffn_dim, hidden_dim, 
+                                           name, 
+                                           num_heads, num_layers, 
+                                           kv_mask, dropout_rate)
     return query_embs
         
 def fr_model():
@@ -2542,32 +2710,31 @@ def fr_model():
     cross_ffn_dim = int(2 * hidden_dim)
 
     user_profile_ctx_token_num = 32
-    user_1k_his_ctx_token_num = 32
+    user_long_term_his_ctx_token_num = 32
     user_gsu_ctx_token_num = 32
     item_gsu_ctx_token_num = 32
     label_token_num = 1
 
     with tf_name_scope("pre_process"), new_xla_jit_context():
-        item_token_embedding, item_token_mask, item_token_label, all_zeros_mask = prepare_item_tokens(vocab_size, item_seq_len, d_model, senmantic_id_v2)
+        item_token_label = semantic_id_v2
+        item_token_embedding, item_token_mask, all_zeros_mask = prepare_item_tokens(vocab_size, item_seq_len, d_model)
 
         # gen global hidden state
         user_query_input = token_proj_tokens(prepare_query_input(), d_model, "user_query_input_tokens") # [b, 1, d_model]
         label_input = prepare_label_input(labels, d_model)
-        # item_gsu = token_proj_tokens(prepare_item_gsu(), d_model, "item_gsu") # [b, -1, d_model]
+        rag_item_tokens, rag_item_pooling_tokens = prepare_item_gsu_ctx(d_model)
         masked_item = item_token_embedding # [b, item_seq_len, d_model]
 
-        # global_hidden_state = tf.concat([user_query_input, label_input, 
-        #                                  item_gsu, masked_item], 1)
-        global_hidden_state = tf.concat([user_query_input, 
+        global_hidden_state = tf.concat([user_query_input, rag_item_pooling_tokens,
                                          label_input, masked_item], 1)
         
         # user_profile_ctx
         user_profile_ctx = prepare_user_profile_ctx(token_dim=d_model)
-        # user_1k_history = token_proj_tokens(prepare_user_1k_history(), d_model, "user_1k_history")
+        user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
         # user_gsu_ctx = token_proj_tokens(prepare_user_gsu_ctx(), d_model, "user_gsu_ctx")
-        # item_gsu_ctx = token_proj_tokens(prepare_item_gsu_ctx(), d_model, "item_gsu_ctx")
 
     with tf_name_scope("user_profile_ctx"), new_xla_jit_context():
+        print("user_profile_ctx")
         user_profile_ctx_query = build_query_former_layers(global_hidden_state,
                                                            user_profile_ctx_token_num,
                                                            ffn_dim=qformer_ffn_dim,
@@ -2584,36 +2751,38 @@ def fr_model():
                                                          name="upc_cross")
 
     
-    # with tf_name_scope("user_1k_history"), new_xla_jit_context():
-    #     user_1k_history_query = build_query_former_layers(global_hidden_state,
-    #                                                       user_1k_his_ctx_token_num,
-    #                                                       ffn_dim=qformer_ffn_dim,
-    #                                                       hidden_dim=hidden_dim,
-    #                                                       num_heads=qformer_num_heads,
-    #                                                       num_layers=qformer_layer_num,
-    #                                                       name="u1kh_query")
-    #     user_1k_history_res = build_cross_former_layers(user_1k_history_query, 
-    #                                                     user_1k_history,
-    #                                                     ffn_dim=cross_ffn_dim,
-    #                                                     hidden_dim=hidden_dim,
-    #                                                     num_heads=cross_num_heads,
-    #                                                     num_layers=cross_layer_num,
-    #                                                     name="u1kh_cross")
+    with tf_name_scope("user_long_term_history"), new_xla_jit_context():
+        print("user_long_term_history")
+        user_long_term_history_query = build_query_former_layers(global_hidden_state,
+                                                          user_long_term_his_ctx_token_num,
+                                                          ffn_dim=qformer_ffn_dim,
+                                                          hidden_dim=hidden_dim,
+                                                          num_heads=qformer_num_heads,
+                                                          num_layers=qformer_layer_num,
+                                                          name="ulth_query")
+        user_long_term_history_res = build_cross_former_layers(user_long_term_history_query, 
+                                                        user_long_term_history,
+                                                        ffn_dim=cross_ffn_dim,
+                                                        hidden_dim=hidden_dim,
+                                                        num_heads=cross_num_heads,
+                                                        num_layers=cross_layer_num,
+                                                        kv_mask=user_long_term_mask,
+                                                        name="ulth_cross")
             
-    # with tf_name_scope("user_gsu_ctx"), new_xla_jit_context():
-    #     user_gsu_ctx_query = build_query_former_layers(global_hidden_state,
-    #                                                    user_gsu_ctx_token_num,
-    #                                                    ffn_dim=qformer_ffn_dim,
-    #                                                    hidden_dim=hidden_dim,
-    #                                                    num_heads=qformer_num_heads,
-    #                                                    num_layers=qformer_layer_num,
-    #                                                    name="ugsc_query")
-    #     user_gsu_ctx_res = build_cross_former_layers(user_gsu_ctx_query, user_gsu_ctx, 
-    #                                                  ffn_dim=cross_ffn_dim,
-    #                                                  hidden_dim=hidden_dim,
-    #                                                  num_heads=cross_num_heads,
-    #                                                  num_layers=cross_layer_num,
-    #                                                  name="ugsc_cross")
+    with tf_name_scope("item_gsu_ctx"), new_xla_jit_context():
+        item_gsu_ctx_query = build_query_former_layers(global_hidden_state,
+                                                       item_gsu_ctx_token_num,
+                                                       ffn_dim=qformer_ffn_dim,
+                                                       hidden_dim=hidden_dim,
+                                                       num_heads=qformer_num_heads,
+                                                       num_layers=qformer_layer_num,
+                                                       name="igsc_query")
+        item_gsu_ctx_res = build_cross_former_layers(item_gsu_ctx_query, rag_item_tokens, 
+                                                     ffn_dim=cross_ffn_dim,
+                                                     hidden_dim=hidden_dim,
+                                                     num_heads=cross_num_heads,
+                                                     num_layers=cross_layer_num,
+                                                     name="igsc_cross")
     
     # with tf_name_scope("item_gsu_ctx"), new_xla_jit_context():
     #     item_gsu_ctx_query = build_query_former_layers(global_hidden_state,
@@ -2637,7 +2806,10 @@ def fr_model():
         #                        item_gsu_ctx_res,
         #                        label_input, masked_item], 1)
         # token_seq = tf.concat([user_profile_ctx_res, item_tokens], 1)
-        token_seq = tf.concat([user_profile_ctx_res, label_input, masked_item], 1)
+        # token_seq = tf.concat([user_profile_ctx_res, user_long_term_history_res,
+        #                         label_input, masked_item], 1)
+        token_seq = tf.concat([user_profile_ctx_res, item_gsu_ctx_res, user_long_term_history_res,
+                                label_input, masked_item], 1)
 
         transformer_output = build_llama_model(token_seq, 
                                                ffn_dim=ffw_size, 
@@ -2665,7 +2837,7 @@ def fr_model():
                                             "item_hidden_state_up", "item_hidden_state_up_param")
         
         item_pred_head = mio_dense_layer(item_hidden_state, vocab_size - 1, 
-                                         None, "item_pred_head", "item_pred_head_param")
+                                         None, "item_pred_head", "item_pred_head_param", bias=False)
         
         item_pred_logits = tf.reshape(item_pred_head, (b, item_seq_len, vocab_size - 1)) 
     
@@ -2686,6 +2858,10 @@ if args.mode == "train":
     token_num = senmantic_id_token_num
 
     item_pred_logits, item_token_mask, item_token_label, all_zeros_mask = fr_model()
+    stid_mix_mask = tf.reshape(get_stid_mix_mask(), [-1])
+    all_zeros_mask = stid_mix_mask * all_zeros_mask
+
+
     token_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
         labels=item_token_label,
         logits=item_pred_logits
@@ -2773,7 +2949,7 @@ if args.mode == "train":
         # config.set_slot_param_attr([344, 348], config.nn.ParamAttr(access_method=config.nn.ProbabilityAccess(100.0),
         #                                                            recycle_method=config.nn.UnseendaysRecycle(30, 2.0)))
 
-        sparse_optimizer = config.optimizer.Adam(0.001) # freeze embedding
+        sparse_optimizer = config.optimizer.Adam(0.0) # freeze embedding
         dense_optimizer_bias = config.optimizer.Adam(0.001)
         dense_optimizer_mlp = config.optimizer.AdamW(learning_rate=0.001, weight_decay=0.001)
 
