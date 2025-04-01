@@ -30,6 +30,7 @@ import contextlib
 senmantic_id_token_num = 16
 long_term_seq_len = 512
 item_rag_size = 32
+item_rag_magic_num = 30000
 
 # 在本地调试模式下，首先导入TensorFlow
 if args.local_debug:
@@ -407,7 +408,7 @@ if args.with_kai_v2 and not args.local_debug:
     user_id = config.get_dense_fea("user_id", 1, dtype=tf.int64)
     
     # remove: "1520"，"93", 
-    item_rag_magic_num = 30000
+   
     item_rag_output_slots = ["1606", "1607", "26", "128", "71", "141", 
                              "142", "143", "417", "430", "776", "777", "778", 
                              "779", "780", "781", "782"]
@@ -539,10 +540,11 @@ short_term_list_seq_len = 20
 act_token_num = 32
 million_token_num = 500
 # short_live_list_seq_len = 50
-#use_matmul_ex = True if args.with_kai_v2 else False
+# use_matmul_ex = True if args.with_kai_v2 else False
 use_matmul_ex = False
 
 use_xla = False if args.mode == "predict" else True
+# use_xla = False
 
 dense_norm_type = 'batch_norm'
 gate_norm_type = 'batch_norm'
@@ -2355,18 +2357,18 @@ def prepare_item_gsu_ctx(d_model):
     rag_item_tokens = token_proj_tokens(rag_items, d_model, "rag_item_tokens") # [b, item_rag_size, d_model]
 
     # pooling tokens
-    pooling_token_list = []
-    for fea_idx, fea in enumerate(rag_list):
-        fea_emb = tf.reduce_mean(fea, axis=1) # [b, dim]
-        fea_emb = tf.expand_dims(fea_emb, axis=1) # [b, 1, dim]
-        fea_emb = mio_dense_layer(fea_emb, d_model, None, 
-                                  f"rag_item_pooling_token_proj_fea_{fea_idx}", 
-                                  f"rag_item_pooling_token_proj_fea_{fea_idx}_param", 
-                                  bias=False)
-        pooling_token_list.append(fea_emb)
-    rag_item_pooling_tokens = tf.concat(pooling_token_list, axis=1) # [b, 4, d_model]
+    # pooling_token_list = []
+    # for fea_idx, fea in enumerate(rag_list):
+    #     fea_emb = tf.reduce_mean(fea, axis=1) # [b, dim]
+    #     fea_emb = tf.expand_dims(fea_emb, axis=1) # [b, 1, dim]
+    #     fea_emb = mio_dense_layer(fea_emb, d_model, None, 
+    #                               f"rag_item_pooling_token_proj_fea_{fea_idx}", 
+    #                               f"rag_item_pooling_token_proj_fea_{fea_idx}_param", 
+    #                               bias=False)
+    #     pooling_token_list.append(fea_emb)
+    # rag_item_pooling_tokens = tf.concat(pooling_token_list, axis=1) # [b, 4, d_model]
 
-    return rag_item_tokens, rag_item_pooling_tokens
+    return rag_item_tokens
 
 ########### feature prepare end ###########
 
@@ -2519,8 +2521,8 @@ def attention_layer_flash(query, key, value, num_heads, att_emb_size, name, q_se
         q_seqinfo=q_seqinfo, k_seqinfo=kv_seqinfo,
         custom_mask_type=config.nn.CustomMaskType.BlockDiagonalMask)
     
-    attn_out = tf.reshape(attn_out, [-1, valid_q_token_num, num_heads * att_emb_size]) # [valid_q, emb]
-    attn_out = mio_dense_layer(attn_out, query.get_shape()[-1], None, 
+    attn_out = tf.reshape(attn_out, [valid_q_token_num, hidden_dim]) # [valid_q, emb]
+    attn_out = mio_dense_layer(attn_out, hidden_dim, None, 
                               f"{name}_attn_output", 
                               f"{name}_attn_output_param", bias=False)
     
@@ -2541,26 +2543,28 @@ def decoder_layer(x, ffn_dim, hidden_dim, name, num_heads,
     x = rms_norm(x, f"{name}_pre_norm")
 
     def flash_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask):
+        batch_size = tf.shape(x)[0]
         seq_len_x = x.get_shape()[1]
-        flat_x, seq_info, valid_indices, batch_size = build_flash_input(x, kv_mask) # flat_x:[batch_size * seq_len_x, emb]
-        flat_x = tf.expand_dims(flat_x, 0) # [1, batch_size * seq_len_x, emb]
-        x = attention_layer_flash(flat_x, flat_x, flat_x, num_heads, att_emb_size, f"{name}_attn", seq_info, seq_info)
-        x = restore_from_flash_input(tf.reshape(x, [-1, hidden_dim]), 
-                                     seq_info, valid_indices, 
-                                     batch_size, seq_len_x, hidden_dim)
+        dim = x.get_shape()[2]
+        flat_x = tf.reshape(x, [1, batch_size * seq_len_x, dim]) # [1, batch_size * seq_len_x, emb]
+        seq_info = tf.ones([batch_size], dtype=tf.int32) * seq_len_x
+        x = attention_layer_flash(flat_x, flat_x, flat_x, num_heads, att_emb_size, f"{name}_attn", seq_info, seq_info) # [batch_size * seq_len_x, emb]
+        x = tf.reshape(x, [batch_size, seq_len_x, dim])
         return x
     
     def naive_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask):
         x = attention_layer(x, x, x, num_heads, att_emb_size, f"{name}_attn", kv_mask)
         return x
     
-    with tf.variable_scope(f"{name}_attn", reuse=tf.AUTO_REUSE):
-        if not align_score:
-            if use_flash_attention:
-                x = flash_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
-            else:
-                x = naive_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
+    
+    if not align_score:
+        if use_flash_attention:
+            assert kv_mask is None, "not support mask for flash attention"
+            x = flash_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
         else:
+            x = naive_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
+    else:
+        with tf.variable_scope(f"{name}_attn", reuse=tf.AUTO_REUSE):
             x1 = flash_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
             x2 = naive_attn(x, num_heads, att_emb_size, hidden_dim, kv_mask)
 
@@ -2571,6 +2575,7 @@ def decoder_layer(x, ffn_dim, hidden_dim, name, num_heads,
 
             print_debug = conditional_tf_print(
                 lambda: tf.equal(tf.mod(train_step, 10), 1),
+                f"{name} decoder_layer align_score",
                 "step: ", train_step,
                 "diff_max:", tf.reduce_max(diff),
                 "diff_min:", tf.reduce_min(diff),
@@ -2583,7 +2588,7 @@ def decoder_layer(x, ffn_dim, hidden_dim, name, num_heads,
             )
 
             with tf.control_dependencies([print_debug]):
-                x = x2
+                x = tf.identity(x1)
 
     if dropout_rate > 0:
         x = tf.nn.dropout(x, rate=dropout_rate)
@@ -2632,7 +2637,11 @@ def build_llama_model(inputs, ffn_dim, hidden_dim, name, num_heads, num_layers):
     inputs = rms_norm(inputs, f"{name}_final_ln")
     return inputs
 
-def cross_former_layer(q, kv, ffn_dim, hidden_dim, name, num_heads, kv_mask=None, dropout_rate=0.0):
+def cross_former_layer(q, kv, ffn_dim, hidden_dim, 
+                       name, num_heads, 
+                       kv_mask=None, dropout_rate=0.0,
+                       use_flash_attention=False,
+                       align_score=False):
     # q: [b, sq, emb]
     # kv: [b, sk, emb]
     # ffn_dim: int
@@ -2649,7 +2658,70 @@ def cross_former_layer(q, kv, ffn_dim, hidden_dim, name, num_heads, kv_mask=None
 
     res = q
     q = rms_norm(q, f"{name}_pre_norm")
-    q = attention_layer(q, kv, kv, num_heads, att_emb_size, f"{name}_attn", kv_mask)
+    def naive_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask):
+        q = attention_layer(q, kv, kv, num_heads, att_emb_size, f"{name}_attn", kv_mask)
+        return q
+    
+    def flash_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask):
+        q_bs = tf.shape(q)[0]
+        q_seq_len = q.get_shape()[1]
+
+        kv_bs = tf.shape(kv)[0]
+        kv_seq_len = kv.get_shape()[1]
+
+        flat_q = tf.reshape(q, [1, q_bs * q_seq_len, hidden_dim])
+        q_seq_info = tf.ones([q_bs], dtype=tf.int32) * q_seq_len
+
+        if kv_mask is not None:
+            flat_kv = tf.reshape(kv, [kv_bs * kv_seq_len, hidden_dim])
+            kv_seq_info = tf.reduce_sum(kv_mask, axis=1)
+
+            # remove unvalid tokens
+            kv_mask = tf.reshape(kv_mask, [kv_bs * kv_seq_len])
+            flat_kv = tf.boolean_mask(flat_kv, kv_mask)
+            flat_kv = tf.reshape(flat_kv, [1, -1, hidden_dim])
+        else:
+            flat_kv = tf.reshape(kv, [1, kv_bs * kv_seq_len, hidden_dim])
+            kv_seq_info = tf.ones([kv_bs], dtype=tf.int32) * kv_seq_len
+
+        attn_q = attention_layer_flash(flat_q, flat_kv, flat_kv, 
+                                    num_heads, att_emb_size, 
+                                    f"{name}_attn", q_seq_info, kv_seq_info)
+        attn_q = tf.reshape(attn_q, [q_bs, q_seq_len, hidden_dim])
+        return attn_q
+    
+    if not align_score:
+        if use_flash_attention:
+            q = flash_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask)
+        else:
+            q = naive_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask)
+    else:
+        with tf.variable_scope(f"{name}_attn", reuse=tf.AUTO_REUSE):
+            q1 = flash_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask)
+            q2 = naive_attn(q, kv, num_heads, att_emb_size, hidden_dim, kv_mask)
+
+            diff = tf.abs(q1 - q2)
+            diff_ratio = diff / (tf.maximum(tf.abs(q1), tf.abs(q2)) + 1e-6)
+
+            train_step = config.get_step()
+
+            print_debug = conditional_tf_print(
+                lambda: tf.equal(tf.mod(train_step, 10), 1),
+                f"{name} cross_former_layer align_score",
+                "step: ", train_step,
+                "diff_max:", tf.reduce_max(diff),
+                "diff_min:", tf.reduce_min(diff),
+                "diff_mean:", tf.reduce_mean(diff),
+                "diff_ratio_max:", tf.reduce_max(diff_ratio),
+                "diff_ratio_min:", tf.reduce_min(diff_ratio),
+                "diff_ratio_mean:", tf.reduce_mean(diff_ratio),
+                output_stream=sys.stdout,
+                summarize=20,
+            )
+
+            with tf.control_dependencies([print_debug]):
+                q = tf.identity(q1)
+                
     if dropout_rate > 0:
         q = tf.nn.dropout(q, rate=dropout_rate)
     q = res + q
@@ -2660,7 +2732,36 @@ def cross_former_layer(q, kv, ffn_dim, hidden_dim, name, num_heads, kv_mask=None
     if dropout_rate > 0:
         q = tf.nn.dropout(q, rate=dropout_rate)
     q = res + q
-    return q    
+    return q
+
+def build_cross_former_self_layers(q, kv, cross_ffn_dim, self_ffn_dim, hidden_dim, 
+                              name, 
+                              num_heads, num_layers, 
+                              kv_mask=None, dropout_rate=0.0):
+
+    batch_size = tf.shape(q)[0]
+    seq_len = q.get_shape()[1]
+    emb_size = q.get_shape()[2]
+
+    pos_embedding = tf.get_variable(f"{name}_pos_embedding", (seq_len, emb_size))
+    pos_embedding = tf.tile(tf.expand_dims(pos_embedding, 0), [batch_size, 1, 1])
+
+    q = q + pos_embedding
+    kv = rms_norm(kv, f"{name}_kv_norm")
+
+    for layer_idx in range(num_layers):
+        q = cross_former_layer(q, kv, cross_ffn_dim, hidden_dim, 
+                               f"{name}_cross_layer_{layer_idx}", 
+                               num_heads, kv_mask, dropout_rate,
+                               use_flash_attention=True, align_score=False)
+        
+        q = decoder_layer(q, self_ffn_dim, hidden_dim, 
+                          f"{name}_self_layer_{layer_idx}", 
+                          num_heads, None, dropout_rate, 
+                          use_flash_attention=True, align_score=False)
+        
+    q = rms_norm(q, f"{name}_final_norm")
+    return q
 
 def build_cross_former_layers(q, kv, ffn_dim, hidden_dim, 
                               name, 
@@ -2689,8 +2790,8 @@ def build_query_former_layers(inputs, query_num, ffn_dim, hidden_dim,
         
 def fr_model():
     # global config
-    d_model = 320
-    num_layers = 2
+    d_model = 640
+    num_layers = 8
     ffw_size = int(d_model * 4)
     num_heads = 10
     
@@ -2700,153 +2801,41 @@ def fr_model():
 
     # field pre process
     hidden_dim = d_model
-
-    qformer_layer_num = 1
-    qformer_num_heads = 10
-    qformer_ffn_dim = int(2 * hidden_dim)
-    
-    cross_layer_num = 1
-    cross_num_heads = 10
-    cross_ffn_dim = int(2 * hidden_dim)
-
-    user_profile_ctx_token_num = 32
-    user_long_term_his_ctx_token_num = 32
-    user_gsu_ctx_token_num = 32
-    item_gsu_ctx_token_num = 32
-    label_token_num = 1
+    cross_ffn_dim = int(4 * hidden_dim)
 
     with tf_name_scope("pre_process"), new_xla_jit_context():
         item_token_label = semantic_id_v2
         item_token_embedding, item_token_mask, all_zeros_mask = prepare_item_tokens(vocab_size, item_seq_len, d_model)
 
-        # gen global hidden state
-        user_query_input = token_proj_tokens(prepare_query_input(), d_model, "user_query_input_tokens") # [b, 1, d_model]
         label_input = prepare_label_input(labels, d_model)
-        rag_item_tokens, rag_item_pooling_tokens = prepare_item_gsu_ctx(d_model)
-        masked_item = item_token_embedding # [b, item_seq_len, d_model]
-
-        global_hidden_state = tf.concat([user_query_input, rag_item_pooling_tokens,
-                                         label_input, masked_item], 1)
-        
-        # user_profile_ctx
+        rag_item_tokens = prepare_item_gsu_ctx(d_model)
         user_profile_ctx = prepare_user_profile_ctx(token_dim=d_model)
         user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
-        # user_gsu_ctx = token_proj_tokens(prepare_user_gsu_ctx(), d_model, "user_gsu_ctx")
-
-    with tf_name_scope("user_profile_ctx"), new_xla_jit_context():
-        print("user_profile_ctx")
-        user_profile_ctx_query = build_query_former_layers(global_hidden_state,
-                                                           user_profile_ctx_token_num,
-                                                           ffn_dim=qformer_ffn_dim,
-                                                           hidden_dim=hidden_dim,
-                                                           num_heads=qformer_num_heads,
-                                                           num_layers=qformer_layer_num,
-                                                           name="upc_query")
-        user_profile_ctx_res = build_cross_former_layers(user_profile_ctx_query, 
-                                                         user_profile_ctx,
-                                                         ffn_dim=cross_ffn_dim,
-                                                         hidden_dim=hidden_dim,
-                                                         num_heads=cross_num_heads,
-                                                         num_layers=cross_layer_num,
-                                                         name="upc_cross")
-
     
-    with tf_name_scope("user_long_term_history"), new_xla_jit_context():
-        print("user_long_term_history")
-        user_long_term_history_query = build_query_former_layers(global_hidden_state,
-                                                          user_long_term_his_ctx_token_num,
-                                                          ffn_dim=qformer_ffn_dim,
-                                                          hidden_dim=hidden_dim,
-                                                          num_heads=qformer_num_heads,
-                                                          num_layers=qformer_layer_num,
-                                                          name="ulth_query")
-        user_long_term_history_res = build_cross_former_layers(user_long_term_history_query, 
-                                                        user_long_term_history,
-                                                        ffn_dim=cross_ffn_dim,
-                                                        hidden_dim=hidden_dim,
-                                                        num_heads=cross_num_heads,
-                                                        num_layers=cross_layer_num,
-                                                        kv_mask=user_long_term_mask,
-                                                        name="ulth_cross")
-            
-    with tf_name_scope("item_gsu_ctx"), new_xla_jit_context():
-        item_gsu_ctx_query = build_query_former_layers(global_hidden_state,
-                                                       item_gsu_ctx_token_num,
-                                                       ffn_dim=qformer_ffn_dim,
-                                                       hidden_dim=hidden_dim,
-                                                       num_heads=qformer_num_heads,
-                                                       num_layers=qformer_layer_num,
-                                                       name="igsc_query")
-        item_gsu_ctx_res = build_cross_former_layers(item_gsu_ctx_query, rag_item_tokens, 
-                                                     ffn_dim=cross_ffn_dim,
-                                                     hidden_dim=hidden_dim,
-                                                     num_heads=cross_num_heads,
-                                                     num_layers=cross_layer_num,
-                                                     name="igsc_cross")
-    
-    # with tf_name_scope("item_gsu_ctx"), new_xla_jit_context():
-    #     item_gsu_ctx_query = build_query_former_layers(global_hidden_state,
-    #                                                    item_gsu_ctx_token_num,
-    #                                                    ffn_dim=qformer_ffn_dim,
-    #                                                    hidden_dim=hidden_dim,
-    #                                                    num_heads=qformer_num_heads,
-    #                                                    num_layers=qformer_layer_num,
-    #                                                    name="igsc_query")
-    #     item_gsu_ctx_res = build_cross_former_layers(item_gsu_ctx_query, item_gsu_ctx, 
-    #                                                  ffn_dim=cross_ffn_dim,
-    #                                                  hidden_dim=hidden_dim,
-    #                                                  num_heads=cross_num_heads,
-    #                                                  num_layers=cross_layer_num,
-    #                                                  name="igsc_cross")
+    with tf_name_scope("qformer"), new_xla_jit_context():
+        # batch_size = tf.shape(user_long_term_mask)[0]
+        context = tf.concat([user_profile_ctx, rag_item_tokens, label_input, user_long_term_history], axis=1)
+        # ctx_seq_len = context.get_shape()[1]
+        # ctx_kv_mask = tf.concat([tf.ones([batch_size, ctx_seq_len - user_long_term_mask.get_shape()[1]], dtype=tf.int32), user_long_term_mask], axis=1)
 
-    with tf_name_scope("self_attention_transformer"), new_xla_jit_context():
-        # token_seq = tf.concat([user_profile_ctx_res, 
-        #                        user_1k_history_res, 
-        #                        user_gsu_ctx_res, 
-        #                        item_gsu_ctx_res,
-        #                        label_input, masked_item], 1)
-        # token_seq = tf.concat([user_profile_ctx_res, item_tokens], 1)
-        # token_seq = tf.concat([user_profile_ctx_res, user_long_term_history_res,
-        #                         label_input, masked_item], 1)
-        token_seq = tf.concat([user_profile_ctx_res, item_gsu_ctx_res, user_long_term_history_res,
-                                label_input, masked_item], 1)
+        qformer_res = build_cross_former_self_layers(item_token_embedding, context, cross_ffn_dim, ffw_size,
+                                                      hidden_dim, 
+                                                     "qformer", 
+                                                     num_heads, num_layers, 
+                                                     kv_mask=None, dropout_rate=0.0)
 
-        transformer_output = build_llama_model(token_seq, 
-                                               ffn_dim=ffw_size, 
-                                               hidden_dim=hidden_dim, 
-                                               name="main_transformer", 
-                                               num_heads=num_heads, 
-                                               num_layers=num_layers)
-    
-    
     with tf_name_scope("item_pred_head"), new_xla_jit_context():
-        # split item part
-        b = tf.shape(transformer_output)[0]
-        # NOTE: transformer_output.get_shape() not work
-        sq = int(transformer_output.shape[1])
-        emb = int(transformer_output.shape[2])
-        
-        start_idx = sq - item_seq_len 
-        item_hidden_state = tf.slice(transformer_output, 
-                                     [0, start_idx, 0], 
-                                     [b, item_seq_len, emb]) # [b, item_seq_len, emb]
-
-        # item pred head, vocab_size - 1 for no mask prediction
-        item_hidden_state = mio_dense_layer(item_hidden_state, 
-                                            d_model * 4, tf.nn.relu, 
-                                            "item_hidden_state_up", "item_hidden_state_up_param")
-        
-        item_pred_head = mio_dense_layer(item_hidden_state, vocab_size - 1, 
+        b = tf.shape(qformer_res)[0]
+        item_pred_head = mio_dense_layer(qformer_res, vocab_size - 1, 
                                          None, "item_pred_head", "item_pred_head_param", bias=False)
-        
         item_pred_logits = tf.reshape(item_pred_head, (b, item_seq_len, vocab_size - 1)) 
     
-        return (
-            item_pred_logits,  # [b, item_seq_len, vocab_size - 1]
-            item_token_mask,   # [b, item_seq_len]
-            item_token_label,  # [b, item_seq_len]
-            all_zeros_mask     # [b]
-        )
+    return (
+        item_pred_logits,  # [b, item_seq_len, vocab_size - 1]
+        item_token_mask,   # [b, item_seq_len]
+        item_token_label,  # [b, item_seq_len]
+        all_zeros_mask     # [b]
+    )
 
 
 if args.mode == "train":
@@ -2858,6 +2847,7 @@ if args.mode == "train":
     token_num = senmantic_id_token_num
 
     item_pred_logits, item_token_mask, item_token_label, all_zeros_mask = fr_model()
+
     stid_mix_mask = tf.reshape(get_stid_mix_mask(), [-1])
     all_zeros_mask = stid_mix_mask * all_zeros_mask
 
