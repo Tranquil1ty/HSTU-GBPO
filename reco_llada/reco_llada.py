@@ -2939,7 +2939,7 @@ if args.mode == "train":
         # config.set_slot_param_attr([344, 348], config.nn.ParamAttr(access_method=config.nn.ProbabilityAccess(100.0),
         #                                                            recycle_method=config.nn.UnseendaysRecycle(30, 2.0)))
 
-        sparse_optimizer = config.optimizer.Adam(0.0) # freeze embedding
+        sparse_optimizer = config.optimizer.Adam(0.0005) # freeze embedding
         dense_optimizer_bias = config.optimizer.Adam(0.001)
         dense_optimizer_mlp = config.optimizer.AdamW(learning_rate=0.001, weight_decay=0.001)
 
