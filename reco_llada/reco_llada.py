@@ -33,6 +33,7 @@ item_rag_size = 32
 item_rag_magic_num = 30000
 
 # 在本地调试模式下，首先导入TensorFlow
+# python reco_llada.py --mode train --local_debug --with_kai_v2 --debug_batch_size 10  
 if args.local_debug:
     import tensorflow as tf
     # 确保使用TensorFlow 1.x的API
@@ -343,6 +344,7 @@ if args.local_debug:
 if args.with_kai_v2 and not args.local_debug:
     import kai.tensorflow as config
     import tensorflow.compat.v1 as tf
+    from kconf.get_config import get_double_config
 
     reco_channel = [
         'reco.reco_log_fine_sort_feature',
@@ -428,19 +430,29 @@ if args.with_kai_v2 and not args.local_debug:
         output_column_types=["list<int64>", "list<int64>"] + ["list<int64>"] * len(item_rag_output_slots) + ["list<int64>"] * len(gsu_output_slots),
         output_common_flags=[False, False] + [False] * len(item_rag_output_slots) + [False] * len(gsu_output_slots),
         data_source_name="train",
-        timeout_ms=10000)
+        timeout_ms=60000)
 
-    # def filter_mask_wrapper(dataset):
-    #     dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
+    def filter_mask_wrapper(dataset):
+        dataset.add_feature('llsid', dataset.DENSE, tf.int64, 1)
+        dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
 
-    #     def mask_fn(batch):
-    #         sample_type = batch['stid_mix_filter_flag']
-    #         mask = tf.math.equal(sample_type, 1)
-    #         return mask
-    #     return mask_fn
+        def mask_fn(batch):
+            sample_llsid = batch['llsid']
+            sample_ratio = get_double_config("reco.model2.reco_llada_sample_filter")
+            hash_val = tf.cast(tf.bitwise.bitwise_and(sample_llsid, 0xffff), tf.float32)
+            hash_ratio = hash_val / tf.cast(0xffff, tf.float32)
+            sample_mask = tf.cast(tf.greater(hash_ratio, sample_ratio), tf.bool)
+
+            stid_mix_filter_flag = batch['stid_mix_filter_flag']
+            stid_mix_mask = tf.cast(tf.equal(stid_mix_filter_flag, 1), tf.bool) # [b, 1]
+
+            mask = tf.logical_or(sample_mask, stid_mix_mask)
+            return mask
+        
+        return mask_fn
     
-    # config.declare_sample_filter(
-    #     filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
+    config.declare_sample_filter(
+        filter_mask_wrapper, data_source_name=['train', 'test'], channel_name=reco_channel)
 
 
 elif args.local_debug:
@@ -2014,33 +2026,46 @@ user_short_term_times = config.new_embedding("user_short_term_times", dim=8, exp
 user_short_term_play = config.new_embedding("user_short_term_play", dim=8, expand=short_term_list_seq_len,
                                             slots=[252], **compress_kwargs)
 
-if args.mode == "train":
-    with tf.xla.experimental.jit_scope(compile_ops=False):
-        item_long_term_pids3, user_id_or_device_id_index = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001], compress_group="user_id_or_device_id")
-        item_long_term_aids3, user_id_or_device_id_index = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002], compress_group="user_id_or_device_id")
-        item_long_term_label3, user_id_or_device_id_index = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004], compress_group="user_id_or_device_id")
-        item_long_term_tag3, user_id_or_device_id_index = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006], compress_group="user_id_or_device_id")
-        item_long_term_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007], compress_group="user_id_or_device_id")
-        item_long_term_play_time3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008], compress_group="user_id_or_device_id")
-        item_long_term_channel3, user_id_or_device_id_index = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009], compress_group="user_id_or_device_id")
-        item_long_term_play_x_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010], compress_group="user_id_or_device_id")
-        item_long_term_day_diff3, user_id_or_device_id_index = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011], compress_group="user_id_or_device_id")
-        item_long_term_mindiff3, user_id_or_device_id_index = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013], compress_group="user_id_or_device_id")
-        item_long_term_abspose3, user_id_or_device_id_index = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014], compress_group="user_id_or_device_id")
-        colossus_time_s, user_id_or_device_id_index = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64, compress_group="user_id_or_device_id")
-else:
-    item_long_term_pids3 = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001])
-    item_long_term_aids3 = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002])
-    item_long_term_label3 = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004])
-    item_long_term_tag3 = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006])
-    item_long_term_duration3 = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007])
-    item_long_term_play_time3 = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008])
-    item_long_term_channel3 = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009])
-    item_long_term_play_x_duration3 = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010])
-    item_long_term_day_diff3 = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011])
-    item_long_term_mindiff3 = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013])
-    item_long_term_abspose3 = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014])
-    colossus_time_s = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64)
+# if args.mode == "train":
+#     with tf.xla.experimental.jit_scope(compile_ops=False):
+#         item_long_term_pids3, user_id_or_device_id_index = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001], compress_group="user_id_or_device_id")
+#         item_long_term_aids3, user_id_or_device_id_index = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002], compress_group="user_id_or_device_id")
+#         item_long_term_label3, user_id_or_device_id_index = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004], compress_group="user_id_or_device_id")
+#         item_long_term_tag3, user_id_or_device_id_index = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006], compress_group="user_id_or_device_id")
+#         item_long_term_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007], compress_group="user_id_or_device_id")
+#         item_long_term_play_time3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008], compress_group="user_id_or_device_id")
+#         item_long_term_channel3, user_id_or_device_id_index = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009], compress_group="user_id_or_device_id")
+#         item_long_term_play_x_duration3, user_id_or_device_id_index = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010], compress_group="user_id_or_device_id")
+#         item_long_term_day_diff3, user_id_or_device_id_index = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011], compress_group="user_id_or_device_id")
+#         item_long_term_mindiff3, user_id_or_device_id_index = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013], compress_group="user_id_or_device_id")
+#         item_long_term_abspose3, user_id_or_device_id_index = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014], compress_group="user_id_or_device_id")
+#         colossus_time_s, user_id_or_device_id_index = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64, compress_group="user_id_or_device_id")
+# else:
+#     item_long_term_pids3 = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001])
+#     item_long_term_aids3 = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002])
+#     item_long_term_label3 = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004])
+#     item_long_term_tag3 = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006])
+#     item_long_term_duration3 = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007])
+#     item_long_term_play_time3 = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008])
+#     item_long_term_channel3 = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009])
+#     item_long_term_play_x_duration3 = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010])
+#     item_long_term_day_diff3 = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011])
+#     item_long_term_mindiff3 = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013])
+#     item_long_term_abspose3 = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014])
+#     colossus_time_s = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64)
+
+item_long_term_pids3 = config.new_embedding("item_long_term_pids3", dim=64, expand=long_term_seq_len, slots=[1001])
+item_long_term_aids3 = config.new_embedding("item_long_term_aids3", dim=64, expand=long_term_seq_len, slots=[1002])
+item_long_term_label3 = config.new_embedding("item_long_term_label3", dim=8, expand=long_term_seq_len, slots=[1004])
+item_long_term_tag3 = config.new_embedding("item_long_term_tag3", dim=8, expand=long_term_seq_len, slots=[1006])
+item_long_term_duration3 = config.new_embedding("item_long_term_duration3", dim=8, expand=long_term_seq_len, slots=[1007])
+item_long_term_play_time3 = config.new_embedding("item_long_term_play_time3", dim=8, expand=long_term_seq_len, slots=[1008])
+item_long_term_channel3 = config.new_embedding("item_long_term_channel3", dim=8, expand=long_term_seq_len, slots=[1009])
+item_long_term_play_x_duration3 = config.new_embedding("item_long_term_play_x_duration3", dim=8, expand=long_term_seq_len, slots=[1010])
+item_long_term_day_diff3 = config.new_embedding("item_long_term_day_diff3", dim=8, expand=long_term_seq_len, slots=[1011])
+item_long_term_mindiff3 = config.new_embedding("item_long_term_mindiff3", dim=8, expand=long_term_seq_len, slots=[1013])
+item_long_term_abspose3 = config.new_embedding("item_long_term_abspose3", dim=8, expand=long_term_seq_len, slots=[1014])
+colossus_time_s = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64)
 
 ### item RAG embedding
 # item_rag_item_age_hour = config.new_embedding("item_rag_1520", dim=16, expand=item_rag_size, slots=[1520])
@@ -2145,11 +2170,6 @@ else:
 
 ############# feature prepare #############
 new_initializer = lambda *args, **kwargs: 0.01*tf.glorot_uniform_initializer()(*args, **kwargs)
-
-def get_stid_mix_mask():
-    stid_mix_flag = config.get_dense_fea("stid_mix_filter_flag", dim=1, dtype=tf.int64) # [b, 1]
-    stid_mix_mask = tf.cast(tf.equal(stid_mix_flag, 1), tf.int32) # [b, 1]
-    return stid_mix_mask
 
 
 def dense_proj_tokens(input, token_num, token_dim, name):
@@ -2292,54 +2312,89 @@ def prepare_user_profile_ctx(token_dim):
     return tf.concat(token_list, 1)
 
 def prepare_user_long_term_history(d_model):
-    if args.mode == "train":
-        # compress by user_id_or_device_id_index
-        with tf.xla.experimental.jit_scope(compile_ops=False):
-            user_batch_size = tf.shape(item_long_term_pids3)[0]
-            long_term_pids3 = tf.reshape(item_long_term_pids3, (user_batch_size, long_term_seq_len, 64))
-            long_term_aids3 = tf.reshape(item_long_term_aids3, (user_batch_size, long_term_seq_len, 64))
-            long_term_label3 = tf.reshape(item_long_term_label3, (user_batch_size, long_term_seq_len, 8))
-            long_term_tag3 = tf.reshape(item_long_term_tag3, (user_batch_size, long_term_seq_len, 8))
-            long_term_duration3 = tf.reshape(item_long_term_duration3, (user_batch_size, long_term_seq_len, 8))
-            long_term_play_time3 = tf.reshape(item_long_term_play_time3, (user_batch_size, long_term_seq_len, 8))
-            long_term_channel3 = tf.reshape(item_long_term_channel3, (user_batch_size, long_term_seq_len, 8))
-            long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (user_batch_size, long_term_seq_len, 8))
-            long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (user_batch_size, long_term_seq_len, 8))
-            long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (user_batch_size, long_term_seq_len, 8))
-            long_term_abspose3 = tf.reshape(item_long_term_abspose3, (user_batch_size, long_term_seq_len, 8))
+    # if args.mode == "train":
+    #     # compress by user_id_or_device_id_index
+    #     with tf.xla.experimental.jit_scope(compile_ops=False):
+    #         user_batch_size = tf.shape(item_long_term_pids3)[0]
+    #         long_term_pids3 = tf.reshape(item_long_term_pids3, (user_batch_size, long_term_seq_len, 64))
+    #         long_term_aids3 = tf.reshape(item_long_term_aids3, (user_batch_size, long_term_seq_len, 64))
+    #         long_term_label3 = tf.reshape(item_long_term_label3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_tag3 = tf.reshape(item_long_term_tag3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_duration3 = tf.reshape(item_long_term_duration3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_play_time3 = tf.reshape(item_long_term_play_time3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_channel3 = tf.reshape(item_long_term_channel3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (user_batch_size, long_term_seq_len, 8))
+    #         long_term_abspose3 = tf.reshape(item_long_term_abspose3, (user_batch_size, long_term_seq_len, 8))
 
-            long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [user_batch_size, long_term_seq_len]
-            user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
-                                            long_term_tag3, long_term_duration3, long_term_play_time3, 
-                                            long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
-                                            long_term_mindiff3, long_term_abspose3], 2) # [user_batch_size, long_term_seq_len, 123]
-            user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [user_batch_size, long_term_seq_len, d_model]
-            user_long_term_mask = tf.reshape(long_term_mask, (user_batch_size, long_term_seq_len))
+    #         long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [user_batch_size, long_term_seq_len]
+    #         user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
+    #                                         long_term_tag3, long_term_duration3, long_term_play_time3, 
+    #                                         long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
+    #                                         long_term_mindiff3, long_term_abspose3], 2) # [user_batch_size, long_term_seq_len, 123]
+    #         user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [user_batch_size, long_term_seq_len, d_model]
+    #         user_long_term_mask = tf.reshape(long_term_mask, (user_batch_size, long_term_seq_len))
 
-            user_long_term_history = tf.gather(user_long_term_history, user_id_or_device_id_index) 
-            user_long_term_mask = tf.gather(user_long_term_mask, user_id_or_device_id_index)
-    else:
-        # expand, batch size
-        batch_size = tf.shape(item_long_term_pids3)[0]
-        long_term_pids3 = tf.reshape(item_long_term_pids3, (batch_size, long_term_seq_len, 64))
-        long_term_aids3 = tf.reshape(item_long_term_aids3, (batch_size, long_term_seq_len, 64))
-        long_term_label3 = tf.reshape(item_long_term_label3, (batch_size, long_term_seq_len, 8))
-        long_term_tag3 = tf.reshape(item_long_term_tag3, (batch_size, long_term_seq_len, 8))
-        long_term_duration3 = tf.reshape(item_long_term_duration3, (batch_size, long_term_seq_len, 8))
-        long_term_play_time3 = tf.reshape(item_long_term_play_time3, (batch_size, long_term_seq_len, 8))
-        long_term_channel3 = tf.reshape(item_long_term_channel3, (batch_size, long_term_seq_len, 8))
-        long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (batch_size, long_term_seq_len, 8))
-        long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (batch_size, long_term_seq_len, 8))
-        long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (batch_size, long_term_seq_len, 8))
-        long_term_abspose3 = tf.reshape(item_long_term_abspose3, (batch_size, long_term_seq_len, 8))
+    #         user_long_term_history = tf.gather(user_long_term_history, user_id_or_device_id_index) 
+    #         user_long_term_mask = tf.gather(user_long_term_mask, user_id_or_device_id_index)
+    # else:
+    #     # expand, batch size
+    #     batch_size = tf.shape(item_long_term_pids3)[0]
+    #     long_term_pids3 = tf.reshape(item_long_term_pids3, (batch_size, long_term_seq_len, 64))
+    #     long_term_aids3 = tf.reshape(item_long_term_aids3, (batch_size, long_term_seq_len, 64))
+    #     long_term_label3 = tf.reshape(item_long_term_label3, (batch_size, long_term_seq_len, 8))
+    #     long_term_tag3 = tf.reshape(item_long_term_tag3, (batch_size, long_term_seq_len, 8))
+    #     long_term_duration3 = tf.reshape(item_long_term_duration3, (batch_size, long_term_seq_len, 8))
+    #     long_term_play_time3 = tf.reshape(item_long_term_play_time3, (batch_size, long_term_seq_len, 8))
+    #     long_term_channel3 = tf.reshape(item_long_term_channel3, (batch_size, long_term_seq_len, 8))
+    #     long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (batch_size, long_term_seq_len, 8))
+    #     long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (batch_size, long_term_seq_len, 8))
+    #     long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (batch_size, long_term_seq_len, 8))
+    #     long_term_abspose3 = tf.reshape(item_long_term_abspose3, (batch_size, long_term_seq_len, 8))
 
-        long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [batch_size, long_term_seq_len]
-        user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
-                                            long_term_tag3, long_term_duration3, long_term_play_time3, 
-                                            long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
-                                            long_term_mindiff3, long_term_abspose3], 2) # [batch_size, long_term_seq_len, 123]
-        user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [batch_size, long_term_seq_len, d_model]
-        user_long_term_mask = tf.reshape(long_term_mask, (batch_size, long_term_seq_len))
+    #     long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [batch_size, long_term_seq_len]
+    #     user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
+    #                                         long_term_tag3, long_term_duration3, long_term_play_time3, 
+    #                                         long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
+    #                                         long_term_mindiff3, long_term_abspose3], 2) # [batch_size, long_term_seq_len, 123]
+    #     user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [batch_size, long_term_seq_len, d_model]
+    #     user_long_term_mask = tf.reshape(long_term_mask, (batch_size, long_term_seq_len))
+
+    # expand, batch size
+    batch_size = tf.shape(item_long_term_pids3)[0]
+    long_term_pids3 = tf.reshape(item_long_term_pids3, (batch_size, long_term_seq_len, 64))
+    long_term_aids3 = tf.reshape(item_long_term_aids3, (batch_size, long_term_seq_len, 64))
+    long_term_label3 = tf.reshape(item_long_term_label3, (batch_size, long_term_seq_len, 8))
+    long_term_tag3 = tf.reshape(item_long_term_tag3, (batch_size, long_term_seq_len, 8))
+    long_term_duration3 = tf.reshape(item_long_term_duration3, (batch_size, long_term_seq_len, 8))
+    long_term_play_time3 = tf.reshape(item_long_term_play_time3, (batch_size, long_term_seq_len, 8))
+    long_term_channel3 = tf.reshape(item_long_term_channel3, (batch_size, long_term_seq_len, 8))
+    long_term_play_x_duration3 = tf.reshape(item_long_term_play_x_duration3, (batch_size, long_term_seq_len, 8))
+    long_term_day_diff3 = tf.reshape(item_long_term_day_diff3, (batch_size, long_term_seq_len, 8))
+    long_term_mindiff3 = tf.reshape(item_long_term_mindiff3, (batch_size, long_term_seq_len, 8))
+    long_term_abspose3 = tf.reshape(item_long_term_abspose3, (batch_size, long_term_seq_len, 8))
+
+    long_term_mask = tf.cast(tf.greater(colossus_time_s, 0), tf.int32) # [batch_size, long_term_seq_len]
+
+    # train_step = config.get_step()
+    # print_debug = conditional_tf_print(
+    #     lambda: tf.equal(tf.mod(train_step, 10), 1),
+    #     "step: ", train_step,
+    #     "long_term_mask:", long_term_mask,
+    #     output_stream=sys.stdout,
+    #     summarize=20,
+    # )
+    # with tf.control_dependencies([print_debug]):
+    #     long_term_mask = tf.identity(long_term_mask)
+    # long_term_mask = P(long_term_mask, "long_term_mask", enable_print_in_training=True)
+
+    user_long_term_history = tf.concat([long_term_pids3, long_term_aids3, long_term_label3, 
+                                        long_term_tag3, long_term_duration3, long_term_play_time3, 
+                                        long_term_channel3, long_term_play_x_duration3, long_term_day_diff3, 
+                                        long_term_mindiff3, long_term_abspose3], 2) # [batch_size, long_term_seq_len, 123]
+    user_long_term_history = token_proj_tokens(user_long_term_history, d_model, "user_long_term_history") # [batch_size, long_term_seq_len, d_model]
+    user_long_term_mask = tf.reshape(long_term_mask, (batch_size, long_term_seq_len))
 
     return user_long_term_history, user_long_term_mask
 
@@ -2813,8 +2868,8 @@ def fr_model():
         user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
     
     with tf_name_scope("qformer"), new_xla_jit_context():
-        # batch_size = tf.shape(user_long_term_mask)[0]
         context = tf.concat([user_profile_ctx, rag_item_tokens, label_input, user_long_term_history], axis=1)
+        # batch_size = tf.shape(user_long_term_mask)[0]
         # ctx_seq_len = context.get_shape()[1]
         # ctx_kv_mask = tf.concat([tf.ones([batch_size, ctx_seq_len - user_long_term_mask.get_shape()[1]], dtype=tf.int32), user_long_term_mask], axis=1)
 
@@ -2847,10 +2902,6 @@ if args.mode == "train":
     token_num = senmantic_id_token_num
 
     item_pred_logits, item_token_mask, item_token_label, all_zeros_mask = fr_model()
-
-    stid_mix_mask = tf.reshape(get_stid_mix_mask(), [-1])
-    all_zeros_mask = stid_mix_mask * all_zeros_mask
-
 
     token_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
         labels=item_token_label,
@@ -2899,7 +2950,7 @@ if args.mode == "train":
 
     # item rebuild hit rate
     valid_sample = 1.0 - tf.cast(all_zeros_mask, tf.float32) # [b]
-    valid_sample_ratio = tf.reduce_sum(valid_sample) / tf.reduce_sum(tf.ones_like(valid_sample))
+    valid_sample_ratio = tf.reduce_sum(valid_sample) / (tf.reduce_sum(tf.ones_like(valid_sample)) + 1e-6)
     eval_targets.append(("valid_sample_ratio", valid_sample_ratio * ones, zeros, ones, "linear_regression"))
     tf.summary.scalar("global_metric/valid_sample_ratio", valid_sample_ratio)
 
@@ -2931,7 +2982,7 @@ if args.mode == "train":
         tf.summary.scalar("hit_rate_by_sample/hitrate_with_{}mask_sample".format(i+1), sample_hit_rate)
 
         sample_count = tf.reduce_sum(sample_mask)
-        sample_ratio = sample_count / tf.reduce_sum(valid_sample)
+        sample_ratio = sample_count / (tf.reduce_sum(valid_sample) + 1e-6)
         eval_targets.append(("sample_ratio_with_{}mask".format(i+1), sample_ratio * ones, zeros, ones, "linear_regression"))
         tf.summary.scalar("sample_ratio/sample_ratio_with_{}mask".format(i+1), sample_ratio)
 
