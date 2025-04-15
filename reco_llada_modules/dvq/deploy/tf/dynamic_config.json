@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "5455cf1a1fb951e55202665e92e72f93_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-03-26 15:54:46",
+  "_CONFIG_VERSION": "e00169f0ae05dedf74a5421ee2bd5233_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-04-02 00:47:41",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "item_attr": [
@@ -35,26 +35,6 @@
           ],
           "type_name": "CommonRecoAttrTypeCastEnricher"
         },
-        "enrich_attr_by_lua_4E74A8": {
-          "$metadata": {
-            "$input_common_attrs": [],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "common_parameters",
-              "common_slots"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "common_parameters",
-            "common_slots"
-          ],
-          "function_for_common": "gen_common_attrs",
-          "import_common_attr": [],
-          "lua_script": "function gen_common_attrs() return ({1152921504730303765}), ({1}) end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "log_debug_info_2F2C08": {
           "$metadata": {
             "$input_common_attrs": [],
@@ -76,12 +56,9 @@
           "respect_sample_logging": false,
           "type_name": "CommonRecoDebugInfoObserver"
         },
-        "uni_predict_fused_0E052F": {
+        "uni_predict_fused_98FD9A": {
           "$metadata": {
-            "$input_common_attrs": [
-              "common_parameters",
-              "common_slots"
-            ],
+            "$input_common_attrs": [],
             "$input_item_attrs": [
               "tokens_double"
             ],
@@ -93,34 +70,11 @@
             ]
           },
           "batching_config": {
-            "batch_task_type": "BasicBatchingTask",
-            "batch_timeout_micros": 0,
-            "max_batch_size": 1024,
-            "max_enqueued_batches": 1
+            "batch_task_type": "BatchTensorflowTask",
+            "batch_timeout_micros": 500,
+            "max_batch_size": 2048,
+            "max_enqueued_batches": 200
           },
-          "embedding_fetchers": [
-            {
-              "colossusdb_embd_service_name": "rlj-24q2-norm-exp",
-              "colossusdb_embd_table_name": "GRMListGen09BGRPO",
-              "common_parameters_inputs": [
-                "common_parameters"
-              ],
-              "common_slots_inputs": [
-                "common_slots"
-              ],
-              "fetcher_type": "ColossusdbEmbeddingServerFetcher",
-              "slots_config": [
-                {
-                  "common": true,
-                  "dim": 1024,
-                  "dtype": "mio_int16",
-                  "expand": 1,
-                  "input_name": "inputs_ids_embeddings",
-                  "slots": "1"
-                }
-              ]
-            }
-          ],
           "executor_config": {
             "context_per_device": 12,
             "inter_op_parallelism_threads_num": 4,
@@ -140,7 +94,8 @@
             "enable_bf16": false,
             "enable_xla": false,
             "executor_batchsizes": [
-              1024
+              1024,
+              2048
             ],
             "force_input_tensor_fp32": true,
             "receive_dnn_model_as_macro_block": false,
@@ -169,8 +124,7 @@
         "__PARENT": "base_pipeline",
         "pipeline": [
           "cast_attr_type_555ACC",
-          "enrich_attr_by_lua_4E74A8",
-          "uni_predict_fused_0E052F",
+          "uni_predict_fused_98FD9A",
           "log_debug_info_2F2C08"
         ]
       }

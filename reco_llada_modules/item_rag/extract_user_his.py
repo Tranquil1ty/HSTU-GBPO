@@ -45,8 +45,16 @@ extra_colossus_fields = [
 EOL = '\n'
 
 returned_user_seq_attrs = ["1001","1002","1003","1004","1005","1006","1007","1008","1009","1010","1011","1012","1013","1014","colossus_time_s","1020","1021"] + ["1015", "1016", "1017", "1018", "1019"]
+user_seq_slots = ["1001","1002","1003","1004","1005","1006","1007","1008","1009","1010","1011","1012","1013","1014","1020","1021"] + ["1015", "1016", "1017", "1018", "1019"]
 
 class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuApiMixin, CofeaApiMixin, EmbedCalcApiMixin, UniPredictApiMixin):
+  def run(self):
+    return (
+      self.if_("use_user_seq == 1")
+      .gpt_gsu(share=True, slot_whitelist={1001, 1002, 1004, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016}, extra_slots=False)
+      .end_if_()
+    )
+
   def gpt_gsu(self, share=False, filter_future_seconds=10 * 60, fix_colossus=False, slot_whitelist=None, extra_slots=False, include_extra_fields=False):
     colossus_features = colossus_fields + ["play_x_duration", "day_diff", "hour_in_day", "minute_diff", "position", "session_position", "hour_diff"]
     all_colossus_fields = colossus_fields
@@ -98,7 +106,7 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
       .perflog_attr_value(check_point="recogpt.time_stat_diff", common_attrs=["min_time_ms_zero", "request_gt_min", "request_gt600_min"]) \
       .copy_user_meta_info(save_request_time_to_attr="origin_request_time") \
       .if_("request_gt_min > 0") \
-        .debug_log(common_attrs=["_REQ_TIME_", "origin_request_time",  "min_time_ms", "request_gt_min","request_diff"], log_tag="before_truncate", respect_sample_logging=False) \
+        .log_debug_info(common_attrs=["_REQ_TIME_", "origin_request_time",  "min_time_ms", "request_gt_min","request_diff"], log_tag="before_truncate", respect_sample_logging=False) \
         .perflog_attr_value(check_point="recogpt.time_stat_diff", common_attrs=["request_diff"]) \
       .end_if_() \
       .reset_user_meta_info(timestamp_attr="min_time_ms", time_unit="ms") 
@@ -155,11 +163,11 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
                 return play_x_duration, day_diff, hour_in_day, minute_diff, position, sesssion_position, hour_diff, last_time_gap, session_num
             end
         """) \
-      .debug_log(common_attrs=["_REQ_TIME_", "origin_request_time", "min_time_ms", "session_num"], log_tag="after_truncate", respect_sample_logging=False) \
+      .log_debug_info(common_attrs=["_REQ_TIME_", "origin_request_time", "min_time_ms", "session_num"], log_tag="after_truncate", respect_sample_logging=False) \
       .perflog_attr_value(check_point="recogpt.new_time_stat", common_attrs=["last_time_gap", "session_num"]) \
 
     if share:
-      self \
+      self.if_("request_type == 'infer_request'") \
         .extract_kuiba_parameter(
           config={
             f"extract_colossus_field_{field}": {
@@ -172,9 +180,29 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
                 }],
             } for field_idx, field in enumerate(colossus_features) if slot_whitelist is None or 1001 + field_idx in slot_whitelist
           },
-          target_item={"item_seq": 0},
+          is_common_attr=True,
+          slots_output="user_seq_slots",
+          parameters_output="user_seq_parameters"
+        ) \
+        .else_() \
+        .extract_kuiba_parameter(
+          config={
+            f"extract_colossus_field_{field}": {
+                "attrs": [{
+                    "key_type": 26 if field == "photo_id" else 128 if field == "author_id_v2" else 1001 + field_idx,
+                    "mio_slot_key_type": 1001 + field_idx,
+                    # "key_type": 1001 + field_idx,
+                    "attr": [f"colossus_{field}"],
+                    **kuiba_list_converter_config,
+                }],
+            } for field_idx, field in enumerate(colossus_features) if slot_whitelist is None or 1001 + field_idx in slot_whitelist
+          },
+          # target_item={"item_seq": 0},
           is_common_attr=False,
-          slot_as_attr_name=True)
+          slot_as_attr_name=True
+        ) \
+        .end_()
+    
       if extra_slots:
           self \
             .extract_kuiba_parameter(
@@ -209,6 +237,12 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
           "to_item": "colossus_time_s"
         }],
         target_item={"item_seq": 0},
+      )\
+      .copy_attr(
+        attrs=[{
+          "from_common": "colossus_timestamp",
+          "to_common": "colossus_time_s"
+        }]
       )
 
     for attr in colossus_features:
@@ -216,9 +250,7 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
       self.log_debug_info(common_attrs=[f'colossus_{attr}'], for_debug_request_only=False)
     return self
 
-
-
-user_seq_flow = GSUServerFlow(name = "predict_for_gsu_share_fix").gpt_gsu(share=True, slot_whitelist={1001, 1002, 1004, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016}, extra_slots=False)
+user_seq_flow = GSUServerFlow(name = "user_seq_flow").run()
 
 # predict_for_gsu = GSUServerFlow(name = "predict_for_gsu").gpt_gsu(10000)
 # predict_for_gsu_limit_10240_share_extra = GSUServerFlow(name = "predict_for_gsu_limit_10240_share_extra").gpt_gsu(10240, share=True, include_extra_fields=True, extra_slots=True)

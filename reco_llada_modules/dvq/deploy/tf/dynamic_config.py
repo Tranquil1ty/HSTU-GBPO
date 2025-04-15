@@ -23,8 +23,6 @@ from dragonfly.ext.embedding.embedding_api_mixin import EmbeddingApiMixin
 
 config_root_dir = os.path.join(os.path.dirname(__file__))
 
-colossusdb_embd_service_name = "rlj-24q2-norm-exp"
-colossusdb_embd_table_name= "GRMListGen09BGRPO"
 service_name= "grpc_semantic_id_decoder_tf"
 queue_prefix = "semantic_id_decoder"   #
 
@@ -68,18 +66,6 @@ def load_tf_model():
 model_config = load_tf_model()
 
 
-mock_slots_config = []
-# for c in model_config.slots_config:
-sc = dict()
-sc['input_name'] = "inputs_ids_embeddings"
-sc['slots'] = '1'
-sc['dtype'] = 'mio_int16'
-#sc['dtype'] = 'scale_int8'
-sc['expand'] = 1
-sc['dim'] = 1024
-sc['common'] = True
-mock_slots_config.append(sc)
-
 class DecodeFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCalcApiMixin, GsuApiMixin, PDNApiMixin, CofeaApiMixin, UniPredictV2ApiMixin, EmbeddingApiMixin):
 
     def decode(self, **kwargs):
@@ -94,13 +80,7 @@ class DecodeFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCal
                     "to_item_attr": "tokens_double"
                     },
                 ]
-            )
-            .gen_common_attr_by_lua(
-                attr_map={
-                    "common_slots": "{1}",
-                    "common_parameters": "{1152921504730303765}",
-                }
-            )           
+            )       
             .uni_predict_fused(
                 static_graph=True,
                 graph=model_config.graph,
@@ -119,27 +99,21 @@ class DecodeFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCal
                                         type="MioTFExecutedByTensorFlowModelLoader",
                                         # implicit_batch=False,
                                         dynamic_shape=True,
-                                        executor_batchsizes=[1024],  # user 单边预估，batch_size 为 1
+                                        executor_batchsizes=[1024, 2048],  # user 单边预估，batch_size 为 1
                                         receive_dnn_model_as_macro_block=False,
                                         enable_xla=False,
                                         enable_bf16=False,
                                         force_input_tensor_fp32=True,
                                         # enable_fp16=False,
                                         ),
-                batching_config=dict(batch_timeout_micros=0,
-                                    max_batch_size=1024,
-                                    max_enqueued_batches=1,
-                                    batch_task_type="BasicBatchingTask"),
+                batching_config=dict(batch_timeout_micros=500,
+                                    max_batch_size=2048,
+                                    max_enqueued_batches=200,
+                                    batch_task_type="BatchTensorflowTask"),
                 executor_config=dict(intra_op_parallelism_threads_num=4,
                                     inter_op_parallelism_threads_num=4,
                                     context_per_device=12,
-                                    ),
-                embedding_fetchers=[dict(fetcher_type="ColossusdbEmbeddingServerFetcher",
-                                    colossusdb_embd_service_name=colossusdb_embd_service_name,
-                                    colossusdb_embd_table_name=colossusdb_embd_table_name,
-                                    common_slots_inputs=["common_slots"],
-                                    common_parameters_inputs=["common_parameters"],
-                                    slots_config=mock_slots_config)]
+                                    )
             )
             .log_debug_info(
                 item_attrs = ["tokens", "embs", "tokens_double"], 

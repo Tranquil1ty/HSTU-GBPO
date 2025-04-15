@@ -20,6 +20,8 @@ from dragonfly.ext.embed_calc.embed_calc_api_mixin import EmbedCalcApiMixin
 from dragonfly.ext.pdn.pdn_api_mixin import PDNApiMixin
 from dragonfly.ext.cofea.cofea_api_mixin import CofeaApiMixin
 from dragonfly.ext.embedding.embedding_api_mixin import EmbeddingApiMixin
+from dragonfly.decorators import for_loop
+
 
 ann_kess = "grpc_ann_ia_128_index"
 identifier = "i2i_ann_ia_128_index_config"
@@ -393,6 +395,61 @@ class I2IRunnerFlow(
                 pass_all_items=True,
                 pass_item_attrs = ['sub_flow_id', 'photo_emb']) 
         return self
+    
+    def _executor_sub_kgnn_flow(self, subflow_dict):
+        # 执行 subflow
+        for i in range(max_subflow_num):
+            self.enrich_by_sub_flow(
+                sub_flow = subflow_dict[i], 
+                pass_all_items=True,
+                pass_item_attrs = ['sub_flow_id']) 
+        return self
+
+    def _get_semantic_id(self):
+        self.limit(0)
+        self.retrieve_by_common_attr(
+            attr="photo_id_list",
+            reason=1,
+        )
+        self.deduplicate()
+        self.copy_item_meta_info(
+            save_item_id_to_attr="photo_id",
+            save_item_seq_to_attr="item_seq"
+        )
+        self.fetch_remote_embedding(
+            protocol=1,
+            colossusdb_embd_model_name="rlj-24q2-norm-exp",
+            colossusdb_embd_table_name="parallel_semantic_id",
+            id_converter={"type_name":"plainIdConverter"},
+            input_attr_name="photo_id",
+            output_attr_name="semantic_id",
+            query_source_type="item_attr",
+            is_raw_data=True,
+            raw_data_type="uint16",
+            timeout_ms=10,
+            size=16
+        )
+        self.enrich_attr_by_lua(
+            import_item_attr = ["semantic_id"],
+            export_item_attr = ["is_valid"],
+            function_for_item = "calculate",
+            lua_script = """
+            function calculate()
+                if semantic_id ~= nil then
+                    return 1
+                else
+                    return 0
+                end
+            end
+            """
+        )
+        self.filter_by_attr(
+            attr_name="is_valid",
+            remove_if="==",
+            compare_to=0,
+            remove_if_attr_missing=True,
+        )
+        return self
 
 class Retr_and_Write_Subflow(
     LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
@@ -459,16 +516,17 @@ class Retr_and_Write_Subflow(
 class KGNNSubflow(
     LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
 ):
-    @for_loop(loop_on="semantic_id", loop_index="id_index", loop_value="id", loop_if="break_loop", loop_limit=15)
+
+    @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="id")
     def construct_edge(self):
 
         self.enrich_attr_by_lua(
-            import_item_attr = ["semantic_id", "id_index"],
-            export_item_attr = ["src_node", "dst_node"],
+            import_item_attr = ["semantic_id"],
+            import_common_attr = ["id_index"],
+            export_item_attr = ["src_node", "dst_node", "src_node_text", "dst_node_text"],
             function_for_item = "calculate",
             lua_script = """
             function calculate()
-                local sid_size = #semantic_id
                 local src_node_str = ""
                 local dst_node_str = ""
                 for i=1, id_index+1 do
@@ -484,27 +542,46 @@ class KGNNSubflow(
                 src_node = util.CityHash64(src_node_str)
                 dst_node = util.CityHash64(dst_node_str)
 
-                return src_node, dst_node
+                return src_node, dst_node, src_node_str, dst_node_str
             end
             """
         )
-        self.if_("loop_index < 8")
+        self.log_debug_info(
+            common_attrs = [
+                "id_index"
+            ],
+            item_attrs = [
+                "photo_id",
+                "src_node",
+                "dst_node",
+                "src_node_text",
+                "dst_node_text"
+            ],
+            for_debug_request_only=False
+        )
+        self.if_("id_index < 4")
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="dst_node",
-            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz"
+            
+            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
             btq_prefix = "btq_kgnn_sid_rag-I2I",
             table_name="semantic_id_kgnn",
             insert_edge_weight_act=1,
             timeout_ms=1000,
             btq_shard_num=4,
             batching_num = 1000
+        )
+        self.perflog_attr_value(
+            check_point="kgnn.id_index.lt8",
+            common_attrs=["id_index"],
+            aggregator="count"
         )
         self.else_()
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="photo_id",
-            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz"
+            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
             btq_prefix = "btq_kgnn_sid_rag-I2I",
             table_name="semantic_id_kgnn",
             insert_edge_weight_act=1,
@@ -512,74 +589,55 @@ class KGNNSubflow(
             btq_shard_num=4,
             batching_num = 1000
         )
-        self.end_()
-
-
-    def construct_graph(self, sub_flow_id):
-        self.count_reco_result(target_item = {"sub_flow_id": sub_flow_id},save_count_to="sub_item_count") 
-        self.if_("sub_item_count <= 0").return_(0, "no item_num").end_()
-        self.fetch_remote_embedding(
-            target_item = {"sub_flow_id": sub_flow_id}
-            protocol=1,
-            colossusdb_embd_model_name="rlj-24q2-norm-exp",
-            colossusdb_embd_table_name="parallel_semantic_id",
-            id_converter={"type_name":"plainIdConverter"},
-            input_attr_name="photo_id",
-            output_attr_name="semantic_id",
-            query_source_type="item_attr",
-            is_raw_data=True,
-            raw_data_type="uint16",
-            timeout_ms=10,
-            size=16
+        self.perflog_attr_value(
+            check_point="kgnn.id_index.gt8",
+            common_attrs=["id_index"],
+            aggregator="count"
         )
-        self.enrich_attr_by_lua(
-            import_item_attr = ["semantic_id"],
-            export_item_attr = ["is_valid"],
-            function_for_item = "calculate",
-            lua_script = """
-            function calculate()
-                if semantic_id ~= nil then
-                    return 1
-                else
-                    return 0
-                end
-            end
-            """
+        self.end_()
+        return self
+
+
+    def construct_graph(self):
+        # self.count_reco_result(target_item = {"sub_flow_id": sub_flow_id},save_count_to="sub_item_count") 
+        # self.if_("sub_item_count <= 0").return_(0, "no item_num").end_()
+        self.count_reco_result(save_count_to="item_count") 
+        self.if_("item_count <= 0").return_(0, "no item_num").end_()
+        self.gen_common_attr_by_lua(
+            attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14}"}
         )
         self.construct_edge()
         return self
 
-subflow_dict = [Retr_and_Write_Subflow('sub_flow_'+str(i))._retrieve_ann_and_write(i) for i in range(max_subflow_num)]
+# subflow_dict = [KGNNSubflow('sub_flow_'+str(i)).construct_graph(i) for i in range(max_subflow_num)]
+kgnn_flow = KGNNSubflow('kgnn_flow').construct_graph()
 
 # 实时发现页索引 BTQ
 realtime_update_flow = I2IRunnerFlow(name="realtime_update_flow") \
     ._prepare()\
     ._retrieve_by_realtime_photo_index(realtime_update_batch_size = 20) \
     ._get_item_index_attr() \
-    ._get_remote_embedding(emb_server_config=emb_server_config)\
-    ._send_btq_embedding(btq_config)\
+    ._get_semantic_id()\
     # ._get_sub_flow_id()\
-    # ._executor_sub_retr_flow(subflow_dict)
+    # ._executor_sub_kgnn_flow(subflow_dict)
 
 # 分布式索引服务 bt_shm_kv
 bt_shm_update_flow = I2IRunnerFlow(name="bt_shm_update_flow") \
     ._prepare()\
     ._retrieve_by_bt_shm_kv() \
     ._get_item_index_attr() \
-    ._get_remote_embedding(emb_server_config=emb_server_config)\
-    ._send_btq_embedding(btq_config)\
+    ._get_semantic_id()\
     # ._get_sub_flow_id()\
-    # ._executor_sub_retr_flow(subflow_dict)
+    # ._executor_sub_kgnn_flow(subflow_dict)
 
 # 最近三十分钟上传的视频
 lite_photo_map_update_flow = I2IRunnerFlow(name="lite_photo_map_update_flow") \
     ._prepare()\
     ._retrieve_by_lite_photo_map(lite_update_batch_size = 20) \
     ._get_item_index_attr() \
-    ._get_remote_embedding(emb_server_config=emb_server_config)\
-    ._send_btq_embedding(btq_config)\
+    ._get_semantic_id()\
     # ._get_sub_flow_id()\
-    # ._executor_sub_retr_flow(subflow_dict)
+    # ._executor_sub_kgnn_flow(subflow_dict)
 
 # retr_server 未命中的视频
 missed_trigger_flow = I2IRunnerFlow(name="missed_trigger_flow") \
@@ -592,10 +650,10 @@ missed_trigger_flow = I2IRunnerFlow(name="missed_trigger_flow") \
 LeafService.CHECK_UNUSED_ATTR = False
 runner = OfflineRunner("ann_ia_128_index_runner")
 
-runner.add_leaf_flows(leaf_flows=[realtime_update_flow], name="realtime_update_flow", thread_num=64)
-runner.add_leaf_flows(leaf_flows=[bt_shm_update_flow], name="bt_shm_update_flow", thread_num=64)
-runner.add_leaf_flows(leaf_flows=[lite_photo_map_update_flow], name="lite_photo_map_update_flow", thread_num=4)
-runner.add_leaf_flows(leaf_flows=[missed_trigger_flow], name="missed_trigger_flow", thread_num=8)
+runner.add_leaf_flows(leaf_flows=[realtime_update_flow, kgnn_flow], name="realtime_update_flow", thread_num=64)
+runner.add_leaf_flows(leaf_flows=[bt_shm_update_flow, kgnn_flow], name="bt_shm_update_flow", thread_num=64)
+runner.add_leaf_flows(leaf_flows=[lite_photo_map_update_flow, kgnn_flow], name="lite_photo_map_update_flow", thread_num=4)
+# runner.add_leaf_flows(leaf_flows=[missed_trigger_flow], name="missed_trigger_flow", thread_num=8)
 
 
 runner.build(__file__.replace(".py", ".json"))

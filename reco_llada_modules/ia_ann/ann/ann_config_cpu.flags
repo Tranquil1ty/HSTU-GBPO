@@ -47,3 +47,4 @@
 
 # stop faster
 --enable_fast_stop=true
+--slow_list_length_limit_kconf_key=reco.model2.onerec_rag_slow_list
