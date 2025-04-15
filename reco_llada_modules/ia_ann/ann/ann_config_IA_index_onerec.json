@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "aeeac96d7010600b5c27f3ca4116de33_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-03-27 13:44:39",
+  "_CONFIG_VERSION": "d1c21cb034595ba061cd52a05c6ca534_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-04-02 01:37:44",
   "_DRAGONFLY_VERSION": "0.8.3",
   "ann_config": {
     "ann_pool": {
@@ -94,9 +94,9 @@
   },
   "attrs_from_request": {
     "common_attr": [
+      "embs_list",
       "i2i_ann_topk",
-      "photo_emb_list",
-      "photo_id_list"
+      "tokens_list"
     ]
   },
   "default_request_type": "cpu_knn",
@@ -125,26 +125,26 @@
           "save_item_id_to_attr": "ann_pid",
           "type_name": "CommonRecoItemMetaInfoEnricher"
         },
-        "enrich_attr_by_lua_1AC9E5": {
+        "enrich_attr_by_lua_0B8AE6": {
           "$metadata": {
             "$input_common_attrs": [
-              "photo_id_list"
+              "tokens_list"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "photo_id_list_key"
+              "tokens_list_key"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "photo_id_list_key"
+            "tokens_list_key"
           ],
           "function_for_common": "func",
           "import_common_attr": [
-            "photo_id_list"
+            "tokens_list"
           ],
-          "lua_script": "function func()\n                    local photo_id_list_key = {}\n                    local semantic_id_str = \"\"\n                    for i=1,#photo_id_list do\n                        if i % 16 == 1 then\n                            semantic_id_str = tostring(photo_id_list[i])\n                        else\n                            semantic_id_str = semantic_id_str ..'.'..tostring(photo_id_list[i])\n                        end\n                        if i % 16 == 0 then\n                            table.insert(photo_id_list_key, util.CityHash64(semantic_id_str))\n                        end\n                    end\n                return photo_id_list_key\n                end",
+          "lua_script": "function func()\n                    local tokens_list_key = {}\n                    local semantic_id_str = \"\"\n                    for i=1, #tokens_list do\n                        if i % 16 == 1 then\n                            semantic_id_str = tostring(tokens_list[i])\n                        else\n                            semantic_id_str = semantic_id_str ..'.'..tostring(tokens_list[i])\n                        end\n                        if i % 16 == 0 then\n                            table.insert(tokens_list_key, util.CityHash64(semantic_id_str))\n                        end\n                    end\n                return tokens_list_key\n                end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "log_debug_info_E26AE0": {
@@ -215,12 +215,12 @@
           ],
           "type_name": "CommonRecoItemAttrPackEnricher"
         },
-        "retrieve_by_local_ann_2B1F19": {
+        "retrieve_by_local_ann_083E5A": {
           "$metadata": {
             "$input_common_attrs": [
+              "embs_list",
               "i2i_ann_topk",
-              "photo_emb_list",
-              "photo_id_list_key"
+              "tokens_list_key"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -238,23 +238,30 @@
           "save_seq_num_to_attr": "src_num",
           "save_src_item_to_attr": "src_item",
           "src_data_type": "photo",
-          "src_embedding_list_attr": "photo_emb_list",
-          "src_items_attr": "photo_id_list_key",
+          "src_embedding_list_attr": "embs_list",
+          "src_items_attr": "tokens_list_key",
           "top_k": "{{i2i_ann_topk}}",
           "type_name": "CommonRecoLocalAnnRetriever"
         },
-        "truncate_EA6E76": {
+        "set_attr_value_B53621": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [],
-            "$modify_item_tables": [
-              ""
-            ],
+            "$modify_item_tables": [],
             "$output_common_attrs": [],
-            "$output_item_attrs": []
+            "$output_item_attrs": [
+              "i2i_ann_topk"
+            ]
           },
-          "size_limit": 0,
-          "type_name": "CommonRecoTruncateArranger"
+          "item_attrs": [
+            {
+              "name": "i2i_ann_topk",
+              "type": "int",
+              "value": 32
+            }
+          ],
+          "no_overwrite": true,
+          "type_name": "CommonRecoItemAttrDefaultValueEnricher"
         }
       },
       "type_name": "CommonRecoPipeline"
@@ -263,9 +270,9 @@
       "cpu_knn_retr": {
         "__PARENT": "base_pipeline",
         "pipeline": [
-          "enrich_attr_by_lua_1AC9E5",
-          "truncate_EA6E76",
-          "retrieve_by_local_ann_2B1F19",
+          "set_attr_value_B53621",
+          "enrich_attr_by_lua_0B8AE6",
+          "retrieve_by_local_ann_083E5A",
           "copy_item_meta_info_6653EF",
           "log_debug_info_E26AE0",
           "pack_item_attr_C25869"
@@ -274,9 +281,9 @@
       "cpu_knn_retr_demo": {
         "__PARENT": "base_pipeline",
         "pipeline": [
-          "enrich_attr_by_lua_1AC9E5",
-          "truncate_EA6E76",
-          "retrieve_by_local_ann_2B1F19",
+          "set_attr_value_B53621",
+          "enrich_attr_by_lua_0B8AE6",
+          "retrieve_by_local_ann_083E5A",
           "copy_item_meta_info_6653EF",
           "log_debug_info_E26AE0",
           "pack_item_attr_C25869"

@@ -2808,12 +2808,12 @@ def build_cross_former_self_layers(q, kv, cross_ffn_dim, self_ffn_dim, hidden_di
         q = cross_former_layer(q, kv, cross_ffn_dim, hidden_dim, 
                                f"{name}_cross_layer_{layer_idx}", 
                                num_heads, kv_mask, dropout_rate,
-                               use_flash_attention=True, align_score=False)
+                               use_flash_attention=use_flash_attention, align_score=False)
         
         q = decoder_layer(q, self_ffn_dim, hidden_dim, 
                           f"{name}_self_layer_{layer_idx}", 
                           num_heads, None, dropout_rate, 
-                          use_flash_attention=True, align_score=False)
+                          use_flash_attention=use_flash_attention, align_score=False)
         
     q = rms_norm(q, f"{name}_final_norm")
     return q

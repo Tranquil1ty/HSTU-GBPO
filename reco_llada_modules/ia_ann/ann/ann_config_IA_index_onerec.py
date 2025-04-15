@@ -60,34 +60,40 @@ knn_retr = mio_data.retrieve_from(
 
 class GpuKnnRetrFlow(LeafFlow):
     def retrieve(self, emb_server_config = None, **kwargs):
-        (self.enrich_attr_by_lua(
-            import_common_attr=["photo_id_list"],
-            export_common_attr=["photo_id_list_key"],
+        (self
+        .set_attr_value(
+            no_overwrite=True,
+            item_attrs=[
+                {"name": "i2i_ann_topk", "type": "int",  "value": 32}
+            ]
+        )
+        .enrich_attr_by_lua(
+            import_common_attr=["tokens_list"],
+            export_common_attr=["tokens_list_key"],
             function_for_common="func",
             lua_script="""
                 function func()
-                    local photo_id_list_key = {}
+                    local tokens_list_key = {}
                     local semantic_id_str = ""
-                    for i=1,#photo_id_list do
+                    for i=1, #tokens_list do
                         if i % 16 == 1 then
-                            semantic_id_str = tostring(photo_id_list[i])
+                            semantic_id_str = tostring(tokens_list[i])
                         else
-                            semantic_id_str = semantic_id_str ..'.'..tostring(photo_id_list[i])
+                            semantic_id_str = semantic_id_str ..'.'..tostring(tokens_list[i])
                         end
                         if i % 16 == 0 then
-                            table.insert(photo_id_list_key, util.CityHash64(semantic_id_str))
+                            table.insert(tokens_list_key, util.CityHash64(semantic_id_str))
                         end
                     end
-                return photo_id_list_key
+                return tokens_list_key
                 end
             """
         )
-        .truncate(size_limit=0)
         .retrieve_by_local_ann(
             dest_bucket="photo_index",
             src_data_type="photo",
-            src_items_attr="photo_id_list_key",
-            src_embedding_list_attr="photo_emb_list",
+            src_items_attr="tokens_list_key",
+            src_embedding_list_attr="embs_list",
             top_k="{{i2i_ann_topk}}",
             save_distance_to_attr="ann_score",
             save_src_item_to_attr="src_item",
@@ -137,7 +143,7 @@ class GpuKnnRetrFlow(LeafFlow):
 flow = GpuKnnRetrFlow("cpu_knn_retr").retrieve()
 service = LeafService(
     kess_name=kess,
-    common_attrs_from_request=["photo_id_list", "photo_emb_list", "i2i_ann_topk"],
+    common_attrs_from_request=["tokens_list", "embs_list", "i2i_ann_topk"],
     ann_config=knn_retr.get_config(),
 )
 

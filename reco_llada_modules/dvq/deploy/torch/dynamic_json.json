@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "69fb39044593ffde35fa39737450c98e_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-03-26 01:34:19",
+  "_CONFIG_VERSION": "50432502b1b632864f0914d5d83569d4_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-04-01 17:22:14",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "item_attr": [
@@ -76,12 +76,9 @@
           "respect_sample_logging": false,
           "type_name": "CommonRecoDebugInfoObserver"
         },
-        "uni_predict_fused_D46B7E": {
+        "uni_predict_fused_A6FC27": {
           "$metadata": {
-            "$input_common_attrs": [
-              "common_parameters",
-              "common_slots"
-            ],
+            "$input_common_attrs": [],
             "$input_item_attrs": [
               "tokens_double"
             ],
@@ -99,29 +96,6 @@
             "max_enqueued_batches": 1
           },
           "debug_tensor": true,
-          "embedding_fetchers": [
-            {
-              "colossusdb_embd_service_name": "rlj-24q2-norm-exp",
-              "colossusdb_embd_table_name": "GRMListGen09BGRPO",
-              "common_parameters_inputs": [
-                "common_parameters"
-              ],
-              "common_slots_inputs": [
-                "common_slots"
-              ],
-              "fetcher_type": "ColossusdbEmbeddingServerFetcher",
-              "slots_config": [
-                {
-                  "common": true,
-                  "dim": 1024,
-                  "dtype": "mio_int16",
-                  "expand": 1,
-                  "input_name": "inputs_ids_embeddings",
-                  "slots": "1"
-                }
-              ]
-            }
-          ],
           "executor_config": {
             "context_per_device": 12,
             "inter_op_parallelism_threads_num": 4,
@@ -200,7 +174,7 @@
         "pipeline": [
           "cast_attr_type_555ACC",
           "enrich_attr_by_lua_4E74A8",
-          "uni_predict_fused_D46B7E",
+          "uni_predict_fused_A6FC27",
           "log_debug_info_2F2C08"
         ]
       }

@@ -69,16 +69,4 @@
 # stop faster
 --enable_fast_stop=true
 
-# distributed index
---item_doc_grpc_service_name=grpc_hotPhotoInfoService
---item_doc_cache_realtime_queue_name=exp_realtime_photoinfo
---kconf_item_num_limit_path=reco.distributedIndex.hotItemDocNumLimiter
---item_doc_cache_size=15000000
---item_doc_cache_grpc_timeout_ms=300
---item_doc_cache_ttl_sec=600
---item_doc_dump_interval_sec=900
---item_doc_cache_put_thread_num=4
---item_doc_grpc_io_thread_num=16
---item_doc_using_f14_lru=true
---item_doc_has_important_queue=false
---item_doc_dump_file_name=./no-such-dir/item_doc.binlog
+--slow_list_length_limit_kconf_key=reco.model2.onerec_rag_slow_list

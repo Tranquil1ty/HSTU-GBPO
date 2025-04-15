@@ -275,936 +275,554 @@ embedding:
     expand: 20
     input_name: user_short_term_play
     slots: '252'
+  - dim: 64
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_pids3
+    slots: '1001'
+  - dim: 64
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_aids3
+    slots: '1002'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_label3
+    slots: '1004'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_tag3
+    slots: '1006'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_duration3
+    slots: '1007'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_play_time3
+    slots: '1008'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_channel3
+    slots: '1009'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_play_x_duration3
+    slots: '1010'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_day_diff3
+    slots: '1011'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_mindiff3
+    slots: '1013'
+  - dim: 8
+    dtype: float32
+    expand: 512
+    input_name: item_long_term_abspose3
+    slots: '1014'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_local_life_id_1
+    slots: '31606'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_local_life_id_2
+    slots: '31607'
+  - dim: 64
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_64_pid
+    slots: '30026'
+  - dim: 64
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_64_aid
+    slots: '30128'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30071
+    slots: '30071'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30141
+    slots: '30141'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30142
+    slots: '30142'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30143
+    slots: '30143'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30430
+    slots: '30430'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_embedding_8_30417
+    slots: '30417'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30776
+    slots: '30776'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30777
+    slots: '30777'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30778
+    slots: '30778'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30779
+    slots: '30779'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30780
+    slots: '30780'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30781
+    slots: '30781'
+  - dim: 8
+    dtype: float32
+    expand: 32
+    input_name: rag_item_nebula_stats_30782
+    slots: '30782'
 extra_params: []
 extra_preds: topk_prob topk_indices
 graph: ../config/graph.pb
 graph_output_labels: []
 graph_tensor_mapping:
-  topk_indices: Reshape_32:0
-  topk_prob: Reshape_31:0
+  topk_indices: Reshape_126:0
+  topk_prob: Reshape_125:0
 hyperparameter_kconf: null
 input_type: 3
 param:
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: item_token_embedding
   rown: 513
   scale_by_rown: true
-- coln: 512
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: slot_gate_new_layer1_param
-  rown: 688
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: slot_gate_new_layer1_param_bias
-  rank: 1
-  rown: 512
-  scale_by_rown: true
-- coln: 15
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: slot_gate_new_layer2_param
-  rown: 512
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: slot_gate_new_layer2_param_bias
-  rank: 1
-  rown: 15
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: user_query_input_tokens_proj_tokens_param
-  rown: 624
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: user_query_input_tokens_proj_tokens_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: label_token_param
   rown: 9
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: label_token_param_bias
-  rank: 1
-  rown: 320
+  name: rag_item_tokens_proj_tokens_param
+  rown: 248
   scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_0_param
   rown: 448
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_0_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_1_param
   rown: 48
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_1_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_2_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_2_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_3_param
   rown: 128
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_3_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_4_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_4_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_5_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_5_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_6_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_6_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_7_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_7_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_8_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_8_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_9_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_9_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_10_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_10_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_11_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_11_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_12_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_12_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_13_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_13_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_14_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_14_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_15_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_15_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_16_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_16_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_17_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_17_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_18_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_18_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_19_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_19_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_20_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_20_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_21_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_21_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_22_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_22_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_23_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_23_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_24_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_24_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_25_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_25_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_26_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_26_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_27_param
   rown: 256
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_27_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_28_param
   rown: 16
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_28_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_29_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_29_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_30_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_30_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_31_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_31_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_32_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_32_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_33_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_33_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_34_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_34_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_35_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_35_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_36_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_36_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_37_param
   rown: 128
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_37_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_38_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_38_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_39_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_39_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_40_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_40_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_41_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_41_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_42_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_42_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_43_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_43_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_44_param
   rown: 32
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_44_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_45_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_45_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_46_param
   rown: 8
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_46_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_47_param
   rown: 64
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_47_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_fea_48_param
   rown: 384
   scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: dense_token_proj_fea_48_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
   name: dense_token_proj_short_term_list_input_param
   rown: 152
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: dense_token_proj_short_term_list_input_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_query_embs
-  rown: 32
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_query_kv_norm
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_query_layer_0_pre_norm
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_q_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_q_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_k_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_k_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_v_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_v_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_attn_output_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_attn_attn_output_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_query_layer_0_ffn_norm
-  rank: 1
-  rown: 320
+  name: user_long_term_history_proj_tokens_param
+  rown: 200
   scale_by_rown: true
 - coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_query_layer_0_ffn_ffn_gate_param
-  rown: 320
+  name: qformer_pos_embedding
+  rown: 16
   scale_by_rown: true
 - coln: 1
   dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_ffn_ffn_gate_param_bias
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_kv_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_0_pre_norm
   rank: 1
   rown: 640
   scale_by_rown: true
@@ -1212,128 +830,64 @@ param:
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_query_layer_0_ffn_ffn_value_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_ffn_ffn_value_param_bias
-  rank: 1
+  name: qformer_cross_layer_0_attn_q_weight_param
   rown: 640
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_ffn_ffn_output_param
-  rown: 640
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_query_layer_0_ffn_ffn_output_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_cross_kv_norm
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_cross_layer_0_pre_norm
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_q_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_q_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_k_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_k_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_v_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_v_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_attn_output_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_attn_attn_output_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 1
-  init_range: 0
-  name: scale_upc_cross_layer_0_ffn_norm
-  rank: 1
-  rown: 320
   scale_by_rown: true
 - coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_gate_param
-  rown: 320
+  name: qformer_cross_layer_0_attn_k_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_gate_param_bias
+  name: qformer_cross_layer_0_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_0_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_0_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_0_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_0_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_0_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_0_pre_norm
   rank: 1
   rown: 640
   scale_by_rown: true
@@ -1341,321 +895,989 @@ param:
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_value_param
-  rown: 320
+  name: qformer_self_layer_0_attn_q_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_value_param_bias
+  name: qformer_self_layer_0_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_0_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_0_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_0_ffn_norm
   rank: 1
   rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_output_param
+  name: qformer_self_layer_0_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_0_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_0_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_1_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_attn_attn_output_param
   rown: 640
   scale_by_rown: true
 - coln: 1
   dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: upc_cross_layer_0_ffn_ffn_output_param_bias
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_1_ffn_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_pos_embedding
-  rown: 49
+  name: qformer_cross_layer_1_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_1_ffn_ffn_output_param
+  rown: 2560
   scale_by_rown: true
 - coln: 1
   dtype: float32
   init_mean: 1
   init_range: 0
-  name: scale_main_transformer_layer_0_pre_norm
+  name: scale_qformer_self_layer_1_pre_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_q_weight_param
-  rown: 320
+  name: qformer_self_layer_1_attn_q_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_q_weight_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_self_layer_1_attn_k_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_k_weight_param
-  rown: 320
+  name: qformer_self_layer_1_attn_v_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_k_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_v_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_v_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_attn_output_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_attn/main_transformer_layer_0_attn_attn_output_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_self_layer_1_attn_attn_output_param
+  rown: 640
   scale_by_rown: true
 - coln: 1
   dtype: float32
   init_mean: 1
   init_range: 0
-  name: scale_main_transformer_layer_0_ffn_norm
+  name: scale_qformer_self_layer_1_ffn_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 1280
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_gate_param
-  rown: 320
+  name: qformer_self_layer_1_ffn_ffn_gate_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_gate_param_bias
-  rank: 1
-  rown: 1280
+  name: qformer_self_layer_1_ffn_ffn_value_param
+  rown: 640
   scale_by_rown: true
-- coln: 1280
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_value_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_value_param_bias
-  rank: 1
-  rown: 1280
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_output_param
-  rown: 1280
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_0_ffn_ffn_output_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_self_layer_1_ffn_ffn_output_param
+  rown: 2560
   scale_by_rown: true
 - coln: 1
   dtype: float32
   init_mean: 1
   init_range: 0
-  name: scale_main_transformer_layer_1_pre_norm
+  name: scale_qformer_cross_layer_2_pre_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_q_weight_param
-  rown: 320
+  name: qformer_cross_layer_2_attn_q_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_q_weight_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_cross_layer_2_attn_k_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 320
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_k_weight_param
-  rown: 320
+  name: qformer_cross_layer_2_attn_v_weight_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_k_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_v_weight_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_v_weight_param_bias
-  rank: 1
-  rown: 320
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_attn_output_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_attn/main_transformer_layer_1_attn_attn_output_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_cross_layer_2_attn_attn_output_param
+  rown: 640
   scale_by_rown: true
 - coln: 1
   dtype: float32
   init_mean: 1
   init_range: 0
-  name: scale_main_transformer_layer_1_ffn_norm
+  name: scale_qformer_cross_layer_2_ffn_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 1280
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_gate_param
-  rown: 320
+  name: qformer_cross_layer_2_ffn_ffn_gate_param
+  rown: 640
   scale_by_rown: true
-- coln: 1
+- coln: 2560
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_gate_param_bias
-  rank: 1
-  rown: 1280
+  name: qformer_cross_layer_2_ffn_ffn_value_param
+  rown: 640
   scale_by_rown: true
-- coln: 1280
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_value_param
-  rown: 320
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_value_param_bias
-  rank: 1
-  rown: 1280
-  scale_by_rown: true
-- coln: 320
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_output_param
-  rown: 1280
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: main_transformer_layer_1_ffn_ffn_output_param_bias
-  rank: 1
-  rown: 320
+  name: qformer_cross_layer_2_ffn_ffn_output_param
+  rown: 2560
   scale_by_rown: true
 - coln: 1
   dtype: float32
   init_mean: 1
   init_range: 0
-  name: scale_main_transformer_final_ln
+  name: scale_qformer_self_layer_2_pre_norm
   rank: 1
-  rown: 320
+  rown: 640
   scale_by_rown: true
-- coln: 1280
+- coln: 640
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: item_hidden_state_up_param
-  rown: 320
+  name: qformer_self_layer_2_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_2_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_2_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_2_attn_attn_output_param
+  rown: 640
   scale_by_rown: true
 - coln: 1
   dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_2_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
   init_mean: 0
   init_range: 1
-  name: item_hidden_state_up_param_bias
+  name: qformer_self_layer_2_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_2_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_2_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_3_pre_norm
   rank: 1
-  rown: 1280
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_3_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_3_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_3_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_3_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_3_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_4_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_4_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_4_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_4_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_4_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_4_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_5_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_5_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_5_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_5_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_5_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_5_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_6_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_6_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_6_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_6_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_6_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_6_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_7_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_cross_layer_7_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_cross_layer_7_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_7_pre_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_attn_q_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_attn_k_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_attn_v_weight_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_attn_attn_output_param
+  rown: 640
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_self_layer_7_ffn_norm
+  rank: 1
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_ffn_ffn_gate_param
+  rown: 640
+  scale_by_rown: true
+- coln: 2560
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_ffn_ffn_value_param
+  rown: 640
+  scale_by_rown: true
+- coln: 640
+  dtype: float32
+  init_mean: 0
+  init_range: 1
+  name: qformer_self_layer_7_ffn_ffn_output_param
+  rown: 2560
+  scale_by_rown: true
+- coln: 1
+  dtype: float32
+  init_mean: 1
+  init_range: 0
+  name: scale_qformer_final_norm
+  rank: 1
+  rown: 640
   scale_by_rown: true
 - coln: 512
   dtype: float32
   init_mean: 0
   init_range: 1
   name: item_pred_head_param
-  rown: 1280
-  scale_by_rown: true
-- coln: 1
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: item_pred_head_param_bias
-  rank: 1
-  rown: 512
+  rown: 640
   scale_by_rown: true
 q_names: topk_prob topk_indices
 vec_input:
+- common: false
+  dim: 512
+  name: colossus_time_s
 - common: false
   dim: 16
   name: semantic_id_v2
