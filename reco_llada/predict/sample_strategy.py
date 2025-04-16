@@ -93,6 +93,66 @@ class ChooseTokenStrategy:
             probs[i] = probs[i] / probs_sum
         return probs
     
+    def choose_token_beam(self, ctx: DragonflyContext) -> None:
+        current_step = ctx.GetInt(b"current_step")
+
+        topk_prob_getter = ctx.ItemAttrGetter(b"topk_prob")
+        topk_indices_getter = ctx.ItemAttrGetter(b"topk_indices")
+        semantic_id_v2_getter = ctx.ItemAttrGetter(b"semantic_id_v2")
+        semantic_id_v2_prob_getter = ctx.ItemAttrGetter(b"semantic_id_v2_prob")
+        beam_prob_getter = ctx.ItemAttrGetter(b"beam_prob")
+
+        semantic_id_v2_setter = ctx.ItemAttrSetter(b"semantic_id_v2")
+        semantic_id_v2_prob_setter = ctx.ItemAttrSetter(b"semantic_id_v2_prob")
+        beam_prob_setter = ctx.ItemAttrSetter(b"beam_prob")
+       
+        
+        pre_seq_indices = []
+        token_indices = []
+        token_probs = []
+        pre_seqs = []
+        pre_seq_probs = []
+        beam_probs = []
+
+        result_size = ctx.GetItemNum()
+        for i in range(result_size):
+            prob = topk_prob_getter.GetDouble(i)
+            idx = topk_indices_getter.GetInt(i)
+            pre_seqs.append(semantic_id_v2_getter.GetDoubleList(i))
+            pre_seq_probs.append(semantic_id_v2_prob_getter.GetDoubleList(i))
+
+            token_indices.append(idx % self.vocab_size)
+            token_probs.append(prob)
+            pre_seq_indices.append(idx // self.vocab_size)
+            beam_probs.append(beam_prob_getter.GetDoubleList(i)[0])
+        
+        for i in range(result_size):
+            choosed_token_probs: FTList[float] = []
+            choosed_token_ids: FTList[float] = []
+
+            token_idx = token_indices[i]
+            token_prob = token_probs[i]
+
+            pre_seq_idx = pre_seq_indices[i]
+            pre_seq = pre_seqs[pre_seq_idx]
+            pre_seq_prob = pre_seq_probs[pre_seq_idx]
+
+            beam_prob = beam_probs[pre_seq_idx]
+            beam_prob_new: FTList[float] = []
+            beam_prob_new.append(beam_prob + math.log(token_prob))
+
+            for j in range(self.token_num):
+                if j == current_step:
+                    choosed_token_probs.append(token_prob * 1.0)
+                    choosed_token_ids.append(token_idx * 1.0)
+                else:
+                    choosed_token_probs.append(pre_seq_prob[j])
+                    choosed_token_ids.append(pre_seq[j])
+
+            semantic_id_v2_setter.SetDoubleList(i, choosed_token_ids)
+            semantic_id_v2_prob_setter.SetDoubleList(i, choosed_token_probs)
+            beam_prob_setter.SetDoubleList(i, beam_prob_new)
+
     def choose_token_v2(self, ctx: DragonflyContext) -> None:
         p_topk = ctx.GetInt(b"p_topk", self.default_topk)
         p_topp = ctx.GetDouble(b"p_topp", self.default_topp)
