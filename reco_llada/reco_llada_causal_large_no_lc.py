@@ -439,7 +439,7 @@ if args.with_kai_v2 and not args.local_debug:
 
         def mask_fn(batch):
             sample_llsid = batch['llsid']
-            sample_ratio = get_double_config("reco.model2.reco_llada_sample_filter_exp1")
+            sample_ratio = 0.2
             hash_val = tf.cast(tf.bitwise.bitwise_and(sample_llsid, 0xffff), tf.float32)
             hash_ratio = hash_val / tf.cast(0xffff, tf.float32)
             sample_mask = tf.cast(tf.greater(hash_ratio, sample_ratio), tf.bool)
