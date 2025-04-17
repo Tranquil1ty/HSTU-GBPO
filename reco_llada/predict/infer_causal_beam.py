@@ -25,7 +25,7 @@ from hit_rate_perf import HitRatePerfFlow
 from eval_flow import EvalFlow
 
 TAB_NEBULA = 30000
-kess_name = "grpc_llada_debug"
+kess_name = "grpc_RecoLlada"
 
 model_config = dict(
     model_config=load_model("./causal_large_config"),
@@ -1149,6 +1149,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 "batch_mask"
             ],
             for_debug_request_only=True,
+            respect_sample_logging=False
         )
         self.item_rag()
 
@@ -1180,6 +1181,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 "topk_beam_prob"
             ],
             for_debug_request_only=True,
+            respect_sample_logging=False
         )
 
         self.enrich_attr_by_py(

@@ -107,19 +107,28 @@ class ChooseTokenStrategy:
         beam_prob_setter = ctx.ItemAttrSetter(b"beam_prob")
        
         
-        pre_seq_indices = []
-        token_indices = []
-        token_probs = []
-        pre_seqs = []
-        pre_seq_probs = []
-        beam_probs = []
+        pre_seq_indices: FTList[int] = []
+        token_indices: FTList[int] = []
+        token_probs: FTList[float] = []
+        pre_seqs: FTList[FTList[float]] = []
+        pre_seq_probs: FTList[FTList[float]] = []
+        beam_probs: FTList[float] = []
 
         result_size = ctx.GetItemNum()
         for i in range(result_size):
             prob = topk_prob_getter.GetDouble(i)
             idx = topk_indices_getter.GetInt(i)
-            pre_seqs.append(semantic_id_v2_getter.GetDoubleList(i))
-            pre_seq_probs.append(semantic_id_v2_prob_getter.GetDoubleList(i))
+
+            pre_seq_input = semantic_id_v2_getter.GetDoubleList(i)
+            pre_seq_input_prob = semantic_id_v2_prob_getter.GetDoubleList(i)
+
+            tmp_pre_seq: FTList[float] = []
+            tmp_pre_seq_prob: FTList[float] = []
+            for j in range(self.token_num):
+                tmp_pre_seq.append(pre_seq_input[j])
+                tmp_pre_seq_prob.append(pre_seq_input_prob[j])
+            pre_seqs.append(tmp_pre_seq)
+            pre_seq_probs.append(tmp_pre_seq_prob)
 
             token_indices.append(idx % self.vocab_size)
             token_probs.append(prob)

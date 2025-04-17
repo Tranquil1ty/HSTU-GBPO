@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "040229ec6b1744d06c0e42597b2c136b_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-04-16 14:17:55",
+  "_CONFIG_VERSION": "dac8b25e8af8f7911b57b7a1a21ae434_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-04-16 21:24:42",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -37,7 +37,7 @@
   },
   "default_request_type": "default",
   "kess_config": {
-    "service_name": "grpc_llada_debug"
+    "service_name": "grpc_RecoLlada"
   },
   "pipeline_manager_config": {
     "base_pipeline": {
@@ -1512,7 +1512,7 @@
           "lua_script": "function calculate()\n                    local random_remask_flag = random_remask_flag or 0\n                    local p_topk = p_topk or 10\n                    local p_topp = p_topp or 1.0\n                    local p_temp = p_temp or 1.0\n                    return random_remask_flag, p_topk, p_topp, p_temp\n                end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_py_53D557": {
+        "enrich_attr_by_py_37710E": {
           "$metadata": {
             "$input_common_attrs": [
               "current_step"
@@ -1532,7 +1532,7 @@
               "semantic_id_v2_prob"
             ]
           },
-          "clang_remote_so_name": "onerec/reco_llada/predict/dso/ChooseTokenStrategy_clang_df0a424c5ac08d4813f60ee052935dca.so",
+          "clang_remote_so_name": "onerec/reco_llada/predict/dso/ChooseTokenStrategy_clang_ea65729dd87eed4bd3e149521ef1156c.so",
           "clang_so_name": "ChooseTokenStrategy_clang.so",
           "compile_tool": "both",
           "export_common_attr": [],
@@ -1542,7 +1542,7 @@
             "beam_prob"
           ],
           "function_set": "ChooseTokenStrategy",
-          "gcc_remote_so_name": "onerec/reco_llada/predict/dso/ChooseTokenStrategy_gcc_02d66057ddfb82602938c0fad764b933.so",
+          "gcc_remote_so_name": "onerec/reco_llada/predict/dso/ChooseTokenStrategy_gcc_63e2329cce32f2beebdb85942c489501.so",
           "gcc_so_name": "ChooseTokenStrategy_gcc.so",
           "import_common_attr": [
             "current_step"
@@ -2766,100 +2766,7 @@
           "type_name": "MioUserInfoHotFixEnricher",
           "user_info_attr": "user_info"
         },
-        "log_debug_info_274389": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "current_step"
-            ],
-            "$input_item_attrs": [
-              "item_logit_idx",
-              "item_pred_logits",
-              "token_prob",
-              "topk_beam_prob",
-              "topk_indices",
-              "topk_prob"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "common_attrs": [
-            "current_step"
-          ],
-          "for_debug_request_only": true,
-          "item_attrs": [
-            "topk_prob",
-            "topk_indices",
-            "item_pred_logits",
-            "token_prob",
-            "item_logit_idx",
-            "topk_beam_prob"
-          ],
-          "log_tag": "infer_result",
-          "type_name": "CommonRecoDebugInfoObserver"
-        },
-        "log_debug_info_69D65C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "current_step"
-            ],
-            "$input_item_attrs": [
-              "semantic_id_v2",
-              "semantic_id_v2_prob",
-              "token_indices",
-              "token_probs",
-              "topk_indices",
-              "topk_prob"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "common_attrs": [
-            "current_step"
-          ],
-          "for_debug_request_only": true,
-          "item_attrs": [
-            "semantic_id_v2",
-            "semantic_id_v2_prob",
-            "token_indices",
-            "token_probs",
-            "topk_indices",
-            "topk_prob"
-          ],
-          "log_tag": "step_infer_result",
-          "respect_sample_logging": false,
-          "type_name": "CommonRecoDebugInfoObserver"
-        },
-        "log_debug_info_7B9A20": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_7",
-              "all_ann_semantic_id_v2"
-            ],
-            "$input_item_attrs": [
-              "ann_pids",
-              "h_dist",
-              "semantic_id_v2"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "common_attrs": [
-            "all_ann_semantic_id_v2"
-          ],
-          "for_debug_request_only": true,
-          "item_attrs": [
-            "h_dist",
-            "semantic_id_v2",
-            "ann_pids"
-          ],
-          "respect_sample_logging": false,
-          "skip": "{{_if_control_attr_7}}",
-          "type_name": "CommonRecoDebugInfoObserver"
-        },
-        "log_debug_info_8C4885": {
+        "log_debug_info_5FFF04": {
           "$metadata": {
             "$input_common_attrs": [
               "adp_effective_view_fix",
@@ -2930,6 +2837,68 @@
             "beam_prob",
             "batch_mask"
           ],
+          "respect_sample_logging": false,
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_69D65C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "current_step"
+            ],
+            "$input_item_attrs": [
+              "semantic_id_v2",
+              "semantic_id_v2_prob",
+              "token_indices",
+              "token_probs",
+              "topk_indices",
+              "topk_prob"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "current_step"
+          ],
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "semantic_id_v2",
+            "semantic_id_v2_prob",
+            "token_indices",
+            "token_probs",
+            "topk_indices",
+            "topk_prob"
+          ],
+          "log_tag": "step_infer_result",
+          "respect_sample_logging": false,
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_7B9A20": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_7",
+              "all_ann_semantic_id_v2"
+            ],
+            "$input_item_attrs": [
+              "ann_pids",
+              "h_dist",
+              "semantic_id_v2"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "all_ann_semantic_id_v2"
+          ],
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "h_dist",
+            "semantic_id_v2",
+            "ann_pids"
+          ],
+          "respect_sample_logging": false,
+          "skip": "{{_if_control_attr_7}}",
           "type_name": "CommonRecoDebugInfoObserver"
         },
         "log_debug_info_8E72B0": {
@@ -3068,6 +3037,39 @@
             "user_info"
           ],
           "for_debug_request_only": true,
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_ECD04F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "current_step"
+            ],
+            "$input_item_attrs": [
+              "item_logit_idx",
+              "item_pred_logits",
+              "token_prob",
+              "topk_beam_prob",
+              "topk_indices",
+              "topk_prob"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "current_step"
+          ],
+          "for_debug_request_only": true,
+          "item_attrs": [
+            "topk_prob",
+            "topk_indices",
+            "item_pred_logits",
+            "token_prob",
+            "item_logit_idx",
+            "topk_beam_prob"
+          ],
+          "log_tag": "infer_result",
+          "respect_sample_logging": false,
           "type_name": "CommonRecoDebugInfoObserver"
         },
         "onerec_rag": {
@@ -3519,557 +3521,7 @@
           "skip": "{{_if_control_attr_1}}",
           "type_name": "CommonRecoProtobufParseAttrEnricher"
         },
-        "perflog_008A537C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "svr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "svr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{svr_MAX}}"
-        },
-        "perflog_02E1A2E4": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ptr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ptr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ptr_AVG}}"
-        },
-        "perflog_0F34EBAA": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ftr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ftr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ftr_AVG}}"
-        },
-        "perflog_1F29D698": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "vtr_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "vtr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{vtr_MAX}}"
-        },
-        "perflog_22354214": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "vtr_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "vtr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{vtr_AVG}}"
-        },
-        "perflog_36463C51": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "cmtr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "cmtr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cmtr_AVG}}"
-        },
-        "perflog_6D09F273": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ptr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ptr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ptr_MAX}}"
-        },
-        "perflog_73133006": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "cpr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "cpr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cpr_MAX}}"
-        },
-        "perflog_75B7AA2D": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "cmtr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "cmtr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cmtr_MAX}}"
-        },
-        "perflog_7C7EA177": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ltr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ltr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ltr_MAX}}"
-        },
-        "perflog_946A37C9": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "wtr_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "wtr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtr_MAX}}"
-        },
-        "perflog_96E25F7C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ftr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ftr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ftr_MAX}}"
-        },
-        "perflog_9D1C94B0": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "lsst_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "lsst_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{lsst_AVG}}"
-        },
-        "perflog_A9A0491D": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "ltr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "ltr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ltr_AVG}}"
-        },
-        "perflog_AA26C984": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "evtr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "evtr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{evtr_MAX}}"
-        },
-        "perflog_B48894CE": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "wtd_v2_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "wtd_v2_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_v2_AVG}}"
-        },
-        "perflog_B7F54707": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "htr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "htr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{htr_MAX}}"
-        },
-        "perflog_BEC8EDE5": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "lsst_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "lsst_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{lsst_MAX}}"
-        },
-        "perflog_C08A1C80": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "lvtr_MAX",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "lvtr_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{lvtr_MAX}}"
-        },
-        "perflog_C8749C51": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "svr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "svr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{svr_AVG}}"
-        },
-        "perflog_D2B4C2BE": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "htr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "htr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{htr_AVG}}"
-        },
-        "perflog_D4E0D066": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "wtr_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "wtr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtr_AVG}}"
-        },
-        "perflog_D8C2291C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "evtr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "evtr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{evtr_AVG}}"
-        },
-        "perflog_DE98D601": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "tab_id_str",
-              "wtd_v2_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "wtd_v2_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_v2_MAX}}"
-        },
-        "perflog_F166C4B4": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_12",
-              "cpr_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "grpc_llada_debug",
-          "extra2": "cpr_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_12}}",
-          "subtag": "reward_value_pxtr",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cpr_AVG}}"
-        },
-        "perflog_F69B0B2F": {
+        "perflog_0D067970": {
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_12",
@@ -4081,7 +3533,7 @@
             "$output_common_attrs": [],
             "$output_item_attrs": []
           },
-          "extra1": "grpc_llada_debug",
+          "extra1": "grpc_RecoLlada",
           "extra2": "lvtr_AVG",
           "extra3": "{{tab_id_str}}",
           "mode": "interval",
@@ -4090,6 +3542,556 @@
           "subtag": "reward_value_pxtr",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{lvtr_AVG}}"
+        },
+        "perflog_18BD732B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ltr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ltr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ltr_AVG}}"
+        },
+        "perflog_18D80069": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ltr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ltr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ltr_MAX}}"
+        },
+        "perflog_2B6B28C4": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "wtd_v2_MAX"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "wtd_v2_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{wtd_v2_MAX}}"
+        },
+        "perflog_2C1EF1C7": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "lsst_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "lsst_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{lsst_AVG}}"
+        },
+        "perflog_338C0CCF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "svr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "svr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{svr_MAX}}"
+        },
+        "perflog_3C41FEEF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ftr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ftr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ftr_MAX}}"
+        },
+        "perflog_40A04089": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "cpr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "cpr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{cpr_AVG}}"
+        },
+        "perflog_483245E8": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "htr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "htr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{htr_MAX}}"
+        },
+        "perflog_4C01DA16": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "wtd_v2_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "wtd_v2_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{wtd_v2_AVG}}"
+        },
+        "perflog_4CFD82F2": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "lsst_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "lsst_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{lsst_MAX}}"
+        },
+        "perflog_506BDE73": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ftr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ftr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ftr_AVG}}"
+        },
+        "perflog_543EB673": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "lvtr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "lvtr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{lvtr_MAX}}"
+        },
+        "perflog_5ED18D7E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ptr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ptr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ptr_AVG}}"
+        },
+        "perflog_728191A4": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "evtr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "evtr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{evtr_MAX}}"
+        },
+        "perflog_7F3282AE": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "ptr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "ptr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{ptr_MAX}}"
+        },
+        "perflog_964EE8D7": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "cmtr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "cmtr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{cmtr_MAX}}"
+        },
+        "perflog_9F08BD2F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "wtr_MAX"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "wtr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{wtr_MAX}}"
+        },
+        "perflog_A4968E2B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "evtr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "evtr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{evtr_AVG}}"
+        },
+        "perflog_BF24B105": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "htr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "htr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{htr_AVG}}"
+        },
+        "perflog_C97DDD52": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "svr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "svr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{svr_AVG}}"
+        },
+        "perflog_CBFF9CC2": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "cmtr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "cmtr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{cmtr_AVG}}"
+        },
+        "perflog_DA86ED7F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "wtr_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "wtr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{wtr_AVG}}"
+        },
+        "perflog_E2CE7BD2": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "vtr_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "vtr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{vtr_AVG}}"
+        },
+        "perflog_F822DB53": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "tab_id_str",
+              "vtr_MAX"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "vtr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{vtr_MAX}}"
+        },
+        "perflog_FE4B5507": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_12",
+              "cpr_MAX",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "grpc_RecoLlada",
+          "extra2": "cpr_MAX",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_12}}",
+          "subtag": "reward_value_pxtr",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{cpr_MAX}}"
         },
         "perflog_attr_value_026A27": {
           "$metadata": {
@@ -7844,32 +7846,32 @@
           "pack_item_attr_E06282",
           "enrich_attr_by_lua_2AEB92",
           "enrich_attr_by_lua_A9D560",
-          "perflog_AA26C984",
-          "perflog_D8C2291C",
-          "perflog_7C7EA177",
-          "perflog_A9A0491D",
-          "perflog_946A37C9",
-          "perflog_D4E0D066",
-          "perflog_96E25F7C",
-          "perflog_0F34EBAA",
-          "perflog_75B7AA2D",
-          "perflog_36463C51",
-          "perflog_C08A1C80",
-          "perflog_F69B0B2F",
-          "perflog_1F29D698",
-          "perflog_22354214",
-          "perflog_008A537C",
-          "perflog_C8749C51",
-          "perflog_6D09F273",
-          "perflog_02E1A2E4",
-          "perflog_B7F54707",
-          "perflog_D2B4C2BE",
-          "perflog_BEC8EDE5",
-          "perflog_9D1C94B0",
-          "perflog_DE98D601",
-          "perflog_B48894CE",
-          "perflog_73133006",
-          "perflog_F166C4B4"
+          "perflog_728191A4",
+          "perflog_A4968E2B",
+          "perflog_18D80069",
+          "perflog_18BD732B",
+          "perflog_9F08BD2F",
+          "perflog_DA86ED7F",
+          "perflog_3C41FEEF",
+          "perflog_506BDE73",
+          "perflog_964EE8D7",
+          "perflog_CBFF9CC2",
+          "perflog_543EB673",
+          "perflog_0D067970",
+          "perflog_F822DB53",
+          "perflog_E2CE7BD2",
+          "perflog_338C0CCF",
+          "perflog_C97DDD52",
+          "perflog_7F3282AE",
+          "perflog_5ED18D7E",
+          "perflog_483245E8",
+          "perflog_BF24B105",
+          "perflog_4CFD82F2",
+          "perflog_2C1EF1C7",
+          "perflog_2B6B28C4",
+          "perflog_4C01DA16",
+          "perflog_FE4B5507",
+          "perflog_40A04089"
         ]
       },
       "hit_rate_perf": {
@@ -7951,7 +7953,7 @@
           "enrich_attr_by_lua_AA4674",
           "_branch_controller_7E428A0F_else",
           "enrich_attr_by_lua_421C7E",
-          "log_debug_info_8C4885",
+          "log_debug_info_5FFF04",
           "copy_attr_3224D3",
           "cast_attr_type_89B27C",
           "onerec_rag",
@@ -7967,8 +7969,8 @@
           "perflog_attr_value_49B5CD",
           "enrich_attr_by_lua_E61920",
           "uni_predict_fused_DAA58C",
-          "log_debug_info_274389",
-          "enrich_attr_by_py_53D557",
+          "log_debug_info_ECD04F",
+          "enrich_attr_by_py_37710E",
           "log_debug_info_8E72B0",
           "enrich_attr_by_lua_E0209C",
           "log_debug_info_69D65C"
