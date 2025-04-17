@@ -2864,12 +2864,12 @@ def fr_model():
         item_token_embedding, item_token_mask, all_zeros_mask = prepare_item_tokens(vocab_size, item_seq_len, d_model)
 
         # label_input = prepare_label_input(labels, d_model)
-        rag_item_tokens = prepare_item_gsu_ctx(d_model)
+        # rag_item_tokens = prepare_item_gsu_ctx(d_model)
         user_profile_ctx = prepare_user_profile_ctx(token_dim=d_model)
         user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
     
     with tf_name_scope("qformer"), new_xla_jit_context():
-        context = tf.concat([user_profile_ctx, rag_item_tokens, user_long_term_history], axis=1)
+        context = tf.concat([user_profile_ctx, user_long_term_history], axis=1)
         # batch_size = tf.shape(user_long_term_mask)[0]
         # ctx_seq_len = context.get_shape()[1]
         # ctx_kv_mask = tf.concat([tf.ones([batch_size, ctx_seq_len - user_long_term_mask.get_shape()[1]], dtype=tf.int32), user_long_term_mask], axis=1)
