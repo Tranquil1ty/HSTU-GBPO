@@ -9,6 +9,7 @@ import yaml
 
 from dragonfly.common_leaf_dsl import LeafService, IndexSource, LeafFlow
 from dragonfly.ext.mio.mio_api_mixin import MioApiMixin
+from dragonfly.ext.kgnn.kgnn_api_mixin import KgnnApiMixin
 from dragonfly.ext.kuiba.kuiba_api_mixin import KuibaApiMixin
 from dragonfly.ext.offline.offline_api_mixin import OfflineApiMixin
 from dragonfly.ext.gsu.gsu_api_mixin import GsuApiMixin
@@ -17,15 +18,19 @@ from dragonfly.ext.pdn.pdn_api_mixin import PDNApiMixin
 from dragonfly.ext.cofea.cofea_api_mixin import CofeaApiMixin
 from dragonfly.ext.uni_predict_v2.uni_predict_v2_api_mixin import UniPredictV2ApiMixin
 from dragonfly.ext.embedding.embedding_api_mixin import EmbeddingApiMixin
+from dragonfly.decorators import for_loop
+from dragonfly.ext.kgnn.node_attr_schema import NodeAttrSchema
 
 from ann_retrieve_flow import AnnRetrieveFlow
 from extract_user_his import user_seq_flow, returned_user_seq_attrs
+from pyfunc import RAGFuncSet
 
 service_name= "grpc_item_rag_server"
 
 item_RAG_num = 32
+kgnn_item_RAG_num = 512
 token_num = 16
-item_rag_attrs = ["1520", "1606", "1607", "26", "128", "71", "93", "141", "142", "143", "417", "418", "430", "776", "777", "778", "779", "780", "781", "782"]
+item_rag_attrs = ["1520", "1606", "1607", "26", "128", "71", "93", "141", "142", "143", "417", "418", "430", "776", "777", "778", "779", "780", "781", "782", "6677"]
 returned_item_rag_attrs = [str(int(attr) + 30000) for attr in item_rag_attrs]
 
 ############## ANN ################
@@ -139,7 +144,11 @@ class PrepareFlow(LeafFlow):
             "use_item_rag": 1,
             "use_user_seq": 1,
             "use_user_rag": 1,
-            "target_as_result": 0
+            "target_as_result": 0,
+            "train_rag_kgnn_topk": kgnn_item_RAG_num,
+            "infer_rag_kgnn_topk": kgnn_item_RAG_num,
+            "prime_scale": 521,
+            "prime_range": 100000000001647
         }
 
         kconf = [
@@ -267,9 +276,9 @@ class DecodeFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCal
         )
     
 
-class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCalcApiMixin, GsuApiMixin, PDNApiMixin, CofeaApiMixin, UniPredictV2ApiMixin, EmbeddingApiMixin):
+class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApiMixin, EmbedCalcApiMixin, GsuApiMixin, PDNApiMixin, CofeaApiMixin, UniPredictV2ApiMixin, EmbeddingApiMixin):
 
-    def run_item_rag(self):
+    def run_ann_item_rag(self):
         return (
             self.if_("use_item_rag == 1")
             .ann_retrieve()
@@ -278,13 +287,12 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
             .end_if_()
         )
 
-    def run_item_rag_infer(self):
+    def run_kgnn_item_rag(self):
         return (
             self.if_("use_item_rag == 1")
-            .ann_retrieve()
+            .kgnn_retrieve()
             .get_item_attributes()
             .extract_features()
-            .infer_format()
             .end_if_()
         )
 
@@ -360,6 +368,12 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                     request_num="{{ann_request_num}}",
                     reason=3
                 )
+                .set_attr_value(
+                    no_overwrite=True,
+                    item_attrs=[
+                        {"name": "id_tag", "type": "int", "value": 1}
+                    ]
+                )
                 .log_debug_info(
                     item_attrs=["ann_pid", "ann_score"],
                     for_debug_request_only=True, 
@@ -376,6 +390,195 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                 )
             .end_if_()
 
+        )
+
+    @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="idx")
+    def kgnn_loop(self):
+        return (
+            self.set_attr_value(
+                no_overwrite=True,
+                item_attrs=[
+                    {"name": "kgnn_neighbors", "type": "int_list", "value": [] },
+                    {"name": "id_tag", "type": "int_list", "value": [] },
+                    {"name": "kgnn_dst_node", "type": "int_list", "value": [] },
+                ]
+            )
+            .enrich_attr_by_lua(
+                import_item_attr = ["tokens"],
+                import_common_attr = ["idx", "prime_scale", "prime_range"],
+                export_item_attr = ["src_node"],
+                function_for_item = "calculate",
+                lua_script = """
+                function calculate()
+                    local src_node = 0
+                    for i=0, idx do
+                        if i == 0 then
+                            src_node = 0
+                        else
+                            src_node = (src_node * prime_scale + tokens[i] + 1) % prime_range
+                        end
+                    end
+                    return src_node
+                end
+                """
+            )
+            .if_("idx <= max_token_num")
+                .if_("request_type == 'ntp_train_request'")
+                    .fetch_kgnn_neighbors(
+                        id_from_item_attr='src_node',
+                        save_neighbors_to='neighbors',
+                        edge_attr_schema=NodeAttrSchema(1, 0).add_int64_attr('dst_node'),
+                        kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
+                        table_name='semantic_id_kgnn',
+                        btq_shard_num=4,
+                        sample_num="{{train_rag_kgnn_topk}}",
+                        sample_type='random',
+                        padding_type='zero',
+                        sample_without_replacement=True
+                    )
+                .else_()
+                    .fetch_kgnn_neighbors(
+                        id_from_item_attr='src_node',
+                        save_neighbors_to='neighbors',
+                        edge_attr_schema=NodeAttrSchema(1, 0).add_int64_attr('dst_node'),
+                        kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
+                        table_name='semantic_id_kgnn',
+                        btq_shard_num=4,
+                        sample_num="{{infer_rag_kgnn_topk}}",
+                        sample_type='random',
+                        padding_type='zero',
+                        sample_without_replacement=True
+                    )
+                .end_if_()
+            .else_()
+                .enrich_attr_by_lua(
+                    import_common_attr = ["infer_rag_kgnn_topk"],
+                    export_item_attr = ["neighbors", "dst_node"],
+                    function_for_item = "calculate",
+                    lua_script = """
+                    function calculate()
+                        local padding = {}
+                        for i=1, infer_rag_kgnn_topk do
+                            table.insert(padding, 0)
+                        end
+                        return padding, padding
+                    end
+                    """
+                )
+            .end_if_()
+            .enrich_attr_by_lua(
+                import_item_attr = ["neighbors", "kgnn_neighbors", "id_tag", "dst_node", "kgnn_dst_node"],
+                import_common_attr = ["idx"],
+                export_item_attr = ["kgnn_neighbors", "id_tag", "kgnn_dst_node", "neighbor_num"],
+                function_for_item = "calculate",
+                lua_script = """
+                    function calculate()
+                        local kgnn_neighbors = kgnn_neighbors or {}
+                        local kgnn_dst_node = kgnn_dst_node or {}
+                        local id_tag = id_tag or {}
+                        local neighbor_num = 0
+                        for i=1, #neighbors do
+                            table.insert(kgnn_neighbors, neighbors[i])
+                            table.insert(kgnn_dst_node, dst_node[i])
+                            if idx < 4 then
+                                table.insert(id_tag, 0)
+                            else
+                                table.insert(id_tag, 2) -- photo_id
+                            end
+                            if neighbors[i] ~= 0 then
+                                neighbor_num = neighbor_num + 1
+                            end
+                        end
+                        return kgnn_neighbors, id_tag, kgnn_dst_node, neighbor_num
+                    end
+                """
+            )
+            .perflog_attr_value(
+                check_point = "{{return 'kgnn.neighbor_num.step' .. tostring(idx)}}",
+                item_attrs = ["neighbor_num"]
+            )
+            .log_debug_info( 
+                log_tag="kgnn_log_step",
+                common_attrs = ["idx"],
+                item_attrs = ["id_tag", "neighbors", "kgnn_neighbors", "src_node", "dst_node", "kgnn_dst_node"], 
+                for_debug_request_only=True, 
+                respect_sample_logging=False
+            )
+        )
+    
+    def kgnn_retrieve(self):
+        return (
+            self.enrich_attr_by_lua(
+                import_item_attr = ["semantic_id_v2", "tokens"],
+                function_for_item = "calculate",
+                export_item_attr = ["tokens", "token_num"],
+                lua_script = """
+                    function calculate(seq, item_key, reason, score)
+                        if semantic_id_v2 ~= nil then
+                            return semantic_id_v2, #semantic_id_v2
+                        else
+                            return tokens, #tokens
+                        end
+                    end
+                """
+            )
+            .pack_item_attr(
+                item_source = {
+                    "reco_results": True
+                },
+                mappings = [
+                    {
+                        "from_item_attr": "token_num",
+                        "to_common_attr": "max_token_num",
+                        "aggregator": "max"
+                    }
+                ]
+            )
+            .gen_common_attr_by_lua(
+                attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}"}
+            )
+            .kgnn_loop()
+            .pack_item_attr(
+                item_source = {
+                    "reco_results": True
+                },
+                mappings = [
+                    {
+                        "to_common_attr": "req_keys"
+                    },{
+                        "from_item_attr": "kgnn_neighbors",
+                        "to_common_attr": "all_kgnn_neighbors",
+                    },{
+                        "from_item_attr": "id_tag",
+                        "to_common_attr": "all_id_tag",
+                    },{
+                        "from_item_attr": "kgnn_dst_node",
+                        "to_common_attr": "all_kgnn_dst_node",
+                    }
+                ]
+            )
+            .truncate(size_limit=0)
+            .retrieve_by_common_attr(attr='all_kgnn_neighbors', reason=3)
+            .dispatch_common_attr(
+                dispatch_config = [
+                    {
+                        "from_common_attr" : "all_kgnn_neighbors",
+                        "to_item_attr" : "kgnn_neighbors"
+                    },{
+                        "from_common_attr" : "all_id_tag",
+                        "to_item_attr" : "id_tag"
+                    },{
+                        "from_common_attr" : "all_kgnn_dst_node",
+                        "to_item_attr" : "dst_node"
+                    }
+                ]
+            )
+            .log_debug_info( 
+                log_tag="kgnn_log",
+                item_attrs = ["id_tag", "kgnn_neighbors", "dst_node"], 
+                for_debug_request_only=True, 
+                respect_sample_logging=False
+            )
         )
 
     def load_feature_list_sign(self, filename):
@@ -398,10 +601,12 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
     def get_item_attributes(self):
         return (
             self.get_item_attr_by_distributed_new_photo_info_index(
+                target_item = { "id_tag": [1,2] },
                 photo_store_kconf_key = "reco.model2.recoExploreFastPhotoStoreConfigForOnerec",
                 save_item_info_to_attr="photo_info"
             )
             .enrich_with_protobuf(
+                target_item = { "id_tag": [1,2] },
                 from_extra_var="photo_info",
                 is_common_attr=False,
                 attrs=[
@@ -439,6 +644,7 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
         
         return (
             self.enrich_attr_by_lua(
+                target_item = { "id_tag": [1,2] },
                 import_common_attr=['_REQ_TIME_'],
                 import_item_attr=["upload_time"],
                 export_item_attr=["photo_age_hour"],
@@ -456,11 +662,13 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                 """
             )
             .extract_with_ks_sign_feature(
+                target_item = { "id_tag": [1,2] },
                 feature_list=feature_list,
                 photo_info_attr="photo_info",
                 slot_as_attr_name=True
             )
             .extract_kuiba_parameter(
+                target_item = { "id_tag": [1,2] },
                 config={
                     "photo_age_hour": {"attrs": [{"key_type": 1520, "attr": ["photo_age_hour"], "converter": "discrete", "converter_args": "3000,0.00,1,100,0.2"}]},
                     'local_life_poi_city_id': {'attrs': [{'key_type': 1606, "mio_slot_key_type": 1606, 'attr': ['local_life_poi_city_id'], "converter": "id"}]},
@@ -469,6 +677,16 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                 is_common_attr=False,
                 slot_as_attr_name=True
             )
+            .if_("request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'")
+                .extract_kuiba_parameter(
+                    target_item = { "id_tag": [0] },
+                    config={
+                        'kgnn_node_id': {'attrs': [{'key_type': 6677, "mio_slot_key_type": 6677, 'attr': ['dst_node'], "converter": "id"}]},
+                    }, 
+                    is_common_attr=False,
+                    slot_as_attr_name=True
+                )
+            .end_if_()
             .set_attr_value(
                 no_overwrite=True,
                 item_attrs=[
@@ -476,7 +694,7 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                 ]
             )
             .log_debug_info(
-                item_attrs = ["1520", "1606", "1607", "26", "128", "71", "93", "141", "142", "143", "417", "418", "430", "776", "777", "778", "779", "780", "781", "782"], 
+                item_attrs = ["1520", "1606", "1607", "26", "128", "71", "93", "141", "142", "143", "417", "418", "430", "776", "777", "778", "779", "780", "781", "782", "6677"], 
                 for_debug_request_only=True, 
                 respect_sample_logging=False, 
             )
@@ -488,54 +706,67 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                     {"from_item_attr": attr, "to_common_attr": remap_attr} for attr, remap_attr in zip(item_rag_attrs, returned_item_rag_attrs)
                 ]
             )
-            .if_("request_type == 'train_request' and target_as_result == 1")
-                .dispatch_common_attr(
-                    dispatch_config = [
-                        {"from_common_attr" : "ann_pids", "to_item_attr" : "ann_pids", "by_list_size": 1},
-                        {"from_common_attr" : "ann_scores", "to_item_attr" : "ann_scores", "by_list_size": 1}
-                    ] + [
-                        {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": 1 *2 if attr == "93" else 1 * 3 if attr=="418" else 1} for attr in returned_item_rag_attrs
-                    ]
-                )
-            .else_()
+            .if_("request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'")
                 .truncate(size_limit=0)
                 .retrieve_by_common_attr(attr="req_keys", reason=666)
                 .copy_item_meta_info(save_item_key_to_attr="photo_id")
                 .dispatch_common_attr(
                     dispatch_config = [
-                        {"from_common_attr" : "embs_list", "to_item_attr" : "embs", "by_list_size": SINGLE_EMBEDDING_DIM},
-                        {"from_common_attr" : "tokens_list", "to_item_attr" : "tokens", "by_list_size": token_num},
-                        {"from_common_attr" : "ann_pids", "to_item_attr" : "ann_pids", "by_list_size": item_RAG_num},
-                        {"from_common_attr" : "ann_scores", "to_item_attr" : "ann_scores", "by_list_size": item_RAG_num}
+                        {"from_common_attr" : "all_kgnn_neighbors", "to_item_attr" : "kgnn_neighbors", "by_list_size": kgnn_item_RAG_num * token_num}
                     ] + [
-                        {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": item_RAG_num *2 if attr == "93" else item_RAG_num * 3 if attr=="418" else item_RAG_num} for attr in returned_item_rag_attrs
+                        {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": kgnn_item_RAG_num * token_num * 2 if attr == "93" else kgnn_item_RAG_num * token_num * 3 if attr=="418" else kgnn_item_RAG_num * token_num} for attr in returned_item_rag_attrs
                     ]
                 )
-            .end_if_()
-            .enrich_attr_by_lua(
-                import_item_attr = ["photo_id", "ann_pids"],
-                function_for_item = "calculate",
-                export_item_attr = ["target_inside"],
-                lua_script = """
-                    function calculate(seq, item_key, reason, score)
-                        for i=1, #ann_pids do
-                            if photo_id == ann_pids[i] then
-                                return 1
+            .else_()
+                .if_("target_as_result == 1")
+                    .dispatch_common_attr(
+                        dispatch_config = [
+                            {"from_common_attr" : "ann_pids", "to_item_attr" : "ann_pids", "by_list_size": 1},
+                            {"from_common_attr" : "ann_scores", "to_item_attr" : "ann_scores", "by_list_size": 1}
+                        ] + [
+                            {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": 1 * 2 if attr == "93" else 1 * 3 if attr=="418" else 1} for attr in returned_item_rag_attrs
+                        ]
+                    )
+                .else_()
+                    .truncate(size_limit=0)
+                    .retrieve_by_common_attr(attr="req_keys", reason=666)
+                    .copy_item_meta_info(save_item_key_to_attr="photo_id")
+                    .dispatch_common_attr(
+                        dispatch_config = [
+                            {"from_common_attr" : "embs_list", "to_item_attr" : "embs", "by_list_size": SINGLE_EMBEDDING_DIM},
+                            {"from_common_attr" : "tokens_list", "to_item_attr" : "tokens", "by_list_size": token_num},
+                            {"from_common_attr" : "ann_pids", "to_item_attr" : "ann_pids", "by_list_size": item_RAG_num},
+                            {"from_common_attr" : "ann_scores", "to_item_attr" : "ann_scores", "by_list_size": item_RAG_num}
+                        ] + [
+                            {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": item_RAG_num *2 if attr == "93" else item_RAG_num * 3 if attr=="418" else item_RAG_num} for attr in returned_item_rag_attrs
+                        ]
+                    )
+                .end_if_()
+                .enrich_attr_by_lua(
+                    import_item_attr = ["photo_id", "ann_pids"],
+                    function_for_item = "calculate",
+                    export_item_attr = ["target_inside"],
+                    lua_script = """
+                        function calculate(seq, item_key, reason, score)
+                            for i=1, #ann_pids do
+                                if photo_id == ann_pids[i] then
+                                    return 1
+                                end
                             end
+                            return 0
                         end
-                        return 0
-                    end
-                """
-            )
-            .log_debug_info(
-                item_attrs = ["target_inside"], 
-                for_debug_request_only=True, 
-                respect_sample_logging=False, 
-            )
-            .perflog_attr_value(
-                check_point="{{return 'item_rag.target_inside.' .. request_type}}",
-                item_attrs=["target_inside"],
-            )
+                    """
+                )
+                .log_debug_info(
+                    item_attrs = ["target_inside"], 
+                    for_debug_request_only=True, 
+                    respect_sample_logging=False, 
+                )
+                .perflog_attr_value(
+                    check_point="{{return 'item_rag.target_inside.' .. request_type}}",
+                    item_attrs=["target_inside"],
+                )
+            .end_if_()
         )
 
     def infer_format(self):
@@ -545,30 +776,41 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, EmbedCa
                 to_item_attr="item_rag_parameters",
                 default_val=[0]
             )
-            .enrich_attr_by_lua(
-                import_item_attr=["item_rag_parameters"],
-                export_item_attr=["item_rag_slots"],
-                function_for_item="calculate",
-                lua_script="""
-                    function calculate()
-                        item_rag_slots = {}
-                        for i=1, #item_rag_parameters do
-                            slot = (item_rag_parameters[i] >> 48) + 16 + 30000
-                            table.insert(item_rag_slots, slot)
-                        end
-                        return item_rag_slots
-                    end
-                """
+            .enrich_attr_by_py(
+                function_set=RAGFuncSet,
+                py_function=RAGFuncSet.sign_to_slot,
             )
         )
+
+class TokenizeFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApiMixin, EmbedCalcApiMixin, GsuApiMixin, PDNApiMixin, CofeaApiMixin, UniPredictV2ApiMixin, EmbeddingApiMixin):
+    def tokenize(self):
+        return (
+            self.fetch_remote_embedding(
+                protocol=1,
+                colossusdb_embd_model_name="rlj-24q2-norm-exp",
+                colossusdb_embd_table_name="semantic_id_new",
+                id_converter={"type_name":"plainIdConverter"},
+                input_attr_name="photo_id",
+                output_attr_name="tokens",
+                query_source_type="item_attr",
+                is_raw_data=True,
+                raw_data_type="uint16",
+                timeout_ms=10,
+                size=3
+            )
+        )
+
 
 prepare_flow = PrepareFlow(name="prepare_flow").prepare()
 
 decode_flow = DecodeFlow(name="decode_flow").decode()
+tokenize_flow = TokenizeFlow(name="tokenize_flow").tokenize()
 
 ann_flow = ItemRAGFlow(name="ann_flow").ann_retrieve()
-item_rag_flow = ItemRAGFlow(name="item_rag_flow").run_item_rag()
-item_rag_infer_flow = ItemRAGFlow(name="item_rag_infer_flow").run_item_rag_infer()
+item_rag_flow = ItemRAGFlow(name="item_rag_flow").run_ann_item_rag()
+item_rag_infer_flow = ItemRAGFlow(name="item_rag_infer_flow").run_ann_item_rag().infer_format()
+kgnn_item_rag_flow = ItemRAGFlow(name="kgnn_item_rag_flow").run_kgnn_item_rag()
+kgnn_item_rag_infer_flow = ItemRAGFlow(name="kgnn_item_rag_infer_flow").run_kgnn_item_rag().infer_format()
 
 kess_name = service_name
 print(f"kess name: {kess_name}")
@@ -576,86 +818,31 @@ print(f"kess name: {kess_name}")
 service = LeafService(
     kess_name=kess_name,
     item_attrs_from_request=["tokens", "semantic_id_v2", "time_ms"],
-    common_attrs_from_request=["user_seq_size", "ann_topk"],
+    common_attrs_from_request=["user_seq_size", "ann_topk", "current_step"],
     index_source=IndexSource.LOCAL_ATTR_INDEX,
     ann_config=knn_retr.get_config(),
 )
 
 service.AUTO_INJECT_ITEM_ATTR = False
 service.CHECK_UNUSED_ATTR = False
-# service.CHECK_NO_SOURCE_ATTR = False
+service.CHECK_NO_SOURCE_ATTR = False
 
 service.IGNORE_NO_SOURCE_ATTR=returned_user_seq_attrs
-returned_item_attrs = ["tokens", "embs", "item_rag_slots", "item_rag_parameters", "ann_pid", "ann_score", "ann_pids", "ann_scores"] + returned_item_rag_attrs + returned_user_seq_attrs
+returned_item_attrs = ["tokens", "embs", "item_rag_slots", "item_rag_parameters", "ann_pid", "ann_score", "ann_pids", "ann_scores", "kgnn_neighbors"] + returned_item_rag_attrs + returned_user_seq_attrs
 service.return_item_attrs(attrs=returned_item_attrs)
-returned_common_attrs = ["tokens", "ann_pids", "ann_scores", "embs_list", "user_seq_slots", "user_seq_parameters", "colossus_time_s"] + returned_item_rag_attrs
+returned_common_attrs = ["tokens", "ann_pids", "ann_scores", "embs_list", "user_seq_slots", "user_seq_parameters", "colossus_time_s", "all_kgnn_neighbors"] + returned_item_rag_attrs
 service.return_common_attrs(attrs=returned_common_attrs)
 
-service.add_leaf_flows(request_type="default", leaf_flows=[prepare_flow, decode_flow, item_rag_flow, ], as_default=True)
-service.add_leaf_flows(request_type="item_rag_request", leaf_flows=[prepare_flow, decode_flow, item_rag_flow, ])
+# service.add_leaf_flows(request_type="default", leaf_flows=[prepare_flow, decode_flow, item_rag_flow, ], as_default=True)
+# service.add_leaf_flows(request_type="item_rag_request", leaf_flows=[prepare_flow, decode_flow, item_rag_flow, ])
 service.add_leaf_flows(request_type="user_seq_request", leaf_flows=[prepare_flow, user_seq_flow, ])
 service.add_leaf_flows(request_type="decode_request", leaf_flows=[prepare_flow, decode_flow, ])
 service.add_leaf_flows(request_type="ann_request", leaf_flows=[prepare_flow, decode_flow, ann_flow])
 service.add_leaf_flows(request_type="train_request", leaf_flows=[prepare_flow, decode_flow, item_rag_flow, user_seq_flow])
 service.add_leaf_flows(request_type="infer_request", leaf_flows=[prepare_flow, decode_flow, item_rag_infer_flow, user_seq_flow])
+service.add_leaf_flows(request_type="ntp_train_request", leaf_flows=[prepare_flow, kgnn_item_rag_flow, user_seq_flow])
+service.add_leaf_flows(request_type="ntp_infer_request", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow, user_seq_flow])
+service.add_leaf_flows(request_type="test_request", leaf_flows=[prepare_flow, tokenize_flow, user_seq_flow])
+service.add_leaf_flows(request_type="test_infer_request", leaf_flows=[prepare_flow, tokenize_flow, user_seq_flow])
 
 service.build(output_file=__file__.replace(".py", ".json"))
-
-'''
-kuiba_parameter_non_common_config = {
-  "pid": {"attrs": [{"key_type": 736, "attr": ["photo_id"], "converter": "id"}]},
-  "aid": {"attrs": [{"key_type": 737, "attr": ["author_id"], "converter": "id"}]},
-#   "cluster_id_fea": {"attrs": [{"key_type": 800, "attr": ["target_photo_cluster_id"], "converter": "id"}]},
-#   "user_hash_tag_id" : {"attrs" : [{"key_type": 727, "attr": ["user_hash_tag_id"], **kuiba_list_converter_config}]},
-#   "wtd_bucket" : {"attrs" : [{"key_type": 1083, "attr": ["wtd_bucket"], "converter": "id"}]},
-#   "wtd_bucket_duration" : {"attrs" : [{"key_type": 1084, "attr": ["wtd_bucket_duration"], "converter": "id"}]},
-#   "wtd_evtr_bucket" : {"attrs" : [{"key_type": 1085, "attr": ["wtd_bucket"], "converter": "id"}]},
-#   "wtd_evtr_bucket_duration" : {"attrs" : [{"key_type": 1086, "attr": ["wtd_bucket_duration"], "converter": "id"}]},
-#   "wtd_lvtr_bucket" : {"attrs" : [{"key_type": 1087, "attr": ["wtd_bucket"], "converter": "id"}]},
-#   "wtd_lvtr_bucket_duration" : {"attrs" : [{"key_type": 1088, "attr": ["wtd_bucket_duration"], "converter": "id"}]},
-#   "search_top4_pid": {"attrs": [{"mio_slot_key_type": 1313, "key_type": 26, "attr": ["search_bubble_top4_pid"], **kuiba_list_converter_config}]},
-#   "search_bubble_query_ctr_param": {"attrs": [{"key_type": 1314, "attr": ["search_bubble_query_ctr_bucket"], "converter": "id"}]},
-#   "search_bubble_query_score_param": {"attrs": [{"key_type": 1315, "attr": ["search_bubble_query_score_bucket"], "converter": "id"}]},
-#   "search_bubble_query_show_param": {"attrs": [{"key_type": 1316, "attr": ["search_bubble_query_show_count_bucket"], "converter": "id"}]},
-#   "search_bubble_query_click_param": {"attrs": [{"key_type": 1317, "attr": ["search_bubble_query_click_count_bucket"], "converter": "id"}]},\
-#   "photo_geohash_2": {"attrs": [{"key_type": 1512, "attr": ["lat", "lon"], "converter": "geohash", "converter_args": "2"}]},
-#   "photo_age_hour": {"attrs": [{"key_type": 1520, "attr": ["photo_age_hour"], "converter": "discrete", "converter_args": "3000,0.00,1,100,0.2"}]},
-  'local_life_poi_city_id': {'attrs': [{'key_type': 1606, "mio_slot_key_type": 1606, 'attr': ['local_life_poi_city_id'], "converter": "id"}]},
-  'local_life_new_poi_id': {'attrs': [{'key_type': 1607, "mio_slot_key_type": 1607, 'attr': ['local_life_new_poi_id'], "converter": "id"}]},
-#   "query_search_click_1d": {"attrs": [{"key_type": 2010, "attr": ["q_s_click_1d"], "converter": "id"}]},
-#   "query_search_result_click_PV_1d": {"attrs": [{"key_type": 2011, "attr": ["q_s_r_click_PV_1d"], "converter": "id"}]},
-#   "query_search_result_play_PV_1d": {"attrs": [{"key_type": 2012, "attr": ["q_s_r_play_PV_1d"], "converter": "id"}]},
-#   "query_search_result_time_1d": {"attrs": [{"key_type": 2013, "attr": ["q_s_r_time_1d"], "converter": "id"}]},
-#   "query_search_result_imp_item_1d": {"attrs": [{"key_type": 2014, "attr": ["q_s_r_imp_item_1d"], "converter": "id"}]},
-#   "query_search_result_click_item_1d": {"attrs": [{"key_type": 2015, "attr": ["q_s_r_click_item_1d"], "converter": "id"}]},
-#   "query_search_result_play_item_1d": {"attrs": [{"key_type": 2016, "attr": ["q_s_r_play_item_1d"], "converter": "id"}]},
-#   "query_search_click_7d": {"attrs": [{"key_type": 2017, "attr": ["q_s_click_7d"], "converter": "id"}]},
-#   "query_search_result_click_PV_7d": {"attrs": [{"key_type": 2018, "attr": ["q_s_r_click_PV_7d"], "converter": "id"}]},
-#   "query_search_result_play_PV_7d": {"attrs": [{"key_type": 2019, "attr": ["q_s_r_play_PV_7d"], "converter": "id"}]},
-#   "query_search_result_time_7d": {"attrs": [{"key_type": 2020, "attr": ["q_s_r_time_7d"], "converter": "id"}]},
-#   "query_search_result_imp_item_7d": {"attrs": [{"key_type": 2021, "attr": ["q_s_r_imp_item_7d"], "converter": "id"}]},
-#   "query_search_result_click_item_7d": {"attrs": [{"key_type": 2022, "attr": ["q_s_r_click_item_7d"], "converter": "id"}]},
-#   "query_search_result_play_item_7d": {"attrs": [{"key_type": 2023, "attr": ["q_s_r_play_item_7d"], "converter": "id"}]},
-#   "query_search_comment_click_1d": {"attrs": [{"key_type": 2024, "attr": ["q_s_click_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_click_PV_1d": {"attrs": [{"key_type": 2025, "attr": ["q_s_r_click_PV_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_play_PV_1d": {"attrs": [{"key_type": 2026, "attr": ["q_s_r_play_PV_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_time_1d": {"attrs": [{"key_type": 2027, "attr": ["q_s_r_time_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_imp_item_1d": {"attrs": [{"key_type": 2028, "attr": ["q_s_r_imp_item_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_click_item_1d": {"attrs": [{"key_type": 2029, "attr": ["q_s_r_click_item_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_play_item_1d": {"attrs": [{"key_type": 2030, "attr": ["q_s_r_play_item_1d_cmt"], "converter": "id"}]},
-#   "query_search_comment_click_7d": {"attrs": [{"key_type": 2031, "attr": ["q_s_click_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_click_PV_7d": {"attrs": [{"key_type": 2032, "attr": ["q_s_r_click_PV_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_play_PV_7d": {"attrs": [{"key_type": 2033, "attr": ["q_s_r_play_PV_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_time_7d": {"attrs": [{"key_type": 2034, "attr": ["q_s_r_time_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_imp_item_7d": {"attrs": [{"key_type": 2035, "attr": ["q_s_r_imp_item_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_click_item_7d": {"attrs": [{"key_type": 2036, "attr": ["q_s_r_click_item_7d_cmt"], "converter": "id"}]},
-#   "query_search_comment_result_play_item_7d": {"attrs": [{"key_type": 2037, "attr": ["q_s_r_play_item_7d_cmt"], "converter": "id"}]},
-#   "search_queryterm": {"attrs": [{"key_type": 2000, "attr": ["search_bubble_query_term"], **kuiba_list_converter_config}]},
-#   "search_querydura": {"attrs": [{"key_type": 2001, "attr": ["search_bubble_query_term_time"], **kuiba_list_converter_config}]},
-  "fuse_duration_fea": {"attrs": [{"key_type": 1394, "converter": "id", "attr": ["duration"]}]},
-#   "playlet_name_out": {"attrs": [{"key_type": 2201, "attr": ["playlet_name"], "converter": "id"}]},
-#   "playlet_theme_out": {"attrs": [{"key_type": 2202, "attr": ["playlet_theme"], "converter": "id"}]},
-#   "playlet_channel_out": {"attrs": [{"key_type": 2203, "attr": ["playlet_channel"], "converter": "id"}]},
-#   "playlet_plot_out": {"attrs": [{"key_type": 2204, "attr": ["playlet_plot"], "converter": "id"}]},
-}
-'''

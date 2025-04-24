@@ -21,6 +21,7 @@ from dragonfly.ext.pdn.pdn_api_mixin import PDNApiMixin
 from dragonfly.ext.cofea.cofea_api_mixin import CofeaApiMixin
 from dragonfly.ext.embedding.embedding_api_mixin import EmbeddingApiMixin
 from dragonfly.decorators import for_loop
+from dragonfly.ext.kgnn.node_attr_schema import NodeAttrSchema
 
 
 ann_kess = "grpc_ann_ia_128_index"
@@ -29,6 +30,8 @@ kconf_key = f"rinf.rlRunner.{identifier}"
 kgnn_shard = 4
 timeout = 1500
 max_subflow_num = 100
+prime_scale = 521
+prime_range = 100000000001647
 
 emb_server_config = {
   "colossusdb_embd_model_name": "wxm_mm_sim_gsu_emb",
@@ -517,53 +520,45 @@ class KGNNSubflow(
     LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
 ):
 
-    @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="id")
+    @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="idx")
     def construct_edge(self):
 
         self.enrich_attr_by_lua(
             import_item_attr = ["semantic_id"],
-            import_common_attr = ["id_index"],
-            export_item_attr = ["src_node", "dst_node", "src_node_text", "dst_node_text"],
+            import_common_attr = ["idx"],
+            export_item_attr = ["src_node", "dst_node"],
             function_for_item = "calculate",
-            lua_script = """
+            lua_script = f"""
             function calculate()
-                local src_node_str = ""
-                local dst_node_str = ""
-                for i=1, id_index+1 do
-                    if i == 1 then
-                        src_node_str = tostring(semantic_id[i])
-                        dst_node_str = tostring(semantic_id[i])
+                local src_node = 0
+                for i=0, idx do
+                    if i == 0 then
+                        src_node = 0
                     else
-                        src_node_str = src_node_str .. '.' .. tostring(semantic_id[i])
-                        dst_node_str = dst_node_str .. '.' .. tostring(semantic_id[i])
+                        src_node = (src_node * {prime_scale} + semantic_id[i] + 1) % {prime_range}
                     end
                 end
-                dst_node_str = dst_node_str .. '.' .. tostring(semantic_id[id_index+2])
-                src_node = util.CityHash64(src_node_str)
-                dst_node = util.CityHash64(dst_node_str)
-
-                return src_node, dst_node, src_node_str, dst_node_str
+                dst_node = (src_node * {prime_scale} + semantic_id[idx+1] + 1) % {prime_range}
+                return src_node, dst_node
             end
             """
         )
         self.log_debug_info(
             common_attrs = [
-                "id_index"
+                "idx"
             ],
             item_attrs = [
                 "photo_id",
                 "src_node",
-                "dst_node",
-                "src_node_text",
-                "dst_node_text"
+                "dst_node"
             ],
             for_debug_request_only=False
         )
-        self.if_("id_index < 4")
+        self.if_("idx < 4")
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="dst_node",
-            
+            dst_node_attr=NodeAttrSchema(1,0).add_int64_attr("dst_node"),
             kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
             btq_prefix = "btq_kgnn_sid_rag-I2I",
             table_name="semantic_id_kgnn",
@@ -573,14 +568,15 @@ class KGNNSubflow(
             batching_num = 1000
         )
         self.perflog_attr_value(
-            check_point="kgnn.id_index.lt8",
-            common_attrs=["id_index"],
+            check_point="kgnn.node_type.hash",
+            common_attrs=["idx"],
             aggregator="count"
         )
         self.else_()
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="photo_id",
+            dst_node_attr=NodeAttrSchema(1,0).add_int64_attr("dst_node"),
             kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
             btq_prefix = "btq_kgnn_sid_rag-I2I",
             table_name="semantic_id_kgnn",
@@ -590,8 +586,8 @@ class KGNNSubflow(
             batching_num = 1000
         )
         self.perflog_attr_value(
-            check_point="kgnn.id_index.gt8",
-            common_attrs=["id_index"],
+            check_point="kgnn.node_type.pid",
+            common_attrs=["idx"],
             aggregator="count"
         )
         self.end_()
@@ -604,7 +600,7 @@ class KGNNSubflow(
         self.count_reco_result(save_count_to="item_count") 
         self.if_("item_count <= 0").return_(0, "no item_num").end_()
         self.gen_common_attr_by_lua(
-            attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14}"}
+            attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}"}
         )
         self.construct_edge()
         return self
@@ -648,7 +644,7 @@ missed_trigger_flow = I2IRunnerFlow(name="missed_trigger_flow") \
     # ._executor_sub_retr_flow(subflow_dict)
 
 LeafService.CHECK_UNUSED_ATTR = False
-runner = OfflineRunner("ann_ia_128_index_runner")
+runner = OfflineRunner("kgnn_runner")
 
 runner.add_leaf_flows(leaf_flows=[realtime_update_flow, kgnn_flow], name="realtime_update_flow", thread_num=64)
 runner.add_leaf_flows(leaf_flows=[bt_shm_update_flow, kgnn_flow], name="bt_shm_update_flow", thread_num=64)
