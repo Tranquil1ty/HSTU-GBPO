@@ -105,6 +105,8 @@ class ChooseTokenStrategy:
         semantic_id_v2_setter = ctx.ItemAttrSetter(b"semantic_id_v2")
         semantic_id_v2_prob_setter = ctx.ItemAttrSetter(b"semantic_id_v2_prob")
         beam_prob_setter = ctx.ItemAttrSetter(b"beam_prob")
+        token_num = ctx.GetInt(b"token_num")
+        vocab_size = ctx.GetInt(b"vocab_size")
        
         
         pre_seq_indices: FTList[int] = []
@@ -124,15 +126,15 @@ class ChooseTokenStrategy:
 
             tmp_pre_seq: FTList[float] = []
             tmp_pre_seq_prob: FTList[float] = []
-            for j in range(self.token_num):
+            for j in range(token_num):
                 tmp_pre_seq.append(pre_seq_input[j])
                 tmp_pre_seq_prob.append(pre_seq_input_prob[j])
             pre_seqs.append(tmp_pre_seq)
             pre_seq_probs.append(tmp_pre_seq_prob)
 
-            token_indices.append(idx % self.vocab_size)
+            token_indices.append(idx % vocab_size)
             token_probs.append(prob)
-            pre_seq_indices.append(idx // self.vocab_size)
+            pre_seq_indices.append(idx // vocab_size)
             beam_probs.append(beam_prob_getter.GetDoubleList(i)[0])
         
         for i in range(result_size):
@@ -150,7 +152,7 @@ class ChooseTokenStrategy:
             beam_prob_new: FTList[float] = []
             beam_prob_new.append(beam_prob + math.log(token_prob))
 
-            for j in range(self.token_num):
+            for j in range(token_num):
                 if j == current_step:
                     choosed_token_probs.append(token_prob * 1.0)
                     choosed_token_ids.append(token_idx * 1.0)

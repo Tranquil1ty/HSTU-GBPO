@@ -167,7 +167,7 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
       .perflog_attr_value(check_point="recogpt.new_time_stat", common_attrs=["last_time_gap", "session_num"]) \
 
     if share:
-      self.if_("request_type == 'infer_request'") \
+      self.if_("request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request'") \
         .extract_kuiba_parameter(
           config={
             f"extract_colossus_field_{field}": {
