@@ -332,101 +332,96 @@ embedding:
     slots: '1014'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_local_life_id_1
     slots: '31606'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_local_life_id_2
     slots: '31607'
   - dim: 64
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_64_pid
     slots: '30026'
   - dim: 64
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_64_aid
     slots: '30128'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30071
     slots: '30071'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30141
     slots: '30141'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30142
     slots: '30142'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30143
     slots: '30143'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30430
     slots: '30430'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_embedding_8_30417
     slots: '30417'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30776
     slots: '30776'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30777
     slots: '30777'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30778
     slots: '30778'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30779
     slots: '30779'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30780
     slots: '30780'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30781
     slots: '30781'
   - dim: 8
     dtype: float32
-    expand: 448
+    expand: 32
     input_name: rag_item_nebula_stats_30782
     slots: '30782'
-  - dim: 128
-    dtype: float32
-    expand: 448
-    input_name: rag_node_embedding
-    slots: '36677'
 extra_params: []
-extra_preds: topk_prob topk_indices
-graph: ../causal_large_config/graph.pb
+extra_preds: pred_tokens pred_scores
+graph: ../3token_beam64/graph.pb
 graph_output_labels: []
 graph_tensor_mapping:
-  topk_indices: Reshape_135:0
-  topk_prob: Reshape_133:0
+  pred_scores: Reshape_273:0
+  pred_tokens: Reshape_272:0
 hyperparameter_kconf: null
 input_type: 3
 param:
@@ -435,7 +430,7 @@ param:
   init_mean: 0
   init_range: 1
   name: item_token_embedding
-  rown: 64
+  rown: 8192
   scale_by_rown: true
 - coln: 640
   dtype: float32
@@ -795,13 +790,6 @@ param:
   rown: 200
   scale_by_rown: true
 - coln: 640
-  dtype: float32
-  init_mean: 0
-  init_range: 1
-  name: rag_items_param
-  rown: 376
-  scale_by_rown: true
-- coln: 640
   dims:
   - 1
   - 1
@@ -809,7 +797,7 @@ param:
   dtype: float32
   init_mean: 0
   init_range: 1
-  name: bos_token_emb
+  name: qformer_bos_token_emb
   rown: 1
   scale_by_rown: true
 - coln: 640
@@ -817,7 +805,7 @@ param:
   init_mean: 0
   init_range: 1
   name: qformer_pos_embedding
-  rown: 7
+  rown: 4
   scale_by_rown: true
 - coln: 1
   dtype: float32
@@ -1875,21 +1863,18 @@ param:
   rank: 1
   rown: 640
   scale_by_rown: true
-- coln: 64
+- coln: 8192
   dtype: float32
   init_mean: 0
   init_range: 1
   name: item_pred_head_param
   rown: 640
   scale_by_rown: true
-q_names: topk_prob topk_indices
+q_names: pred_tokens pred_scores
 vec_input:
 - common: false
   dim: 512
   name: colossus_time_s
-- common: false
-  dim: 7
-  name: semantic_id_v2
 - common: false
   dim: 1
   name: adp_effective_view_fix
@@ -1917,15 +1902,3 @@ vec_input:
 - common: false
   dim: 1
   name: play_complete
-- common: false
-  dim: 1
-  name: cur_step
-- common: false
-  dim: 1
-  name: batch_mask
-- common: false
-  dim: 1
-  name: p_temp
-- common: false
-  dim: 1
-  name: beam_prob

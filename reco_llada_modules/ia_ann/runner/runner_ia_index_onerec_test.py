@@ -30,7 +30,7 @@ kconf_key = f"rinf.rlRunner.{identifier}"
 kgnn_shard = 4
 timeout = 1500
 max_subflow_num = 100
-prime_scale = 521
+prime_scale = 67
 prime_range = 100000000001647
 
 emb_server_config = {
@@ -422,7 +422,7 @@ class I2IRunnerFlow(
         self.fetch_remote_embedding(
             protocol=1,
             colossusdb_embd_model_name="rlj-24q2-norm-exp",
-            colossusdb_embd_table_name="parallel_semantic_id",
+            colossusdb_embd_table_name="se_id_6_1r",
             id_converter={"type_name":"plainIdConverter"},
             input_attr_name="photo_id",
             output_attr_name="semantic_id",
@@ -430,7 +430,7 @@ class I2IRunnerFlow(
             is_raw_data=True,
             raw_data_type="uint16",
             timeout_ms=10,
-            size=16
+            size=7
         )
         self.enrich_attr_by_lua(
             import_item_attr = ["semantic_id"],
@@ -526,7 +526,7 @@ class KGNNSubflow(
         self.enrich_attr_by_lua(
             import_item_attr = ["semantic_id"],
             import_common_attr = ["idx"],
-            export_item_attr = ["src_node", "dst_node"],
+            export_item_attr = ["src_node", "dst_node", "token_id"],
             function_for_item = "calculate",
             lua_script = f"""
             function calculate()
@@ -539,7 +539,8 @@ class KGNNSubflow(
                     end
                 end
                 dst_node = (src_node * {prime_scale} + semantic_id[idx+1] + 1) % {prime_range}
-                return src_node, dst_node
+                token_id = semantic_id[idx+1]
+                return src_node, dst_node, token_id
             end
             """
         )
@@ -550,18 +551,19 @@ class KGNNSubflow(
             item_attrs = [
                 "photo_id",
                 "src_node",
-                "dst_node"
+                "dst_node",
+                "token_id"
             ],
             for_debug_request_only=False
         )
-        self.if_("idx < 4")
+        self.if_("idx <= 5") # 前6次检索（bos to t5）只返回节点feature
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="dst_node",
-            dst_node_attr=NodeAttrSchema(1,0).add_int64_attr("dst_node"),
-            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
-            btq_prefix = "btq_kgnn_sid_rag-I2I",
-            table_name="semantic_id_kgnn",
+            dst_node_attr=NodeAttrSchema(2,0).add_int64_attr("dst_node").add_int64_attr("token_id"),
+            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn-7x64_biz",
+            btq_prefix = "btq_kgnn_sid_7x64_rag-I2I",
+            table_name="semantic_id_7x64_kgnn",
             insert_edge_weight_act=1,
             timeout_ms=1000,
             btq_shard_num=4,
@@ -572,14 +574,14 @@ class KGNNSubflow(
             common_attrs=["idx"],
             aggregator="count"
         )
-        self.else_()
+        self.else_() # 第7次检索（t6 to t7）返回节点和边信息
         self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
             src_attr="src_node",
             dst_attr="photo_id",
-            dst_node_attr=NodeAttrSchema(1,0).add_int64_attr("dst_node"),
-            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
-            btq_prefix = "btq_kgnn_sid_rag-I2I",
-            table_name="semantic_id_kgnn",
+            dst_node_attr=NodeAttrSchema(2,0).add_int64_attr("dst_node").add_int64_attr("token_id"),
+            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn-7x64_biz",
+            btq_prefix = "btq_kgnn_sid_7x64_rag-I2I",
+            table_name="semantic_id_7x64_kgnn",
             insert_edge_weight_act=1,
             timeout_ms=1000,
             btq_shard_num=4,
@@ -600,7 +602,7 @@ class KGNNSubflow(
         self.count_reco_result(save_count_to="item_count") 
         self.if_("item_count <= 0").return_(0, "no item_num").end_()
         self.gen_common_attr_by_lua(
-            attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}"}
+            attr_map={"loop_ids": "{0,1,2,3,4,5,6}"}
         )
         self.construct_edge()
         return self
