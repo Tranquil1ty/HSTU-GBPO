@@ -593,11 +593,6 @@ class FinishStage(LeafFlow):
     def finish_clean(self, reason, **kwargs):
         return self.limit(0, name="clean_all_for_" + reason, **kwargs)
 
-# eval request 第一步，评估样本处理
-pre_eval_flow = (GenerativeRetrFlow(name="pre_eval_flow")
-    
-)
-
 call_eval_server = CallEvalServer("call_eval_server", loop_if="is_keep_call_eval", loop_limit=100)
 call_eval_server.pre_eval()
 call_eval_server.eval_call()
