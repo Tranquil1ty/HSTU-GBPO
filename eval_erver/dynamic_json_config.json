@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "bd6ece03597b058001d54c9c39689adf_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-11 17:28:15",
+  "_CONFIG_VERSION": "76f3664d8b52fc1b848179eeb8819b8f_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-11 18:08:04",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -731,8 +731,9 @@
           "skip": "{{_if_control_attr_3}}",
           "type_name": "CommonRecoUserMetaInfoEnricher"
         },
-        "count_reco_result_B061F6": {
+        "count_reco_result_F842BF": {
           "$metadata": {
+            "$downstream_new_result": true,
             "$input_common_attrs": [],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -1021,7 +1022,7 @@
           "type_name": "CommonRecoDelegateEnricher",
           "use_packed_item_attr": true
         },
-        "delegate_retrieve_AE3EFE": {
+        "delegate_retrieve_2A7FE2": {
           "$metadata": {
             "$input_common_attrs": [
               "common_eval_kess_name",
@@ -1035,16 +1036,13 @@
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "eval_retr_photo_id_list"
-            ],
+            "$output_common_attrs": [],
             "$output_item_attrs": []
           },
-          "downstream_processor": "__pipeline_end",
+          "downstream_processor": "count_reco_result_F842BF",
           "kess_service": "{{common_eval_kess_name}}",
           "request_num": 1000,
           "request_type": "default",
-          "save_result_to_common_attr": "eval_retr_photo_id_list",
           "send_common_attrs": [
             "eval_pos_photo_id_list",
             "f1_score_list",
@@ -6283,9 +6281,9 @@
           "pack_item_attr_68BEEC",
           "log_debug_info_CC0BD6",
           "truncate_5111BF",
-          "delegate_retrieve_AE3EFE",
+          "delegate_retrieve_2A7FE2",
           "enrich_attr_by_lua_7A10DA",
-          "count_reco_result_B061F6",
+          "count_reco_result_F842BF",
           "_branch_controller_EB7701DB",
           "copy_item_meta_info_59FAFB",
           "get_item_attr_by_distributed_index_69A7E2",
