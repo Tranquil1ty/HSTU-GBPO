@@ -280,8 +280,7 @@ class CallEvalServer(LeafFlow):
                 ],
                 request_type="default",
                 timeout_ms=10000,
-                request_num=1000,
-                save_result_to_common_attr="eval_retr_photo_id_list"
+                request_num=1000
             )
             .enrich_attr_by_lua(
                 import_common_attr=["common_eval_kess_list",
