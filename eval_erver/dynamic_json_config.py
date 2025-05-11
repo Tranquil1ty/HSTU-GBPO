@@ -126,13 +126,6 @@ read_log = (
         output_attr="user_info",
         class_name="ks::reco::UserInfo",
     )
-    .extract_with_ks_sign_feature(
-        feature_list=load_feature_list_sign("./feature_list_sign.txt"),
-        user_info_attr="user_info",
-        common_slots_output="common_user_slots",
-        common_parameters_output="common_user_signs",
-    )
-    .log_debug_info(common_attrs=["common_user_slots", "common_user_signs"], for_debug_request_only=False)
     .copy_user_meta_info(save_result_size_to_attr="item_num")
     .if_("item_num == 0")
         .return_()
