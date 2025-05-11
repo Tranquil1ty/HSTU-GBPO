@@ -191,47 +191,7 @@ class CallEvalServer(LeafFlow):
     def __init__(self, name, loop_if, loop_limit):
         LeafFlow.__init__(self, name=name, loop_if=loop_if, loop_limit=loop_limit)
 
-    def eval_call(self):
-        return (self
-            .if_("item_num > 0")
-            .delegate_retrieve(
-                kess_service="{{common_eval_kess_name}}",
-                send_common_attrs=["eval_pos_photo_id_list", "f1_score_list", "tab_id", {"name": "user_info_str", "as": "user"}] + [
-                    "like_photo_id_list", "follow_photo_id_list", "longview_photo_id_list"
-                ],
-                request_type="default",
-                timeout_ms=10000,
-                request_num=1000,
-                save_result_to_common_attr="eval_retr_photo_id_list"
-            )
-            # 更新 kess_name
-            .enrich_attr_by_lua(
-                import_common_attr=["common_eval_kess_list",
-                                    "common_eval_kess_list_size",
-                                    "common_eval_kess_list_index"],
-                export_common_attr=["common_eval_kess_list_index",
-                                    "common_eval_kess_name",
-                                    "is_keep_call_eval"],
-                function_for_common="calculate",
-                lua_script="""
-                function calculate()
-                    local common_eval_kess_list_index = common_eval_kess_list_index or 1
-                    common_eval_kess_list_index = common_eval_kess_list_index + 1
-                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size
-                    local common_eval_kess_name = ""
-                    if (is_keep_call_eval) then
-                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]
-                    end
-                    return common_eval_kess_list_index,
-                           common_eval_kess_name,
-                           is_keep_call_eval
-                end
-                """
-            )
-            .end_()
-        )
-
-    # 第一步：解析出 realshow item 的semantic id list
+    # 第1.1步：解析出 realshow item 的semantic id list
     def pre_eval(self):
         return (self.limit(0, name="clean_all_for_before_eval")
         .if_("eval_pos_photo_id_list ~= nil")
@@ -298,7 +258,48 @@ class CallEvalServer(LeafFlow):
             ]
         )
         .limit(0)
-        .end_())
+        .end_()
+    )
+
+    # 第1.2步：请求生成模型，并更新下次请求的服务
+    def eval_call(self):
+        return (self
+            .if_("item_num > 0")
+            .delegate_retrieve(
+                kess_service="{{common_eval_kess_name}}",
+                send_common_attrs=["eval_pos_photo_id_list", "f1_score_list", "tab_id", {"name": "user_info_str", "as": "user"}] + [
+                    "like_photo_id_list", "follow_photo_id_list", "longview_photo_id_list"
+                ],
+                request_type="default",
+                timeout_ms=10000,
+                request_num=1000,
+                save_result_to_common_attr="eval_retr_photo_id_list"
+            )
+            .enrich_attr_by_lua(
+                import_common_attr=["common_eval_kess_list",
+                                    "common_eval_kess_list_size",
+                                    "common_eval_kess_list_index"],
+                export_common_attr=["common_eval_kess_list_index",
+                                    "common_eval_kess_name",
+                                    "is_keep_call_eval"],
+                function_for_common="calculate",
+                lua_script="""
+                function calculate()
+                    local common_eval_kess_list_index = common_eval_kess_list_index or 1
+                    common_eval_kess_list_index = common_eval_kess_list_index + 1
+                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size
+                    local common_eval_kess_name = ""
+                    if (is_keep_call_eval) then
+                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]
+                    end
+                    return common_eval_kess_list_index,
+                           common_eval_kess_name,
+                           is_keep_call_eval
+                end
+                """
+            )
+            .end_()
+        )
     
     def post_eval(self):
         return (self.if_("eval_length ~= nil and eval_length > 0")
@@ -448,11 +449,11 @@ class CallEvalServer(LeafFlow):
             function_for_item="calc",
             lua_script="""
                 function calc()
-                    return math.min(f1_score, 10000.0)
+                    return math.min(f1_score, 2000.0)
                 end
             """
         )
-        .perflog_attr_value(check_point="default.reward", item_attrs=["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "svr", "ptr"],)
+        .perflog_attr_value(check_point="onerec.eval.reward", item_attrs=["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "svr", "ptr"],)
         .perf_reward_value(namespace="common.leaf", subtag="onerec_reward_value_eval")
         .end_()
     )
