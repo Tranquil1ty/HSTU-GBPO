@@ -257,6 +257,15 @@ class CallEvalServer(LeafFlow):
                 {"from_item_attr": "eval_layer_3", "to_common_attr": "eval_layer_3_list", },
             ]
         )
+        .log_debug_info(
+            log_tag="hqg_debug.onerec.eval.kess",
+            common_attrs=["common_eval_kess_list_size",
+                                "common_eval_kess_list_index",
+                                "common_eval_kess_name",
+                                "is_keep_call_eval"],
+            for_debug_request_only=False,
+            respect_sample_logging=False
+        )
         .limit(0)
         .end_()
     )
@@ -264,7 +273,6 @@ class CallEvalServer(LeafFlow):
     # 第1.2步：请求生成模型，并更新下次请求的服务
     def eval_call(self):
         return (self
-            .if_("item_num > 0")
             .delegate_retrieve(
                 kess_service="{{common_eval_kess_name}}",
                 send_common_attrs=["eval_pos_photo_id_list", "f1_score_list", "tab_id", {"name": "user_info_str", "as": "user"}] + [
@@ -298,7 +306,6 @@ class CallEvalServer(LeafFlow):
                 end
                 """
             )
-            .end_()
         )
     
     def post_eval(self):
