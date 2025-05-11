@@ -300,7 +300,7 @@ class CallEvalServer(LeafFlow):
         .limit(0)
         .end_())
     
-    def post_eval(self, model_key):
+    def post_eval(self):
         return (self.if_("eval_length ~= nil and eval_length > 0")
         .enrich_attr_by_lua(
             import_common_attr=["eval_layer_1_list", "eval_layer_2_list", "eval_layer_3_list",
