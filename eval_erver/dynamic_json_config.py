@@ -582,7 +582,6 @@ class CallEvalServer(LeafFlow):
                 extra2=sorted_attr_name+"_SORTED_TOP6_AVG",
                 extra3="{{tab_id_str}}"
             )
-            .end_()
             )
 
 # 第三步，清理现场
