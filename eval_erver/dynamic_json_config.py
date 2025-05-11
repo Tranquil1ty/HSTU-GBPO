@@ -48,6 +48,31 @@ labels = [
   "formula_one_score"
 ]
 
+# 请求最新的精排模型，评估 reward
+main_model_pxtrs = [
+    "evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "svr", "ptr", "tag_click",
+    "join_topic", "vtr_v2", "dtr", "epstr", "lwt", "slide_next_rate", "dfvr", "cmef",
+    "etcm", "live", "htr", "qtr", "osftr", "cltr", "setr", "scalar0", "scalar1",
+    "scalar2", "linear0", "linear1", "linear2", "switch_out_featured_tab", "video_slide",
+    "ptltr", "swptr", "swpst", "swppc", "swpac", "lstr", "lsst", "llvtr", "long_watch_time",
+    "mus1", "mus2", "mus3", "vrec", "mfsc", "mus4", "mtm1", "mtm2", "mtm3", "csf", "cmagic",
+    "tag_ctr", "tag_vtr", "mustc", "twhc", "vmagic", "browse_depth", "combine_unity",
+    "evtr_v3", "lvtr_v3", "vtr_v3", "fr_log_vtr", "bottom_search_pctr", "adaptive_wtd",
+    "cpr", "evtr_exp", "lvtr_exp", "svr_exp", "vtr_exp", "kyplc", "post_at_comment_score",
+    "screen_shot", "search_comment_highlight_click", "search_comment_highlight_trending",
+    "watchlive_wtd_combine", "sppc_bottom_bar", "interest_evtr_playtime", "wtd_duration_score",
+    "vtr_calibration_score", "fuse_score", "new_svr", "sppc_combine", "wtd_finish_score",
+    "cpr_wtd", "wtd_duration_score_v2", "wtd_v2", "caption_searchpage", "click_live",
+    "effective_watch_live_time", "setr3_low_active", "search_pure_cmt_highlight_ctr", "itr",
+    "playlet_ctr", "adp_wtd", "hashtag_ctr", "peak_evtr", "search_comment_trending_click",
+    "bubble_cr", "hashtag_sppc", "bottom_bar_ctr", "ua_long_term_page_score", "session_play_time",
+    "all_evtr", "avtt", "playtime_denoise", "pro_cpr", "total_watch_time", "total_watch_time_wtd",
+    "adp_clevtr_pro", "pro_evtr", "watch_live", "wtd_v2_playtime", "cpr_duration_score", "setr2",
+    "bubble_sr", "search_page_photo_show", "search_page_photo_click"
+]
+
+EOL = '\n'
+
 def load_feature_list_sign(filename):
     ret = set()
     with open(filename) as f:
@@ -89,6 +114,7 @@ read_log = (
     .if_("tab_id ~= 10000 and tab_id ~= 30000")
         .return_()
     .end_()
+    .gen_common_attr_by_lua(attr_map={"tab_id_str": "tostring(tab_id)"})
     .set_attr_value(
         no_overwrite=True,
         item_attrs=[{"name": "formula_one_score", "type": "double", "value": 0.0}]
@@ -180,11 +206,12 @@ class CallEvalServer(LeafFlow):
                 send_common_attrs=["eval_pos_photo_id_list", "f1_score_list", "tab_id", {"name": "user_info_str", "as": "user"}] + [
                     "like_photo_id_list", "follow_photo_id_list", "longview_photo_id_list"
                 ],
-                request_type="eval_request",
+                request_type="default",
                 timeout_ms=10000,
                 request_num=1000,
                 save_result_to_common_attr="eval_retr_photo_id_list"
-            ) \
+            )
+            # 更新 kess_name
             .enrich_attr_by_lua(
                 import_common_attr=["common_eval_kess_list",
                                     "common_eval_kess_list_size",
@@ -211,6 +238,360 @@ class CallEvalServer(LeafFlow):
             .end_()
         )
 
+    # 第一步：解析出 realshow item 的semantic id list
+    def pre_eval(self):
+        return (self.limit(0, name="clean_all_for_before_eval")
+        .if_("eval_pos_photo_id_list ~= nil")
+        .retrieve_by_common_attr(attr="eval_pos_photo_id_list", reason=1)
+        .copy_item_meta_info(save_item_id_to_attr="eval_pos_pid")
+        .get_remote_embedding_lite_v2(
+            protocol=1,
+            colossusdb_embd_service_name="rlj-24q2-norm-exp",
+            colossusdb_embd_table_name="semantic_id_new",
+            client_side_shard=True,
+            shard_num=2,
+            id_converter={"type_name": "plainIdConverter"},
+            input_attr_name="eval_pos_pid",
+            output_attr_name="eval_semantic_id_list",
+            is_raw_data=True,
+            query_source_type="item_attr",
+            raw_data_type="uint16",
+            timeout_ms=100,
+            size=3
+        )
+        .enrich_attr_by_lua(
+            import_item_attr=["eval_semantic_id_list"],
+            export_item_attr=["non_empty_semantic_id", "eval_layer_1", "eval_layer_2", "eval_layer_3"],
+            function_for_item="func",
+            lua_script="""
+            function func()
+                local non_empty_semantic_id = 1
+                if eval_semantic_id_list == nil then
+                    non_empty_semantic_id = 0
+                end
+
+                local sid1 = eval_semantic_id_list[1]
+                local sid2 = eval_semantic_id_list[2]
+                local sid3 = eval_semantic_id_list[3]
+
+                local eval_layer_1;
+                local eval_layer_2;
+                local eval_layer_3;
+
+                if eval_semantic_id_list ~= nil then
+                    eval_layer_1 = util.CityHash64(tostring(sid1))
+                    eval_layer_2 = util.CityHash64(tostring(sid1)..tostring(sid2))
+                    eval_layer_3 = util.CityHash64(tostring(sid1)..tostring(sid2)..tostring(sid3))
+                end
+                return non_empty_semantic_id, eval_layer_1, eval_layer_2, eval_layer_3
+            end
+            """
+        ).filter_by_attr(
+            attr_name="non_empty_semantic_id",
+            remove_if="==",
+            compare_to=0,
+            remove_if_attr_missing=False
+        ).copy_user_meta_info(
+            save_result_size_to_attr="eval_length"
+        ).perflog_attr_value(
+            check_point="onerec.eval_length",
+            common_attrs=["eval_length"]
+        ).pack_item_attr(
+            item_source={ "reco_results": True },
+            mappings=[
+                {"from_item_attr": "eval_layer_1", "to_common_attr": "eval_layer_1_list", },
+                {"from_item_attr": "eval_layer_2", "to_common_attr": "eval_layer_2_list", },
+                {"from_item_attr": "eval_layer_3", "to_common_attr": "eval_layer_3_list", },
+            ]
+        )
+        .limit(0)
+        .end_())
+    
+    def post_eval(self, model_key):
+        return (self.if_("eval_length ~= nil and eval_length > 0")
+        .enrich_attr_by_lua(
+            import_common_attr=["eval_layer_1_list", "eval_layer_2_list", "eval_layer_3_list",
+                "middle_layer_1", "middle_layer_2", "middle_layer_3", "eval_length"],
+            export_common_attr=["hit_rate_1", "hit_rate_2", "hit_rate_3", "rank_index_1", "rank_index_2", "rank_index_3",],
+            function_for_common="func",
+            lua_script="""
+            function func()
+                -- pre
+                local global_dict = {}
+
+                for i=1, #middle_layer_1, 1 do
+                    sid1 = math.floor(middle_layer_1[i])
+                    key = util.CityHash64(tostring(sid1))
+                    global_dict[key] = i
+                end
+
+                for i=1, #middle_layer_2, 2 do
+                    sid1 = math.floor(middle_layer_2[i])
+                    sid2 = math.floor(middle_layer_2[i+1])
+                    key = util.CityHash64(tostring(sid1)..tostring(sid2))
+                    global_dict[key] = (i+1) / 2
+                end
+
+                for i=1, #middle_layer_3, 3 do
+                    sid1 = math.floor(middle_layer_3[i])
+                    sid2 = math.floor(middle_layer_3[i+1])
+                    sid3 = math.floor(middle_layer_3[i+2])
+                    key = util.CityHash64(tostring(sid1)..tostring(sid2)..tostring(sid3))
+                    global_dict[key] = (i+2) / 3
+                end
+
+                local hit_1 = 0;
+                local hit_2 = 0;
+                local hit_3 = 0;
+
+                local rank_index_1 = 0;
+                local rank_index_2 = 0;
+                local rank_index_3 = 0;
+
+                -- 第一层 评估
+                for i = 1, #eval_layer_1_list do
+                    if global_dict[eval_layer_1_list[i]] ~= nil then
+                        hit_1 = hit_1 + 1
+                        rank_index_1 = rank_index_1 + global_dict[eval_layer_1_list[i]]
+                    end
+                end
+
+                -- 第二层 评估
+                for i = 1, #eval_layer_2_list do
+                    if global_dict[eval_layer_2_list[i]] ~= nil then
+                        hit_2 = hit_2 + 1
+                        rank_index_2 = rank_index_2 + global_dict[eval_layer_2_list[i]]
+                    end
+                end
+
+                -- 第三层 评估
+                for i = 1, #eval_layer_3_list do
+                    if global_dict[eval_layer_3_list[i]] ~= nil then
+                        hit_3 = hit_3 + 1
+                        rank_index_3 = rank_index_3 + global_dict[eval_layer_3_list[i]]
+                    end
+                end
+
+                rank_index_1 = rank_index_1 / hit_1
+                rank_index_2 = rank_index_2 / hit_2
+                rank_index_3 = rank_index_3 / hit_3
+
+                return math.floor(hit_1 / eval_length * 10000), math.floor(hit_2 / eval_length * 10000), math.floor(hit_3 / eval_length * 10000), math.floor(rank_index_1*10000), math.floor(rank_index_2*10000), math.floor(rank_index_3*10000)
+            end
+            """
+        )
+        .hitrate_perf(namespace="common.leaf", subtag="tiger_hit_rate", service_name="{{common_eval_kess_name}}")
+        .end_()
+    )
+
+    def reward_eval(self):
+        return (self.count_reco_result(save_count_to="item_num")
+        .if_("item_num > 0")
+        .copy_item_meta_info(
+            save_item_key_to_attr="item_id",
+        )
+        .get_item_attr_by_distributed_index(
+            photo_store_kconf_key="reco.distributedIndex.hotPhotoStoreConfig",
+            use_dynamic_photo_store=True,
+            attrs=[{ "name": "is_living", "path": "live_photo_info.is_living" },]
+        )
+        .build_protobuf(
+            inputs = [
+                { "item_attr": "is_living", "path": "living" },
+                { "item_attr": "item_id", "path": "ar_result.pid" },
+            ],
+            output_item_attr = "reco_photo_info_str",
+            class_name = "ks::reco::RecoPhotoInfo",
+            as_string = True
+        )
+        .set_attr_value(
+            no_overwrite=True,
+            common_attrs=[{
+            "name": "retr_type",
+            "type": "int",
+            "value": 1
+            }]
+        )
+        .enrich_attr_by_lua(
+            import_common_attr=["tab_id"],
+            export_common_attr=["full_rank_req_type"],
+            function_for_common="func",
+            lua_script="""
+            function func()
+                local full_rank_req_type = 'predict_for_gamora'
+                if tab_id == 30000 then
+                    full_rank_req_type = 'predict_for_nebula'
+                end
+                return full_rank_req_type
+            end
+            """
+        )
+        .delegate_enrich(
+            name="delegate_enrich_main_model",
+            kess_service="grpc_hqg24q4ModelComboFinal",
+            request_type="{{full_rank_req_type}}",
+            timeout_ms=10000,
+            send_common_attrs = [
+                {"name": "user", "as": "user_info_str"},
+                "tab_id",
+                "retr_type"
+            ],
+            send_item_attrs=["reco_photo_info_str"],
+            recv_item_attrs=main_model_pxtrs,
+            partition_size=256,
+            use_packed_item_attr=True
+        )
+        .calc_by_formula1(
+            import_item_attr=main_model_pxtrs,
+            kconf_key="formula.scenarioKey58.ll_dpo_train_f1",
+            export_formula_value = [
+                "f1_score",
+            ],
+            abtest_biz_name="KUAISHOU_APPS"
+        )
+        .enrich_attr_by_lua(
+            import_item_attr=["f1_score"],
+            export_item_attr=["f1_score"],
+            function_for_item="calc",
+            lua_script="""
+                function calc()
+                    return math.min(f1_score, 10000.0)
+                end
+            """
+        )
+        .perflog_attr_value(check_point="default.reward", item_attrs=["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "svr", "ptr"],)
+        .perf_reward_value(namespace="common.leaf", subtag="onerec_eval_system")
+        .end_()
+    )
+
+    def perf_reward_value(self, namespace, subtag):
+        perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
+        perf_pxtrs += ["wtd_finish_score", "session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
+        perf_pxtrs += ["f1_score", "log_p"]
+
+        min_pxtrs = ["svr", "htr"]
+        self.pack_item_attr(
+            item_source={ "reco_results": True },
+            mappings=[
+                {"from_item_attr": x, "to_common_attr": x+"_MAX", "aggregator": "max"} for x in perf_pxtrs
+            ] + [
+                {"from_item_attr": x, "to_common_attr": x+"_AVG", "aggregator": "avg"} for x in perf_pxtrs
+            ] + [
+                {"from_item_attr": x, "to_common_attr": x+"_MIN", "aggregator": "min"} for x in min_pxtrs
+            ]
+        )
+
+        self.enrich_attr_by_lua(
+            import_common_attr=[f"{x}_MAX" for x in perf_pxtrs],
+            export_common_attr=[f"{x}_MAX" for x in perf_pxtrs],
+            function_for_common="calc",
+            lua_script=f"""
+            function calc()
+                {EOL.join(f"local {x} = math.floor({x}_MAX*10000)" for x in perf_pxtrs)}
+                return {", ".join(x for x in perf_pxtrs)}
+            end
+            """
+        )
+
+        self.enrich_attr_by_lua(
+            import_common_attr=[f"{x}_AVG" for x in perf_pxtrs],
+            export_common_attr=[f"{x}_AVG" for x in perf_pxtrs],
+            function_for_common="calc",
+            lua_script=f"""
+            function calc()
+                {EOL.join(f"local {x} = math.floor({x}_AVG*10000)" for x in perf_pxtrs)}
+                return {", ".join(x for x in perf_pxtrs)}
+            end
+            """
+        )
+
+        self.enrich_attr_by_lua(
+            import_common_attr=[f"{x}_MIN" for x in min_pxtrs],
+            export_common_attr=[f"{x}_MIN" for x in min_pxtrs],
+            function_for_common="calc",
+            lua_script=f"""
+            function calc()
+                {EOL.join(f"local {x} = math.floor({x}_MIN*10000)" for x in min_pxtrs)}
+                return {", ".join(x for x in min_pxtrs)}
+            end
+            """
+        )
+
+        for x in perf_pxtrs:
+            self.perflog(
+                mode="interval",
+                value="{{" + x+"_MAX" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=x+"_MAX",
+                extra3="{{tab_id_str}}"
+            )
+
+            self.perflog(
+                mode="interval",
+                value="{{" + x+"_AVG" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=x+"_AVG",
+                extra3="{{tab_id_str}}"
+            )
+
+            self.perflog(
+                mode="interval",
+                value="{{" + x+"_TOP6_AVG" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=x+"_TOP6_AVG",
+                extra3="{{tab_id_str}}"
+            )
+        
+        for x in min_pxtrs:
+            self.perflog(
+                mode="interval",
+                value="{{" + x+"_MIN" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=x+"_MIN",
+                extra3="{{tab_id_str}}"
+            )
+
+        # 按精排 排序后的 top6
+        for x in perf_pxtrs:
+            self.perf_sorted_reward_value(namespace, subtag, x)
+        for x in min_pxtrs:
+            self.perf_sorted_reward_value(namespace, subtag, x, desc=False)
+
+        return self
+    
+    def perf_sorted_reward_value(self, namespace, subtag, sorted_attr_name, desc=True):
+        return (
+            self.sort_by(sorted_attr_name, desc=desc)
+            .copy_item_meta_info(
+                save_item_seq_to_attr="item_seq"
+            )
+            .pack_item_attr(
+                item_source={ "reco_results": True },
+                mappings=[
+                    {"from_item_attr": sorted_attr_name, "to_common_attr": sorted_attr_name+"_SORTED_TOP6_AVG", "aggregator": "avg"}
+                ],
+                target_item = { "item_seq": [0, 1, 2, 3, 4, 5] }
+            )
+            .perflog(
+                mode="interval",
+                value="{{" + sorted_attr_name+"_SORTED_TOP6_AVG" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=sorted_attr_name+"_SORTED_TOP6_AVG",
+                extra3="{{tab_id_str}}"
+            )
+            .end_()
+            )
+
 # 第三步，清理现场
 class FinishStage(LeafFlow):
     def __init__(self, name):
@@ -219,8 +600,16 @@ class FinishStage(LeafFlow):
     def finish_clean(self, reason, **kwargs):
         return self.limit(0, name="clean_all_for_" + reason, **kwargs)
 
+# eval request 第一步，评估样本处理
+pre_eval_flow = (GenerativeRetrFlow(name="pre_eval_flow")
+    
+)
+
 call_eval_server = CallEvalServer("call_eval_server", loop_if="is_keep_call_eval", loop_limit=100)
+call_eval_server.pre_eval()
 call_eval_server.eval_call()
+call_eval_server.reward_eval()
+call_eval_server.post_eval()
 
 finish_stage = FinishStage("finish_stage")
 finish_stage.finish_clean("finish_eval")
