@@ -1,0 +1,3047 @@
+{
+  "_CONFIG_VERSION": "8fd34a3e11defc233fe7811a8a2556c6_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-11 14:54:11",
+  "_DRAGONFLY_VERSION": "0.8.3",
+  "attrs_from_request": {
+    "common_attr": [
+      "is_gamora_user",
+      "is_nebula_user",
+      "is_tnu",
+      "page_size",
+      "source_photo_id",
+      "tab_id",
+      "user_info_attr"
+    ]
+  },
+  "default_request_type": "default",
+  "kess_config": {
+    "service_name": "grpc_OnePieceLeafCkV1"
+  },
+  "pipeline_manager_config": {
+    "base_pipeline": {
+      "processor": {
+        "_branch_controller_2CFC0311": {
+          "$branch_start": "_branch_controller_2CFC0311",
+          "$code_info": "[if] 2CFC0311 direct_retrieval_flow.py in _do_retr(): return self.if_(\"enable_frequency_control == 1 and frequency_enable == 0\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "enable_frequency_control",
+              "frequency_enable"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_1"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_1"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "enable_frequency_control",
+            "frequency_enable"
+          ],
+          "lua_script": "function evaluate() if (enable_frequency_control == 1 and frequency_enable == 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_2CFC0311_else": {
+          "$branch_start": "_branch_controller_2CFC0311",
+          "$code_info": "[else] 8E2D5054 direct_retrieval_flow.py in _do_retr(): .return_(0)",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_1"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_else_control_attr_2"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_else_control_attr_2"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_1"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_1 == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_306DCE5F": {
+          "$branch_start": "_branch_controller_306DCE5F",
+          "$code_info": "[if] 306DCE5F gen_result_flow.py in _default_flow(): self.if_(\"muw_enable_use_forumua_one_v2 == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "muw_enable_use_forumua_one_v2"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_6"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_6"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "muw_enable_use_forumua_one_v2"
+          ],
+          "lua_script": "function evaluate() if (muw_enable_use_forumua_one_v2 == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_306DCE5F_else": {
+          "$branch_start": "_branch_controller_306DCE5F",
+          "$code_info": "[else] 82701129 gen_result_flow.py in _default_flow(): abtest_biz_name=\"KUAISHOU_APPS\"",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_6"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_else_control_attr_7"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_else_control_attr_7"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_6"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_6 == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_7543B0B2": {
+          "$branch_start": "_branch_controller_7543B0B2",
+          "$code_info": "[if] 7543B0B2 main_process_flow.py in fetch_photo_info(): .if_(\"enable_use_fr_model_copy_v2 == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "enable_use_fr_model_copy_v2"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_4"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_3",
+            "enable_use_fr_model_copy_v2"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (enable_use_fr_model_copy_v2 == 1)) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_7543B0B2_else": {
+          "$branch_start": "_branch_controller_7543B0B2",
+          "$code_info": "[else] BDF6EBF5 main_process_flow.py in fetch_photo_info(): use_packed_item_attr = True",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "_if_control_attr_4"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_else_control_attr_5"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_else_control_attr_5"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_3",
+            "_if_control_attr_4"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (_if_control_attr_4 == 1)) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_EB7701DB": {
+          "$branch_start": "_branch_controller_EB7701DB",
+          "$code_info": "[if] EB7701DB main_process_flow.py in fetch_photo_info(): .if_(\"item_num > 0\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_3"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_3"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num > 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "build_protobuf_640AD3": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_living",
+              "item_id"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "reco_photo_info_str"
+            ]
+          },
+          "as_string": true,
+          "class_name": "ks.reco.RecoPhotoInfo",
+          "inputs": [
+            {
+              "item_attr": "is_living",
+              "path": "living"
+            },
+            {
+              "item_attr": "item_id",
+              "path": "ar_result.pid"
+            }
+          ],
+          "output_item_attr": "reco_photo_info_str",
+          "type_name": "CommonRecoProtobufBuildAttrEnricher"
+        },
+        "calc_by_formula1_25CB1B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_6"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "f1_score"
+            ]
+          },
+          "abtest_biz_name": "KUAISHOU_APPS",
+          "export_formula_value": [
+            "f1_score"
+          ],
+          "kconf_key": "formula.scenarioKey15.retrieval_leaf_xtr_filter_f1_nebula",
+          "skip": "{{_if_control_attr_6}}",
+          "type_name": "CommonRecoFormulaOneEnricher"
+        },
+        "calc_by_formula1_B22B16": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_else_control_attr_7"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "f1_score"
+            ]
+          },
+          "abtest_biz_name": "KUAISHOU_APPS",
+          "export_formula_value": [
+            "f1_score"
+          ],
+          "kconf_key": "formula.scenarioKey60.retrieval_leaf_xtr_filter_f1_gamora",
+          "skip": "{{_else_control_attr_7}}",
+          "type_name": "CommonRecoFormulaOneEnricher"
+        },
+        "copy_item_meta_info_863564": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "item_id"
+            ]
+          },
+          "save_item_key_to_attr": "item_id",
+          "type_name": "CommonRecoItemMetaInfoEnricher"
+        },
+        "copy_user_meta_info_D8585E": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "current_time_ms",
+              "device_id",
+              "request_id",
+              "request_time",
+              "user_id"
+            ],
+            "$output_item_attrs": []
+          },
+          "save_current_time_ms_to_attr": "current_time_ms",
+          "save_device_id_to_attr": "device_id",
+          "save_request_id_to_attr": "request_id",
+          "save_request_time_to_attr": "request_time",
+          "save_user_id_to_attr": "user_id",
+          "type_name": "CommonRecoUserMetaInfoEnricher"
+        },
+        "count_reco_result_983F0C": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "retr_score"
+            ],
+            "$downstream_new_result": true,
+            "$input_common_attrs": [
+              "_else_control_attr_2"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "item_num"
+            ],
+            "$output_item_attrs": []
+          },
+          "save_result_size_to_common_attr": "item_num",
+          "skip": "{{_else_control_attr_2}}",
+          "type_name": "CommonRecoCountRecoResultEnricher"
+        },
+        "count_reco_result_B061F6": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "item_num"
+            ],
+            "$output_item_attrs": []
+          },
+          "save_result_size_to_common_attr": "item_num",
+          "type_name": "CommonRecoCountRecoResultEnricher"
+        },
+        "delegate_enrich_main_model": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_else_control_attr_5",
+              "retr_type",
+              "reward_model_timeout",
+              "tab_id",
+              "user_info_attr"
+            ],
+            "$input_item_attrs": [
+              "is_living",
+              "reco_photo_info_str"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "adaptive_wtd",
+              "adp_clevtr_pro",
+              "adp_wtd",
+              "all_evtr",
+              "avtt",
+              "bottom_bar_ctr",
+              "bottom_search_pctr",
+              "browse_depth",
+              "bubble_cr",
+              "bubble_sr",
+              "caption_searchpage",
+              "click_live",
+              "cltr",
+              "cmagic",
+              "cmef",
+              "cmtr",
+              "combine_unity",
+              "cpr",
+              "cpr_duration_score",
+              "cpr_wtd",
+              "csf",
+              "dfvr",
+              "dtr",
+              "effective_watch_live_time",
+              "epstr",
+              "etcm",
+              "evtr",
+              "evtr_exp",
+              "evtr_v3",
+              "fr_log_vtr",
+              "ftr",
+              "fuse_score",
+              "hashtag_ctr",
+              "hashtag_sppc",
+              "htr",
+              "interest_evtr_playtime",
+              "itr",
+              "join_topic",
+              "kyplc",
+              "linear0",
+              "linear1",
+              "linear2",
+              "live",
+              "llvtr",
+              "long_watch_time",
+              "lsst",
+              "lstr",
+              "ltr",
+              "lvtr",
+              "lvtr_exp",
+              "lvtr_v3",
+              "lwt",
+              "mfsc",
+              "mtm1",
+              "mtm2",
+              "mtm3",
+              "mus1",
+              "mus2",
+              "mus3",
+              "mus4",
+              "mustc",
+              "new_svr",
+              "osftr",
+              "peak_evtr",
+              "playlet_ctr",
+              "playtime_denoise",
+              "post_at_comment_score",
+              "pro_cpr",
+              "pro_evtr",
+              "ptltr",
+              "ptr",
+              "qtr",
+              "scalar0",
+              "scalar1",
+              "scalar2",
+              "screen_shot",
+              "search_comment_highlight_click",
+              "search_comment_highlight_trending",
+              "search_comment_trending_click",
+              "search_page_photo_click",
+              "search_page_photo_show",
+              "search_pure_cmt_highlight_ctr",
+              "session_play_time",
+              "setr",
+              "setr2",
+              "setr3_low_active",
+              "slide_next_rate",
+              "sppc_bottom_bar",
+              "sppc_combine",
+              "svr",
+              "svr_exp",
+              "switch_out_featured_tab",
+              "swpac",
+              "swppc",
+              "swpst",
+              "swptr",
+              "tag_click",
+              "tag_ctr",
+              "tag_vtr",
+              "total_watch_time",
+              "total_watch_time_wtd",
+              "twhc",
+              "ua_long_term_page_score",
+              "video_slide",
+              "vmagic",
+              "vrec",
+              "vtr",
+              "vtr_calibration_score",
+              "vtr_exp",
+              "vtr_v2",
+              "vtr_v3",
+              "watch_live",
+              "watchlive_wtd_combine",
+              "wtd_duration_score",
+              "wtd_duration_score_v2",
+              "wtd_finish_score",
+              "wtd_v2",
+              "wtd_v2_playtime",
+              "wtr"
+            ]
+          },
+          "downstream_processor": "enrich_attr_by_lua_429788",
+          "kess_service": "grpc_hqg24q4ModelComboFinal",
+          "partition_size": 256,
+          "recv_item_attrs": [
+            "evtr",
+            "ltr",
+            "wtr",
+            "ftr",
+            "cmtr",
+            "lvtr",
+            "vtr",
+            "svr",
+            "ptr",
+            "tag_click",
+            "join_topic",
+            "vtr_v2",
+            "dtr",
+            "epstr",
+            "lwt",
+            "slide_next_rate",
+            "dfvr",
+            "cmef",
+            "etcm",
+            "live",
+            "htr",
+            "qtr",
+            "osftr",
+            "cltr",
+            "setr",
+            "scalar0",
+            "scalar1",
+            "scalar2",
+            "linear0",
+            "linear1",
+            "linear2",
+            "switch_out_featured_tab",
+            "video_slide",
+            "ptltr",
+            "swptr",
+            "swpst",
+            "swppc",
+            "swpac",
+            "lstr",
+            "lsst",
+            "llvtr",
+            "long_watch_time",
+            "mus1",
+            "mus2",
+            "mus3",
+            "vrec",
+            "mfsc",
+            "mus4",
+            "mtm1",
+            "mtm2",
+            "mtm3",
+            "csf",
+            "cmagic",
+            "tag_ctr",
+            "tag_vtr",
+            "mustc",
+            "twhc",
+            "vmagic",
+            "browse_depth",
+            "combine_unity",
+            "evtr_v3",
+            "lvtr_v3",
+            "vtr_v3",
+            "fr_log_vtr",
+            "bottom_search_pctr",
+            "adaptive_wtd",
+            "cpr",
+            "evtr_exp",
+            "lvtr_exp",
+            "svr_exp",
+            "vtr_exp",
+            "kyplc",
+            "post_at_comment_score",
+            "screen_shot",
+            "search_comment_highlight_click",
+            "search_comment_highlight_trending",
+            "watchlive_wtd_combine",
+            "sppc_bottom_bar",
+            "interest_evtr_playtime",
+            "wtd_duration_score",
+            "vtr_calibration_score",
+            "fuse_score",
+            "new_svr",
+            "sppc_combine",
+            "wtd_finish_score",
+            "cpr_wtd",
+            "wtd_duration_score_v2",
+            "wtd_v2",
+            "caption_searchpage",
+            "click_live",
+            "effective_watch_live_time",
+            "setr3_low_active",
+            "search_pure_cmt_highlight_ctr",
+            "itr",
+            "playlet_ctr",
+            "adp_wtd",
+            "hashtag_ctr",
+            "peak_evtr",
+            "search_comment_trending_click",
+            "bubble_cr",
+            "hashtag_sppc",
+            "bottom_bar_ctr",
+            "ua_long_term_page_score",
+            "session_play_time",
+            "all_evtr",
+            "avtt",
+            "playtime_denoise",
+            "pro_cpr",
+            "total_watch_time",
+            "total_watch_time_wtd",
+            "adp_clevtr_pro",
+            "pro_evtr",
+            "watch_live",
+            "wtd_v2_playtime",
+            "cpr_duration_score",
+            "setr2",
+            "bubble_sr",
+            "search_page_photo_show",
+            "search_page_photo_click"
+          ],
+          "request_type": "predict_for_gamora",
+          "send_common_attrs": [
+            {
+              "as": "user_info_str",
+              "name": "user_info_attr"
+            },
+            "tab_id",
+            "retr_type"
+          ],
+          "send_item_attrs": [
+            {
+              "as": "reco_photo_info_str",
+              "name": "reco_photo_info_str"
+            },
+            {
+              "as": "living",
+              "name": "is_living"
+            }
+          ],
+          "skip": "{{_else_control_attr_5}}",
+          "timeout_ms": "{{reward_model_timeout}}",
+          "type_name": "CommonRecoDelegateEnricher",
+          "use_packed_item_attr": true
+        },
+        "delegate_enrich_main_model_copy": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "fr_model_copy_kess_name",
+              "retr_type",
+              "reward_model_timeout",
+              "tab_id",
+              "user_info_attr"
+            ],
+            "$input_item_attrs": [
+              "is_living",
+              "reco_photo_info_str"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "adaptive_wtd",
+              "adp_clevtr_pro",
+              "adp_wtd",
+              "all_evtr",
+              "avtt",
+              "bottom_bar_ctr",
+              "bottom_search_pctr",
+              "browse_depth",
+              "bubble_cr",
+              "bubble_sr",
+              "caption_searchpage",
+              "click_live",
+              "cltr",
+              "cmagic",
+              "cmef",
+              "cmtr",
+              "combine_unity",
+              "cpr",
+              "cpr_duration_score",
+              "cpr_wtd",
+              "csf",
+              "dfvr",
+              "dtr",
+              "effective_watch_live_time",
+              "epstr",
+              "etcm",
+              "evtr",
+              "evtr_exp",
+              "evtr_v3",
+              "fr_log_vtr",
+              "ftr",
+              "fuse_score",
+              "hashtag_ctr",
+              "hashtag_sppc",
+              "htr",
+              "interest_evtr_playtime",
+              "itr",
+              "join_topic",
+              "kyplc",
+              "linear0",
+              "linear1",
+              "linear2",
+              "live",
+              "llvtr",
+              "long_watch_time",
+              "lsst",
+              "lstr",
+              "ltr",
+              "lvtr",
+              "lvtr_exp",
+              "lvtr_v3",
+              "lwt",
+              "mfsc",
+              "mtm1",
+              "mtm2",
+              "mtm3",
+              "mus1",
+              "mus2",
+              "mus3",
+              "mus4",
+              "mustc",
+              "new_svr",
+              "osftr",
+              "peak_evtr",
+              "playlet_ctr",
+              "playtime_denoise",
+              "post_at_comment_score",
+              "pro_cpr",
+              "pro_evtr",
+              "ptltr",
+              "ptr",
+              "qtr",
+              "scalar0",
+              "scalar1",
+              "scalar2",
+              "screen_shot",
+              "search_comment_highlight_click",
+              "search_comment_highlight_trending",
+              "search_comment_trending_click",
+              "search_page_photo_click",
+              "search_page_photo_show",
+              "search_pure_cmt_highlight_ctr",
+              "session_play_time",
+              "setr",
+              "setr2",
+              "setr3_low_active",
+              "slide_next_rate",
+              "sppc_bottom_bar",
+              "sppc_combine",
+              "svr",
+              "svr_exp",
+              "switch_out_featured_tab",
+              "swpac",
+              "swppc",
+              "swpst",
+              "swptr",
+              "tag_click",
+              "tag_ctr",
+              "tag_vtr",
+              "total_watch_time",
+              "total_watch_time_wtd",
+              "twhc",
+              "ua_long_term_page_score",
+              "video_slide",
+              "vmagic",
+              "vrec",
+              "vtr",
+              "vtr_calibration_score",
+              "vtr_exp",
+              "vtr_v2",
+              "vtr_v3",
+              "watch_live",
+              "watchlive_wtd_combine",
+              "wtd_duration_score",
+              "wtd_duration_score_v2",
+              "wtd_finish_score",
+              "wtd_v2",
+              "wtd_v2_playtime",
+              "wtr"
+            ]
+          },
+          "downstream_processor": "enrich_attr_by_lua_429788",
+          "kess_service": "{{fr_model_copy_kess_name}}",
+          "partition_size": 256,
+          "recv_item_attrs": [
+            "evtr",
+            "ltr",
+            "wtr",
+            "ftr",
+            "cmtr",
+            "lvtr",
+            "vtr",
+            "svr",
+            "ptr",
+            "tag_click",
+            "join_topic",
+            "vtr_v2",
+            "dtr",
+            "epstr",
+            "lwt",
+            "slide_next_rate",
+            "dfvr",
+            "cmef",
+            "etcm",
+            "live",
+            "htr",
+            "qtr",
+            "osftr",
+            "cltr",
+            "setr",
+            "scalar0",
+            "scalar1",
+            "scalar2",
+            "linear0",
+            "linear1",
+            "linear2",
+            "switch_out_featured_tab",
+            "video_slide",
+            "ptltr",
+            "swptr",
+            "swpst",
+            "swppc",
+            "swpac",
+            "lstr",
+            "lsst",
+            "llvtr",
+            "long_watch_time",
+            "mus1",
+            "mus2",
+            "mus3",
+            "vrec",
+            "mfsc",
+            "mus4",
+            "mtm1",
+            "mtm2",
+            "mtm3",
+            "csf",
+            "cmagic",
+            "tag_ctr",
+            "tag_vtr",
+            "mustc",
+            "twhc",
+            "vmagic",
+            "browse_depth",
+            "combine_unity",
+            "evtr_v3",
+            "lvtr_v3",
+            "vtr_v3",
+            "fr_log_vtr",
+            "bottom_search_pctr",
+            "adaptive_wtd",
+            "cpr",
+            "evtr_exp",
+            "lvtr_exp",
+            "svr_exp",
+            "vtr_exp",
+            "kyplc",
+            "post_at_comment_score",
+            "screen_shot",
+            "search_comment_highlight_click",
+            "search_comment_highlight_trending",
+            "watchlive_wtd_combine",
+            "sppc_bottom_bar",
+            "interest_evtr_playtime",
+            "wtd_duration_score",
+            "vtr_calibration_score",
+            "fuse_score",
+            "new_svr",
+            "sppc_combine",
+            "wtd_finish_score",
+            "cpr_wtd",
+            "wtd_duration_score_v2",
+            "wtd_v2",
+            "caption_searchpage",
+            "click_live",
+            "effective_watch_live_time",
+            "setr3_low_active",
+            "search_pure_cmt_highlight_ctr",
+            "itr",
+            "playlet_ctr",
+            "adp_wtd",
+            "hashtag_ctr",
+            "peak_evtr",
+            "search_comment_trending_click",
+            "bubble_cr",
+            "hashtag_sppc",
+            "bottom_bar_ctr",
+            "ua_long_term_page_score",
+            "session_play_time",
+            "all_evtr",
+            "avtt",
+            "playtime_denoise",
+            "pro_cpr",
+            "total_watch_time",
+            "total_watch_time_wtd",
+            "adp_clevtr_pro",
+            "pro_evtr",
+            "watch_live",
+            "wtd_v2_playtime",
+            "cpr_duration_score",
+            "setr2",
+            "bubble_sr",
+            "search_page_photo_show",
+            "search_page_photo_click"
+          ],
+          "request_type": "predict_for_gamora",
+          "send_common_attrs": [
+            {
+              "as": "user_info_str",
+              "name": "user_info_attr"
+            },
+            "tab_id",
+            "retr_type"
+          ],
+          "send_item_attrs": [
+            {
+              "as": "reco_photo_info_str",
+              "name": "reco_photo_info_str"
+            },
+            {
+              "as": "living",
+              "name": "is_living"
+            }
+          ],
+          "skip": "{{_if_control_attr_4}}",
+          "timeout_ms": "{{reward_model_timeout}}",
+          "type_name": "CommonRecoDelegateEnricher",
+          "use_packed_item_attr": true
+        },
+        "delegate_retrieve_FAE3F6": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_else_control_attr_2",
+              "direct_retr_kess_name",
+              "direct_retr_num",
+              "direct_retr_request_type",
+              "direct_retr_timeout_ms",
+              "is_gamora_user",
+              "is_nebula_user",
+              "user_info_attr"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "retr_score"
+            ]
+          },
+          "downstream_processor": "count_reco_result_983F0C",
+          "kess_service": "{{direct_retr_kess_name}}",
+          "reason": 1024,
+          "recv_item_attrs": [
+            {
+              "as": "retr_score",
+              "name": "log_p"
+            }
+          ],
+          "request_num": "{{direct_retr_num}}",
+          "request_type": "{{direct_retr_request_type}}",
+          "send_common_attrs": [
+            {
+              "as": "user",
+              "name": "user_info_attr"
+            },
+            "is_nebula_user",
+            "is_gamora_user"
+          ],
+          "skip": "{{_else_control_attr_2}}",
+          "timeout_ms": "{{direct_retr_timeout_ms}}",
+          "type_name": "CommonRecoDelegateRetriever"
+        },
+        "enrich_attr_by_lua_0D9E9C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "risk_level_test"
+            ],
+            "$input_item_attrs": [
+              "photo_level"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "should_photo_level_filter"
+            ]
+          },
+          "export_item_attr": [
+            "should_photo_level_filter"
+          ],
+          "function_for_item": "calculate",
+          "import_common_attr": [
+            "risk_level_test"
+          ],
+          "import_item_attr": [
+            "photo_level"
+          ],
+          "lua_script": "function calculate()\n            local should_photo_level_filter = 0\n            if risk_level_test >= 5 and photo_level < risk_level_test then \n              should_photo_level_filter = 1 \n            end \n            return should_photo_level_filter\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_171426": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "current_time_ms",
+              "hate_hetu_one_list",
+              "hate_hetu_three_list",
+              "hate_hetu_two_list",
+              "hate_time_list"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "one_day_hate_hetu_one_list",
+              "one_day_hate_hetu_three_list",
+              "one_day_hate_hetu_two_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "one_day_hate_hetu_one_list",
+            "one_day_hate_hetu_two_list",
+            "one_day_hate_hetu_three_list"
+          ],
+          "function_for_common": "calculate",
+          "import_common_attr": [
+            "hate_time_list",
+            "hate_hetu_one_list",
+            "hate_hetu_two_list",
+            "hate_hetu_three_list",
+            "current_time_ms"
+          ],
+          "lua_script": "function calculate()\n              local hate_time_list = hate_time_list or {}\n              local hate_hetu_one_list = hate_hetu_one_list or {}\n              local hate_hetu_two_list = hate_hetu_two_list or {}\n              local hate_hetu_three_list = hate_hetu_three_list or {}\n              local one_day_hate_hetu_one_list = {}\n              local one_day_hate_hetu_two_list = {}\n              local one_day_hate_hetu_three_list = {}\n              if #hate_time_list ~= #hate_hetu_one_list then \n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list\n              else\n                for i=1, #hate_time_list do \n                  if current_time_ms - hate_time_list[i] <= 86400000 then \n                    one_day_hate_hetu_one_list.insert(hate_hetu_one_list[i])\n                    if hate_hetu_two_list[i] ~= nil then \n                      one_day_hate_hetu_two_list.insert(hate_hetu_two_list[i])\n                    end \n                    if hate_hetu_three_list[i] ~= nil then \n                      one_day_hate_hetu_three_list.insert(hate_hetu_three_list[i])\n                    end\n                  end\n                end\n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list \n              end\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_419004": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "city_id"
+            ],
+            "$input_item_attrs": [
+              "slide_punish_city"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_city_punish_photo"
+            ]
+          },
+          "export_item_attr": [
+            "is_city_punish_photo"
+          ],
+          "function_for_item": "calculate",
+          "import_common_attr": [
+            "city_id"
+          ],
+          "import_item_attr": [
+            "slide_punish_city"
+          ],
+          "lua_script": "function calculate()\n              local is_city_punish_photo = 0\n              if (slide_punish_city ~= nil) then \n                for i = 1, #slide_punish_city do\n                    if slide_punish_city[i] == city_id then\n                        is_city_punish_photo = 1\n                    end\n                end\n              end\n              return is_city_punish_photo\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_429788": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "adaptive_wtd",
+              "adp_clevtr_pro",
+              "adp_wtd",
+              "all_evtr",
+              "avtt",
+              "bottom_bar_ctr",
+              "bottom_search_pctr",
+              "browse_depth",
+              "bubble_cr",
+              "bubble_sr",
+              "caption_searchpage",
+              "click_live",
+              "cltr",
+              "cmagic",
+              "cmef",
+              "cmtr",
+              "combine_unity",
+              "cpr",
+              "cpr_duration_score",
+              "cpr_wtd",
+              "csf",
+              "dfvr",
+              "dtr",
+              "effective_watch_live_time",
+              "epstr",
+              "etcm",
+              "evtr",
+              "evtr_exp",
+              "evtr_v3",
+              "fr_log_vtr",
+              "ftr",
+              "fuse_score",
+              "hashtag_ctr",
+              "hashtag_sppc",
+              "htr",
+              "interest_evtr_playtime",
+              "itr",
+              "join_topic",
+              "kyplc",
+              "linear0",
+              "linear1",
+              "linear2",
+              "live",
+              "llvtr",
+              "long_watch_time",
+              "lsst",
+              "lstr",
+              "ltr",
+              "lvtr",
+              "lvtr_exp",
+              "lvtr_v3",
+              "lwt",
+              "mfsc",
+              "mtm1",
+              "mtm2",
+              "mtm3",
+              "mus1",
+              "mus2",
+              "mus3",
+              "mus4",
+              "mustc",
+              "new_svr",
+              "osftr",
+              "peak_evtr",
+              "playlet_ctr",
+              "playtime_denoise",
+              "post_at_comment_score",
+              "pro_cpr",
+              "pro_evtr",
+              "ptltr",
+              "ptr",
+              "qtr",
+              "scalar0",
+              "scalar1",
+              "scalar2",
+              "screen_shot",
+              "search_comment_highlight_click",
+              "search_comment_highlight_trending",
+              "search_comment_trending_click",
+              "search_page_photo_click",
+              "search_page_photo_show",
+              "search_pure_cmt_highlight_ctr",
+              "session_play_time",
+              "setr",
+              "setr2",
+              "setr3_low_active",
+              "slide_next_rate",
+              "sppc_bottom_bar",
+              "sppc_combine",
+              "svr",
+              "svr_exp",
+              "switch_out_featured_tab",
+              "swpac",
+              "swppc",
+              "swpst",
+              "swptr",
+              "tag_click",
+              "tag_ctr",
+              "tag_vtr",
+              "total_watch_time",
+              "total_watch_time_wtd",
+              "twhc",
+              "ua_long_term_page_score",
+              "video_slide",
+              "vmagic",
+              "vrec",
+              "vtr",
+              "vtr_calibration_score",
+              "vtr_exp",
+              "vtr_v2",
+              "vtr_v3",
+              "watch_live",
+              "watchlive_wtd_combine",
+              "wtd_duration_score",
+              "wtd_duration_score_v2",
+              "wtd_finish_score",
+              "wtd_v2",
+              "wtd_v2_playtime",
+              "wtr"
+            ],
+            "$input_common_attrs": [
+              "_if_control_attr_3"
+            ],
+            "$input_item_attrs": [
+              "wtd_v2"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "wtd"
+            ]
+          },
+          "export_item_attr": [
+            "wtd"
+          ],
+          "function_for_item": "calc",
+          "import_item_attr": [
+            "wtd_v2"
+          ],
+          "lua_script": "function calc()\n            local wtd = wtd_v2 or 0\n            return wtd\n          end",
+          "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_6C1CCF": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "same_frame_sources"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_same_frame_filter_photo"
+            ]
+          },
+          "export_item_attr": [
+            "is_same_frame_filter_photo"
+          ],
+          "function_for_item": "calculate",
+          "import_item_attr": [
+            "same_frame_sources"
+          ],
+          "lua_script": "function calculate()\n              local is_same_frame_filter_photo = 0\n              if same_frame_sources ~= nil and #same_frame_sources > 0 then \n                is_same_frame_filter_photo = 1 \n              end\n              return is_same_frame_filter_photo\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_781F3D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "muw_frequency_control_item_gap_limit",
+              "video_playing_reason"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "frequency_enable"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "frequency_enable"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "video_playing_reason",
+            "muw_frequency_control_item_gap_limit"
+          ],
+          "lua_script": "function calc()\n          local reason = ''\n          local start = -1\n          local finish = -1\n          for i = 1, #video_playing_reason do\n            if i < muw_frequency_control_item_gap_limit then\n              reason = video_playing_reason[i]\n              start, finish = string.find(reason, '1024')\n              if start ~= nil and start > 0 then\n                return 0\n              end\n            end\n          end\n          return 1\n        end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_78CAB3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "user_id"
+            ],
+            "$input_item_attrs": [
+              "invisible_friends"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_invisible_friend_photo"
+            ]
+          },
+          "export_item_attr": [
+            "is_invisible_friend_photo"
+          ],
+          "function_for_item": "calculate",
+          "import_common_attr": [
+            "user_id"
+          ],
+          "import_item_attr": [
+            "invisible_friends"
+          ],
+          "lua_script": "function calculate()\n              local is_invisible_friend_photo = 0\n              if (invisible_friends ~= nil) then \n                for i = 1, #invisible_friends do\n                    if invisible_friends[i] == user_id then\n                        is_invisible_friend_photo = 1\n                    end\n                end\n              end\n              return is_invisible_friend_photo\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_B28F31": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "gamora_realshow_cnt",
+              "nebula_realshow_cnt"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "total_realshow_cnt"
+            ]
+          },
+          "export_item_attr": [
+            "total_realshow_cnt"
+          ],
+          "function_for_item": "calculate",
+          "import_item_attr": [
+            "nebula_realshow_cnt",
+            "gamora_realshow_cnt"
+          ],
+          "lua_script": "function calculate()\n            local nebula_realshow_cnt = nebula_realshow_cnt or 0\n            local gamora_realshow_cnt = gamora_realshow_cnt or 0\n            return nebula_realshow_cnt + gamora_realshow_cnt\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_F4F4DF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_gamora_user",
+              "is_nebula_user"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "fr_request_type"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "fr_request_type"
+          ],
+          "function_for_common": "calculate",
+          "import_common_attr": [
+            "is_nebula_user",
+            "is_gamora_user"
+          ],
+          "lua_script": "function calculate()\n          local is_nebula_user = is_nebula_user or 0\n          local is_gamora_user = is_gamora_user or 0\n          if is_nebula_user == 1 then\n            return \"predict_for_nebula\"\n          end\n          if is_gamora_user == 1 then \n            return \"predict_for_gamora\"\n          end\n          return \"default\"\n        end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_with_protobuf_2CC9DE": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "user_info_ptr"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "black_author_list",
+              "city_id",
+              "hate_aid_list",
+              "hate_hetu_one_list",
+              "hate_hetu_three_list",
+              "hate_hetu_two_list",
+              "hate_time_list",
+              "report_aid_list",
+              "risk_level_test",
+              "video_playing_reason"
+            ],
+            "$output_item_attrs": []
+          },
+          "attrs": [
+            {
+              "name": "city_id",
+              "path": "request_location_new.city_id"
+            },
+            {
+              "name": "black_author_list",
+              "path": "black_author_list"
+            },
+            {
+              "name": "risk_level_test",
+              "path": "risk_level_test"
+            },
+            {
+              "name": "hate_aid_list",
+              "path": "user_profile_v1.hate_list.author_id",
+              "repeat_limit": {
+                "user_profile_v1.hate_list": 200
+              }
+            },
+            {
+              "name": "report_aid_list",
+              "path": "user_profile_v1.report_list.author_id",
+              "repeat_limit": {
+                "user_profile_v1.report_list": 200
+              }
+            },
+            {
+              "name": "hate_time_list",
+              "path": "user_profile_v1.hate_list.time_ms",
+              "repeat_limit": {
+                "user_profile_v1.hate_list": 200
+              }
+            },
+            {
+              "name": "video_playing_reason",
+              "path": "user_profile_v1.video_playing_stat.reason",
+              "repeat_limit": {
+                "user_profile_v1.video_playing_stat": 50
+              }
+            },
+            {
+              "name": "hate_hetu_one_list",
+              "path": "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_one",
+              "repeat_limit": {
+                "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_one": 1
+              }
+            },
+            {
+              "name": "hate_hetu_two_list",
+              "path": "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_two",
+              "repeat_limit": {
+                "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_two": 1
+              }
+            },
+            {
+              "name": "hate_hetu_three_list",
+              "path": "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_three",
+              "repeat_limit": {
+                "user_profile_v1.hate_list.hetu_tag_level_info.hetu_level_three": 1
+              }
+            }
+          ],
+          "from_extra_var": "user_info_ptr",
+          "type_name": "CommonRecoProtobufAttrEnricher"
+        },
+        "filter_by_attr_203448": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_jianguan_risk_photo"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_jianguan_risk_photo",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_328126": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_same_frame_filter_photo"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_same_frame_filter_photo",
+          "compare_to": 0,
+          "remove_if": ">",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_3946E3": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "forbid_hot_page"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "forbid_hot_page",
+          "compare_to": 0,
+          "remove_if": ">",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_468B8C": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "long_term_high_level_photo"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "long_term_high_level_photo",
+          "compare_to": 0,
+          "remove_if": ">",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_46AD06": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "topk_audit_level"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "topk_audit_level",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_4EBE10": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_city_punish_photo"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_city_punish_photo",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_5A7355": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "audit_hot_high_tag_level"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "audit_hot_high_tag_level",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_6C918C": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_invisible_friend_photo"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_invisible_friend_photo",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_83109E": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "audit_hot_high_subdivision_level"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "audit_hot_high_subdivision_level",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_92BC23": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "level_hot_online"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "level_hot_online",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_B149E9": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "audit_b_second_tag_expand_normal"
+            ],
+            "$input_item_attrs": [
+              "audit_b_second_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "audit_b_second_tag",
+          "compare_to": "{{audit_b_second_tag_expand_normal}}",
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_B28E6F": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_status"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "photo_status",
+          "compare_to": 0,
+          "remove_if": ">",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_C09AFA": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "should_photo_level_filter"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "should_photo_level_filter",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_D20E7A": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "audit_b_second_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "audit_b_second_tag",
+          "compare_to": -999,
+          "remove_if": "==",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_FBC88D": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "inferior_first_review_score"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "inferior_first_review_score",
+          "compare_to": 0.89,
+          "remove_if": ">",
+          "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_browse_set_0EC122": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "type_name": "CommonRecoBrowseSetFilterArranger"
+        },
+        "filter_by_browse_set_4176A7": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "dup_cluster_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_id_in_attr": "dup_cluster_id",
+          "select_item": {
+            "attr_name": "dup_cluster_id",
+            "compare_to": 0,
+            "select_if": ">",
+            "select_if_attr_missing": false
+          },
+          "type_name": "CommonRecoBrowseSetFilterArranger"
+        },
+        "filter_by_browse_set_6B7057": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "original_photo_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_id_in_attr": "original_photo_id",
+          "select_item": {
+            "attr_name": "original_photo_id",
+            "compare_to": 0,
+            "select_if": ">",
+            "select_if_attr_missing": false
+          },
+          "type_name": "CommonRecoBrowseSetFilterArranger"
+        },
+        "filter_by_browse_set_7695CC": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "sim_remove_dup_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_id_in_attr": "sim_remove_dup_id",
+          "select_item": {
+            "attr_name": "sim_remove_dup_id",
+            "compare_to": 0,
+            "select_if": ">",
+            "select_if_attr_missing": false
+          },
+          "type_name": "CommonRecoBrowseSetFilterArranger"
+        },
+        "filter_by_browse_set_F066CB": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "pic_and_selfdup_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "check_id_in_attr": "pic_and_selfdup_id",
+          "select_item": {
+            "attr_name": "pic_and_selfdup_id",
+            "compare_to": 0,
+            "select_if": ">",
+            "select_if_attr_missing": false
+          },
+          "type_name": "CommonRecoBrowseSetFilterArranger"
+        },
+        "filter_by_common_attr_23925C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "topk_audit_second_level_black_tag_list"
+            ],
+            "$input_item_attrs": [
+              "topk_audit_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "topk_audit_second_level_black_tag_list"
+          ],
+          "on_item_attr": "topk_audit_tag",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_405C68": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "hate_aid_list"
+            ],
+            "$input_item_attrs": [
+              "author_big_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "hate_aid_list"
+          ],
+          "on_item_attr": "author_big_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_584B99": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "one_day_hate_hetu_one_list"
+            ],
+            "$input_item_attrs": [
+              "hetu_tag_level_one"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "one_day_hate_hetu_one_list"
+          ],
+          "on_item_attr": "hetu_tag_level_one",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_671186": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "hate_aid_list"
+            ],
+            "$input_item_attrs": [
+              "author_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "hate_aid_list"
+          ],
+          "on_item_attr": "author_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_69B4D6": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "black_author_list"
+            ],
+            "$input_item_attrs": [
+              "author_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "black_author_list"
+          ],
+          "on_item_attr": "author_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_7430CC": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "sexy_content_filter_list"
+            ],
+            "$input_item_attrs": [
+              "audit_b_second_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "sexy_content_filter_list"
+          ],
+          "on_item_attr": "audit_b_second_tag",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_76CFC6": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "high_hot_audit_second_level_black_tag_list"
+            ],
+            "$input_item_attrs": [
+              "explore_operation_c_review_level"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "high_hot_audit_second_level_black_tag_list"
+          ],
+          "on_item_attr": "explore_operation_c_review_level",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_7CD6AF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "report_aid_list"
+            ],
+            "$input_item_attrs": [
+              "author_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "report_aid_list"
+          ],
+          "on_item_attr": "author_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_8F222B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "audit_risk_immd_tag_list"
+            ],
+            "$input_item_attrs": [
+              "audit_risk_immd_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "audit_risk_immd_tag_list"
+          ],
+          "on_item_attr": "audit_risk_immd_tag",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_9B8210": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "slide_retr_block_author_list"
+            ],
+            "$input_item_attrs": [
+              "author_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "slide_retr_block_author_list"
+          ],
+          "on_item_attr": "author_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_A299F8": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "impression_audit_second_level_black_tag_list"
+            ],
+            "$input_item_attrs": [
+              "audit_b_second_tag"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "impression_audit_second_level_black_tag_list"
+          ],
+          "on_item_attr": "audit_b_second_tag",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_C13FBF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "one_day_hate_hetu_three_list"
+            ],
+            "$input_item_attrs": [
+              "hetu_tag_level_three"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "one_day_hate_hetu_three_list"
+          ],
+          "on_item_attr": "hetu_tag_level_three",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_C2A7A9": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "report_aid_list"
+            ],
+            "$input_item_attrs": [
+              "author_big_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "report_aid_list"
+          ],
+          "on_item_attr": "author_big_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_C3A875": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "one_day_hate_hetu_two_list"
+            ],
+            "$input_item_attrs": [
+              "hetu_tag_level_two"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "one_day_hate_hetu_two_list"
+          ],
+          "on_item_attr": "hetu_tag_level_two",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_C6228A": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "common_filter_photo_set"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "common_filter_photo_set"
+          ],
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_C9CB89": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "black_author_list"
+            ],
+            "$input_item_attrs": [
+              "author_big_id"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "black_author_list"
+          ],
+          "on_item_attr": "author_big_id",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "filter_by_common_attr_EDA48C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "author_type_vv_thresh_type_string_list"
+            ],
+            "$input_item_attrs": [
+              "catorgery_level_1"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attr": [
+            "author_type_vv_thresh_type_string_list"
+          ],
+          "on_item_attr": "catorgery_level_1",
+          "type_name": "CommonRecoCommonAttrFilterArranger"
+        },
+        "get_abtest_params_1FF824": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_ABTEST_USER_TAG_NAMES_",
+              "_ABTEST_USER_TAG_VALUES_"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "audit_b_second_tag_expand_normal",
+              "audit_risk_immd_tag_filter_str_gamora",
+              "author_type_vv_thresh_type_string",
+              "high_hot_audit_second_level_black_tags",
+              "impression_audit_second_level_black_tags",
+              "sexy_content_filter_str_gamora",
+              "topk_audit_second_level_black_tags"
+            ],
+            "$output_item_attrs": []
+          },
+          "ab_params": [
+            {
+              "default_value": "2147249,2147250,2147251,2147252,2147253,2147254,2147255,2185071",
+              "param_name": "audit_risk_immd_tag_filter_str_gamora",
+              "param_type": "string"
+            },
+            {
+              "default_value": "2147489",
+              "param_name": "sexy_content_filter_str_gamora",
+              "param_type": "string"
+            },
+            {
+              "default_value": "2000854,2000847",
+              "param_name": "impression_audit_second_level_black_tags",
+              "param_type": "string"
+            },
+            {
+              "default_value": "2000001084",
+              "param_name": "high_hot_audit_second_level_black_tags",
+              "param_type": "string"
+            },
+            {
+              "default_value": "2000001084",
+              "param_name": "topk_audit_second_level_black_tags",
+              "param_type": "string"
+            },
+            {
+              "default_value": "5,6,7,9,700",
+              "param_name": "author_type_vv_thresh_type_string",
+              "param_type": "string"
+            },
+            {
+              "default_value": "2000860",
+              "param_name": "audit_b_second_tag_expand_normal",
+              "param_type": "int"
+            }
+          ],
+          "biz_name": "KUAISHOU_APPS",
+          "deduplicate": true,
+          "parallel_get": 32,
+          "type_name": "CommonRecoAbtestCommonAttrEnricher"
+        },
+        "get_abtest_params_2111B0": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_ABTEST_USER_TAG_NAMES_",
+              "_ABTEST_USER_TAG_VALUES_"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "enable_use_fr_model_copy_v2",
+              "fr_model_copy_kess_name",
+              "one_piece_leaf_kconfig"
+            ],
+            "$output_item_attrs": []
+          },
+          "ab_params": [
+            {
+              "default_value": "rinf.rlRunner.one_piece_leaf_kconfig",
+              "param_name": "one_piece_leaf_kconfig",
+              "param_type": "string"
+            },
+            {
+              "default_value": false,
+              "param_name": "enable_use_fr_model_copy_v2",
+              "param_type": "bool"
+            },
+            {
+              "default_value": "grpc_hqg24q4ModelComboCopy",
+              "param_name": "fr_model_copy_kess_name",
+              "param_type": "string"
+            }
+          ],
+          "biz_name": "KUAISHOU_APPS",
+          "type_name": "CommonRecoAbtestCommonAttrEnricher"
+        },
+        "get_item_attr_by_distributed_index_4AB9B0": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "audit_b_second_tag",
+              "audit_hot_high_subdivision_level",
+              "audit_hot_high_tag_level",
+              "audit_risk_immd_tag",
+              "author_big_id",
+              "author_id",
+              "catorgery_level_1",
+              "dup_cluster_id",
+              "duration_ms",
+              "explore_operation_c_review_level",
+              "forbid_hot_page",
+              "gamora_realshow_cnt",
+              "hetu_tag_level_one_list",
+              "hetu_tag_level_three_list",
+              "hetu_tag_level_two_list",
+              "inferior_first_review_score",
+              "invisible_friends",
+              "is_jianguan_risk_photo",
+              "is_living",
+              "level_hot_online",
+              "long_term_high_level_photo",
+              "nebula_realshow_cnt",
+              "original_photo_id",
+              "photo_level",
+              "photo_status",
+              "pic_and_selfdup_id",
+              "same_frame_sources",
+              "sim_remove_dup_id",
+              "slide_punish_city",
+              "topk_audit_level",
+              "topk_audit_tag"
+            ]
+          },
+          "attrs": [
+            {
+              "name": "author_id",
+              "path": "author.id"
+            },
+            {
+              "name": "author_big_id",
+              "path": "author.big_id"
+            },
+            "duration_ms",
+            "photo_status",
+            "is_jianguan_risk_photo",
+            "slide_punish_city",
+            "dup_cluster_id",
+            "sim_remove_dup_id",
+            "pic_and_selfdup_id",
+            "invisible_friends",
+            "original_photo_id",
+            "forbid_hot_page",
+            "same_frame_sources",
+            "inferior_first_review_score",
+            "long_term_high_level_photo",
+            "audit_hot_high_subdivision_level",
+            "audit_risk_immd_tag",
+            "audit_b_second_tag",
+            "audit_hot_high_tag_level",
+            "explore_operation_c_review_level",
+            "topk_audit_level",
+            "topk_audit_tag",
+            {
+              "name": "level_hot_online",
+              "path": "content_safety_level_with_namespace.level_hot_online"
+            },
+            {
+              "name": "catorgery_level_1",
+              "path": "author_category.catorgery_level_1"
+            },
+            {
+              "name": "photo_level",
+              "path": "content_safety_level_with_namespace.hot_online_v2"
+            },
+            {
+              "name": "hetu_tag_level_one_list",
+              "path": "author.hetu_author_tag.hetu_level_one"
+            },
+            {
+              "name": "hetu_tag_level_two_list",
+              "path": "author.hetu_author_tag.hetu_level_two"
+            },
+            {
+              "name": "hetu_tag_level_three_list",
+              "path": "author.hetu_author_tag.hetu_level_three"
+            },
+            {
+              "name": "nebula_realshow_cnt",
+              "path": "nebula_stats.real_show_count"
+            },
+            {
+              "name": "gamora_realshow_cnt",
+              "path": "thanos_stats.real_show_count"
+            },
+            {
+              "name": "is_living",
+              "path": "live_photo_info.is_living"
+            }
+          ],
+          "downstream_processor": "parse_hetu_tag_3B36C2",
+          "photo_store_kconf_key": "reco.distributedIndex.hotPhotoStoreConfig",
+          "type_name": "CommonRecoDistributedIndexItemAttrEnricher",
+          "use_dynamic_photo_store": true
+        },
+        "get_kconf_params_8D7B32": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "one_piece_leaf_kconfig"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "direct_retr_kess_name",
+              "direct_retr_num",
+              "direct_retr_request_type",
+              "direct_retr_timeout_ms",
+              "enable_frequency_control",
+              "exp_name",
+              "muw_enable_request_online_fr_model",
+              "muw_enable_use_forumua_one_v2",
+              "muw_frequency_control_item_gap_limit",
+              "reward_model_kess_name",
+              "reward_model_partition_size",
+              "reward_model_request_type",
+              "reward_model_timeout"
+            ],
+            "$output_item_attrs": []
+          },
+          "kconf_configs": [
+            {
+              "default_value": "grpc_listll6_onerec_infer",
+              "export_common_attr": "direct_retr_kess_name",
+              "json_path": "direct_retr_kess_name",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": "default",
+              "export_common_attr": "direct_retr_request_type",
+              "json_path": "direct_retr_request_type",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 1024,
+              "export_common_attr": "direct_retr_num",
+              "json_path": "direct_retr_num",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 600,
+              "export_common_attr": "direct_retr_timeout_ms",
+              "json_path": "direct_retr_timeout_ms",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": "default",
+              "export_common_attr": "exp_name",
+              "json_path": "exp_name",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 1,
+              "export_common_attr": "enable_frequency_control",
+              "json_path": "enable_frequency_control",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": "grpc_rljListScoreForGen",
+              "export_common_attr": "reward_model_kess_name",
+              "json_path": "reward_model_kess_name",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": "predict_for_point",
+              "export_common_attr": "reward_model_request_type",
+              "json_path": "reward_model_request_type",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 100,
+              "export_common_attr": "reward_model_partition_size",
+              "json_path": "reward_model_partition_size",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 1000,
+              "export_common_attr": "reward_model_timeout",
+              "json_path": "reward_model_timeout",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 20,
+              "export_common_attr": "muw_frequency_control_item_gap_limit",
+              "json_path": "muw_frequency_control_item_gap_limit",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 0,
+              "export_common_attr": "muw_enable_request_online_fr_model",
+              "json_path": "muw_enable_request_online_fr_model",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            },
+            {
+              "default_value": 0,
+              "export_common_attr": "muw_enable_use_forumua_one_v2",
+              "json_path": "muw_enable_use_forumua_one_v2",
+              "kconf_key": "{{one_piece_leaf_kconfig}}"
+            }
+          ],
+          "type_name": "CommonRecoKconfCommonAttrEnricher"
+        },
+        "get_kconf_params_B3F91C": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "slide_retr_block_author_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "kconf_configs": [
+            {
+              "export_common_attr": "slide_retr_block_author_list",
+              "kconf_key": "reco.thanos.slideRetrBlockAuthor",
+              "value_type": "set_int64"
+            }
+          ],
+          "type_name": "CommonRecoKconfCommonAttrEnricher"
+        },
+        "get_kconf_params_DEA748": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "common_filter_photo_set"
+            ],
+            "$output_item_attrs": []
+          },
+          "kconf_configs": [
+            {
+              "export_common_attr": "common_filter_photo_set",
+              "kconf_key": "reco.thanos.commonFilterPhotosSet",
+              "value_type": "set_int64"
+            }
+          ],
+          "type_name": "CommonRecoKconfCommonAttrEnricher"
+        },
+        "parse_hetu_tag_3B36C2": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "audit_b_second_tag",
+              "audit_hot_high_subdivision_level",
+              "audit_hot_high_tag_level",
+              "audit_risk_immd_tag",
+              "author_big_id",
+              "author_id",
+              "catorgery_level_1",
+              "dup_cluster_id",
+              "duration_ms",
+              "explore_operation_c_review_level",
+              "forbid_hot_page",
+              "gamora_realshow_cnt",
+              "hetu_tag_level_one_list",
+              "hetu_tag_level_three_list",
+              "hetu_tag_level_two_list",
+              "inferior_first_review_score",
+              "invisible_friends",
+              "is_jianguan_risk_photo",
+              "is_living",
+              "level_hot_online",
+              "long_term_high_level_photo",
+              "nebula_realshow_cnt",
+              "original_photo_id",
+              "photo_level",
+              "photo_status",
+              "pic_and_selfdup_id",
+              "same_frame_sources",
+              "sim_remove_dup_id",
+              "slide_punish_city",
+              "topk_audit_level",
+              "topk_audit_tag"
+            ],
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "hetu_tag_level_one_list",
+              "hetu_tag_level_three_list",
+              "hetu_tag_level_two_list"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "hetu_tag_level_one",
+              "hetu_tag_level_three",
+              "hetu_tag_level_two"
+            ]
+          },
+          "configs": [
+            {
+              "hetu_attr": "hetu_tag_level_one",
+              "hetu_list_attr": "hetu_tag_level_one_list"
+            },
+            {
+              "hetu_attr": "hetu_tag_level_two",
+              "hetu_list_attr": "hetu_tag_level_two_list"
+            },
+            {
+              "hetu_attr": "hetu_tag_level_three",
+              "hetu_list_attr": "hetu_tag_level_three_list"
+            }
+          ],
+          "hetu_v2": true,
+          "ignore_tags": [
+            64
+          ],
+          "type_name": "HetuTagEnricher"
+        },
+        "parse_protobuf_from_string_5F9EFF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "user_info_attr"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "user_info_ptr"
+            ],
+            "$output_item_attrs": []
+          },
+          "class_name": "ks.reco.UserInfo",
+          "input_attr": "user_info_attr",
+          "output_attr": "user_info_ptr",
+          "type_name": "CommonRecoProtobufParseAttrEnricher"
+        },
+        "perflog_03D75469": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name",
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "item_cnt_after_filter",
+          "extra2": "{{exp_name}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{item_num}}"
+        },
+        "perflog_046176B3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name",
+              "frequency_enable"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "frequency_enable",
+          "extra2": "{{exp_name}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{frequency_enable}}"
+        },
+        "perflog_0E834E8A": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "direct_retr_req_cnt",
+          "extra2": "{{exp_name}}",
+          "mode": "count",
+          "namespace": "common.leaf",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver"
+        },
+        "perflog_4C2BA25B": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name",
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "item_num_by_browset",
+          "extra2": "{{exp_name}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{item_num}}"
+        },
+        "perflog_70CCA74F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_else_control_attr_2",
+              "exp_name",
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "item_cnt_retr",
+          "extra2": "{{exp_name}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_else_control_attr_2}}",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{item_num}}"
+        },
+        "perflog_DEC7E36D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name",
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "item_cnt_after_retr",
+          "extra2": "{{exp_name}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "subtag": "onerec",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{item_num}}"
+        },
+        "perflog_attr_value_4CA779": {
+          "$eval_common_attrs": [
+            "exp_name"
+          ],
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name"
+            ],
+            "$input_item_attrs": [
+              "cmtr",
+              "cpr",
+              "epstr",
+              "evtr",
+              "f1_score",
+              "lsst",
+              "ltr",
+              "lvtr",
+              "svr",
+              "vtr",
+              "wtd",
+              "wtr"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "aggregator": "avg",
+          "check_point": "{{return 'onerec.pxtr.avg.' .. exp_name}}",
+          "item_attrs": [
+            "evtr",
+            "lvtr",
+            "ltr",
+            "wtr",
+            "wtd",
+            "cmtr",
+            "vtr",
+            "svr",
+            "cpr",
+            "lsst",
+            "epstr",
+            "f1_score"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "perflog_attr_value_8C6404": {
+          "$eval_common_attrs": [
+            "exp_name"
+          ],
+          "$metadata": {
+            "$input_common_attrs": [
+              "exp_name"
+            ],
+            "$input_item_attrs": [
+              "cmtr",
+              "cpr",
+              "epstr",
+              "evtr",
+              "f1_score",
+              "lsst",
+              "ltr",
+              "lvtr",
+              "svr",
+              "vtr",
+              "wtd",
+              "wtr"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "aggregator": "max",
+          "check_point": "{{return 'onerec.pxtr.max.' .. exp_name}}",
+          "item_attrs": [
+            "evtr",
+            "lvtr",
+            "ltr",
+            "wtr",
+            "wtd",
+            "cmtr",
+            "vtr",
+            "svr",
+            "cpr",
+            "lsst",
+            "epstr",
+            "f1_score"
+          ],
+          "type_name": "CommonRecoAttrValuePerflogObserver"
+        },
+        "return__28C561": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_1"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "skip": "{{_if_control_attr_1}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "set_attr_value_5CE6B9": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "retr_type"
+            ],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            {
+              "name": "retr_type",
+              "type": "int",
+              "value": 1
+            }
+          ],
+          "no_overwrite": true,
+          "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoItemAttrDefaultValueEnricher"
+        },
+        "sort_by_score_FB8439": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "f1_score"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "score_from_attr": "f1_score",
+          "type_name": "CommonRecoScoreSortArranger"
+        },
+        "split_string_list_025629": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "high_hot_audit_second_level_black_tags"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "high_hot_audit_second_level_black_tag_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "high_hot_audit_second_level_black_tags",
+          "output_common_attr": "high_hot_audit_second_level_black_tag_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_151641": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "sexy_content_filter_str_gamora"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "sexy_content_filter_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "sexy_content_filter_str_gamora",
+          "output_common_attr": "sexy_content_filter_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_60E188": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "audit_risk_immd_tag_filter_str_gamora"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "audit_risk_immd_tag_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "audit_risk_immd_tag_filter_str_gamora",
+          "output_common_attr": "audit_risk_immd_tag_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_7CDD9D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "topk_audit_second_level_black_tags"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "topk_audit_second_level_black_tag_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "topk_audit_second_level_black_tags",
+          "output_common_attr": "topk_audit_second_level_black_tag_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_81CFCF": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "author_type_vv_thresh_type_string"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "author_type_vv_thresh_type_string_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "author_type_vv_thresh_type_string",
+          "output_common_attr": "author_type_vv_thresh_type_string_list",
+          "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_EC5996": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "impression_audit_second_level_black_tags"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "impression_audit_second_level_black_tag_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "impression_audit_second_level_black_tags",
+          "output_common_attr": "impression_audit_second_level_black_tag_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
+        }
+      },
+      "type_name": "CommonRecoPipeline"
+    },
+    "pipeline_map": {
+      "filter": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "filter_by_browse_set_0EC122",
+          "count_reco_result_B061F6",
+          "perflog_4C2BA25B",
+          "filter_by_attr_B28E6F",
+          "filter_by_attr_3946E3",
+          "enrich_attr_by_lua_6C1CCF",
+          "filter_by_attr_328126",
+          "filter_by_attr_468B8C",
+          "filter_by_attr_FBC88D",
+          "filter_by_attr_203448",
+          "filter_by_attr_83109E",
+          "enrich_attr_by_lua_419004",
+          "filter_by_attr_4EBE10",
+          "enrich_attr_by_lua_78CAB3",
+          "filter_by_attr_6C918C",
+          "enrich_attr_by_lua_0D9E9C",
+          "filter_by_attr_C09AFA",
+          "filter_by_attr_5A7355",
+          "filter_by_attr_92BC23",
+          "filter_by_attr_46AD06",
+          "filter_by_attr_B149E9",
+          "filter_by_attr_D20E7A",
+          "filter_by_browse_set_4176A7",
+          "filter_by_browse_set_7695CC",
+          "filter_by_browse_set_F066CB",
+          "filter_by_browse_set_6B7057",
+          "filter_by_common_attr_C6228A",
+          "filter_by_common_attr_8F222B",
+          "filter_by_common_attr_A299F8",
+          "filter_by_common_attr_76CFC6",
+          "filter_by_common_attr_23925C",
+          "filter_by_common_attr_EDA48C",
+          "filter_by_common_attr_7430CC",
+          "filter_by_common_attr_671186",
+          "filter_by_common_attr_405C68",
+          "filter_by_common_attr_7CD6AF",
+          "filter_by_common_attr_C2A7A9",
+          "filter_by_common_attr_69B4D6",
+          "filter_by_common_attr_C9CB89",
+          "filter_by_common_attr_9B8210",
+          "filter_by_common_attr_584B99",
+          "filter_by_common_attr_C3A875",
+          "filter_by_common_attr_C13FBF",
+          "count_reco_result_B061F6",
+          "perflog_03D75469"
+        ]
+      },
+      "gen_result": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "_branch_controller_306DCE5F",
+          "calc_by_formula1_25CB1B",
+          "_branch_controller_306DCE5F_else",
+          "calc_by_formula1_B22B16",
+          "perflog_attr_value_4CA779",
+          "perflog_attr_value_8C6404",
+          "sort_by_score_FB8439"
+        ]
+      },
+      "main_process": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_item_attr_by_distributed_index_4AB9B0",
+          "parse_hetu_tag_3B36C2",
+          "enrich_attr_by_lua_B28F31",
+          "copy_item_meta_info_863564",
+          "build_protobuf_640AD3",
+          "_branch_controller_EB7701DB",
+          "set_attr_value_5CE6B9",
+          "_branch_controller_7543B0B2",
+          "delegate_enrich_main_model_copy",
+          "_branch_controller_7543B0B2_else",
+          "delegate_enrich_main_model",
+          "enrich_attr_by_lua_429788"
+        ]
+      },
+      "prepare": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "parse_protobuf_from_string_5F9EFF",
+          "copy_user_meta_info_D8585E",
+          "enrich_attr_by_lua_F4F4DF",
+          "enrich_with_protobuf_2CC9DE",
+          "enrich_attr_by_lua_171426",
+          "get_kconf_params_B3F91C",
+          "get_kconf_params_DEA748",
+          "get_abtest_params_1FF824",
+          "split_string_list_60E188",
+          "split_string_list_151641",
+          "split_string_list_EC5996",
+          "split_string_list_025629",
+          "split_string_list_7CDD9D",
+          "split_string_list_81CFCF"
+        ]
+      },
+      "retr": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "get_abtest_params_2111B0",
+          "get_kconf_params_8D7B32",
+          "perflog_0E834E8A",
+          "enrich_attr_by_lua_781F3D",
+          "perflog_046176B3",
+          "_branch_controller_2CFC0311",
+          "return__28C561",
+          "_branch_controller_2CFC0311_else",
+          "delegate_retrieve_FAE3F6",
+          "count_reco_result_983F0C",
+          "perflog_70CCA74F",
+          "count_reco_result_B061F6",
+          "perflog_DEC7E36D"
+        ]
+      }
+    }
+  },
+  "request_type_config": {
+    "default": [
+      "prepare",
+      "retr",
+      "main_process",
+      "filter",
+      "gen_result"
+    ]
+  },
+  "return_common_attrs": [
+    "user_id"
+  ],
+  "return_item_attrs": [
+    "cmtr",
+    "cpr",
+    "epstr",
+    "evtr",
+    "f1_score",
+    "is_living",
+    "lsst",
+    "ltr",
+    "lvtr",
+    "retr_score",
+    "svr",
+    "vtr",
+    "wtd",
+    "wtr"
+  ]
+}

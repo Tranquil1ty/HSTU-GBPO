@@ -1,0 +1,10 @@
+--log_dir=../log/
+
+# --grpc_thread_num=64
+--grpc_thread_num_per_core=2.0
+--sub_flow_async_thread_num=24
+--logging_switch_uid_mod_divisor_kconf_key=recoBiz.kuaishouLiveGift.leafGiveLogUidModDivisor
+--attr_perf_sample_rate=0.001
+
+# 性能优化
+--enable_pthread_affinity=true
