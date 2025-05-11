@@ -373,7 +373,7 @@ class CallEvalServer(LeafFlow):
             end
             """
         )
-        .hitrate_perf(namespace="common.leaf", subtag="tiger_hit_rate", service_name="{{common_eval_kess_name}}")
+        .hitrate_perf(namespace="common.leaf", subtag="onerec_hit_rate_eval")
         .end_()
     )
 
@@ -453,7 +453,7 @@ class CallEvalServer(LeafFlow):
             """
         )
         .perflog_attr_value(check_point="default.reward", item_attrs=["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "svr", "ptr"],)
-        .perf_reward_value(namespace="common.leaf", subtag="onerec_eval_system")
+        .perf_reward_value(namespace="common.leaf", subtag="onerec_reward_value_eval")
         .end_()
     )
 
@@ -582,7 +582,25 @@ class CallEvalServer(LeafFlow):
                 extra2=sorted_attr_name+"_SORTED_TOP6_AVG",
                 extra3="{{tab_id_str}}"
             )
-            )
+        )
+    
+    def hitrate_perf(self, namespace, subtag):
+        return self \
+            .perflog_attr_value(check_point="generative.hit_rate", common_attrs=["hit_rate_1", "hit_rate_2", "hit_rate_3"]) \
+            .gen_common_attr_by_lua(attr_map={"tab_id_str": "tostring(tab_id)"}) \
+            .perflog(mode="interval", value="{{hit_rate_1}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="hit_rate_1", extra3="{{tab_id_str}}") \
+            .perflog(mode="interval", value="{{hit_rate_2}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="hit_rate_2", extra3="{{tab_id_str}}") \
+            .perflog(mode="interval", value="{{hit_rate_3}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="hit_rate_3", extra3="{{tab_id_str}}") \
+            .if_("hit_rate_1 > 0") \
+                .perflog(mode="interval", value="{{rank_index_1}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="rank_index_1", extra3="{{tab_id_str}}") \
+            .end_() \
+            .if_("hit_rate_2 > 0") \
+                .perflog(mode="interval", value="{{rank_index_2}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="rank_index_2", extra3="{{tab_id_str}}") \
+            .end_() \
+            .if_("hit_rate_3 > 0") \
+                .perflog(mode="interval", value="{{rank_index_3}}", namespace=namespace, subtag=subtag, extra1="{{common_eval_kess_name}}", extra2="rank_index_3", extra3="{{tab_id_str}}") \
+            .end_()
+
 
 # 第三步，清理现场
 class FinishStage(LeafFlow):
