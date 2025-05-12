@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "e6b853418ab7bf25c7df17208fbd90d4_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 10:24:00",
+  "_CONFIG_VERSION": "7e2805c4f10c777cb498a5191819a106_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 10:39:05",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -246,7 +246,7 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoProtobufBuildAttrEnricher"
         },
-        "calc_by_formula1_F26760": {
+        "calc_by_formula1_9AFA12": {
           "$metadata": {
             "$downstream_item_attrs": [
               "adaptive_wtd",
@@ -364,7 +364,6 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
-              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
@@ -488,7 +487,6 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
-              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
@@ -588,7 +586,6 @@
             "fuse_score",
             "new_svr",
             "sppc_combine",
-            "wtd_finish_score",
             "cpr_wtd",
             "wtd_duration_score_v2",
             "wtd_v2",
@@ -875,13 +872,12 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
-              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
             ]
           },
-          "downstream_processor": "calc_by_formula1_F26760",
+          "downstream_processor": "calc_by_formula1_9AFA12",
           "kess_service": "grpc_hqg24q4ModelComboFinal",
           "partition_size": 256,
           "recv_item_attrs": [
@@ -969,7 +965,6 @@
             "fuse_score",
             "new_svr",
             "sppc_combine",
-            "wtd_finish_score",
             "cpr_wtd",
             "wtd_duration_score_v2",
             "wtd_v2",
@@ -1092,118 +1087,6 @@
           "skip": "{{_if_control_attr_3}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_0F00F9": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "adp_wtd_MAX",
-              "cltr_MAX",
-              "cmef_MAX",
-              "cmtr_MAX",
-              "cpr_MAX",
-              "dtr_MAX",
-              "epstr_MAX",
-              "evtr_MAX",
-              "f1_score_MAX",
-              "ftr_MAX",
-              "log_p_MAX",
-              "lsst_MAX",
-              "ltr_MAX",
-              "lvtr_MAX",
-              "playlet_ctr_MAX",
-              "ptr_MAX",
-              "qtr_MAX",
-              "session_play_time_MAX",
-              "setr2_MAX",
-              "vtr_MAX",
-              "wtd_finish_score_MAX",
-              "wtd_v2_MAX",
-              "wtr_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "adp_wtd_MAX",
-              "cltr_MAX",
-              "cmef_MAX",
-              "cmtr_MAX",
-              "cpr_MAX",
-              "dtr_MAX",
-              "epstr_MAX",
-              "evtr_MAX",
-              "f1_score_MAX",
-              "ftr_MAX",
-              "log_p_MAX",
-              "lsst_MAX",
-              "ltr_MAX",
-              "lvtr_MAX",
-              "playlet_ctr_MAX",
-              "ptr_MAX",
-              "qtr_MAX",
-              "session_play_time_MAX",
-              "setr2_MAX",
-              "vtr_MAX",
-              "wtd_finish_score_MAX",
-              "wtd_v2_MAX",
-              "wtr_MAX"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "evtr_MAX",
-            "ltr_MAX",
-            "wtr_MAX",
-            "ftr_MAX",
-            "cmtr_MAX",
-            "lvtr_MAX",
-            "vtr_MAX",
-            "ptr_MAX",
-            "lsst_MAX",
-            "wtd_v2_MAX",
-            "cpr_MAX",
-            "wtd_finish_score_MAX",
-            "session_play_time_MAX",
-            "qtr_MAX",
-            "dtr_MAX",
-            "epstr_MAX",
-            "cmef_MAX",
-            "cltr_MAX",
-            "adp_wtd_MAX",
-            "playlet_ctr_MAX",
-            "setr2_MAX",
-            "f1_score_MAX",
-            "log_p_MAX"
-          ],
-          "function_for_common": "calc",
-          "import_common_attr": [
-            "evtr_MAX",
-            "ltr_MAX",
-            "wtr_MAX",
-            "ftr_MAX",
-            "cmtr_MAX",
-            "lvtr_MAX",
-            "vtr_MAX",
-            "ptr_MAX",
-            "lsst_MAX",
-            "wtd_v2_MAX",
-            "cpr_MAX",
-            "wtd_finish_score_MAX",
-            "session_play_time_MAX",
-            "qtr_MAX",
-            "dtr_MAX",
-            "epstr_MAX",
-            "cmef_MAX",
-            "cltr_MAX",
-            "adp_wtd_MAX",
-            "playlet_ctr_MAX",
-            "setr2_MAX",
-            "f1_score_MAX",
-            "log_p_MAX"
-          ],
-          "lua_script": "function calc()\n                local evtr = math.floor(evtr_MAX*10000)\nlocal ltr = math.floor(ltr_MAX*10000)\nlocal wtr = math.floor(wtr_MAX*10000)\nlocal ftr = math.floor(ftr_MAX*10000)\nlocal cmtr = math.floor(cmtr_MAX*10000)\nlocal lvtr = math.floor(lvtr_MAX*10000)\nlocal vtr = math.floor(vtr_MAX*10000)\nlocal ptr = math.floor(ptr_MAX*10000)\nlocal lsst = math.floor(lsst_MAX*10000)\nlocal wtd_v2 = math.floor(wtd_v2_MAX*10000)\nlocal cpr = math.floor(cpr_MAX*10000)\nlocal wtd_finish_score = math.floor(wtd_finish_score_MAX*10000)\nlocal session_play_time = math.floor(session_play_time_MAX*10000)\nlocal qtr = math.floor(qtr_MAX*10000)\nlocal dtr = math.floor(dtr_MAX*10000)\nlocal epstr = math.floor(epstr_MAX*10000)\nlocal cmef = math.floor(cmef_MAX*10000)\nlocal cltr = math.floor(cltr_MAX*10000)\nlocal adp_wtd = math.floor(adp_wtd_MAX*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_MAX*10000)\nlocal setr2 = math.floor(setr2_MAX*10000)\nlocal f1_score = math.floor(f1_score_MAX*10000)\nlocal log_p = math.floor(log_p_MAX*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, wtd_finish_score, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score, log_p\n            end",
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "enrich_attr_by_lua_39799B": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1247,118 +1130,6 @@
             "tab_id"
           ],
           "lua_script": "function func()\n                local full_rank_req_type = 'predict_for_gamora'\n                if tab_id == 30000 then\n                    full_rank_req_type = 'predict_for_nebula'\n                end\n                return full_rank_req_type\n            end",
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_5DFA4F": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "adp_wtd_AVG",
-              "cltr_AVG",
-              "cmef_AVG",
-              "cmtr_AVG",
-              "cpr_AVG",
-              "dtr_AVG",
-              "epstr_AVG",
-              "evtr_AVG",
-              "f1_score_AVG",
-              "ftr_AVG",
-              "log_p_AVG",
-              "lsst_AVG",
-              "ltr_AVG",
-              "lvtr_AVG",
-              "playlet_ctr_AVG",
-              "ptr_AVG",
-              "qtr_AVG",
-              "session_play_time_AVG",
-              "setr2_AVG",
-              "vtr_AVG",
-              "wtd_finish_score_AVG",
-              "wtd_v2_AVG",
-              "wtr_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "adp_wtd_AVG",
-              "cltr_AVG",
-              "cmef_AVG",
-              "cmtr_AVG",
-              "cpr_AVG",
-              "dtr_AVG",
-              "epstr_AVG",
-              "evtr_AVG",
-              "f1_score_AVG",
-              "ftr_AVG",
-              "log_p_AVG",
-              "lsst_AVG",
-              "ltr_AVG",
-              "lvtr_AVG",
-              "playlet_ctr_AVG",
-              "ptr_AVG",
-              "qtr_AVG",
-              "session_play_time_AVG",
-              "setr2_AVG",
-              "vtr_AVG",
-              "wtd_finish_score_AVG",
-              "wtd_v2_AVG",
-              "wtr_AVG"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "evtr_AVG",
-            "ltr_AVG",
-            "wtr_AVG",
-            "ftr_AVG",
-            "cmtr_AVG",
-            "lvtr_AVG",
-            "vtr_AVG",
-            "ptr_AVG",
-            "lsst_AVG",
-            "wtd_v2_AVG",
-            "cpr_AVG",
-            "wtd_finish_score_AVG",
-            "session_play_time_AVG",
-            "qtr_AVG",
-            "dtr_AVG",
-            "epstr_AVG",
-            "cmef_AVG",
-            "cltr_AVG",
-            "adp_wtd_AVG",
-            "playlet_ctr_AVG",
-            "setr2_AVG",
-            "f1_score_AVG",
-            "log_p_AVG"
-          ],
-          "function_for_common": "calc",
-          "import_common_attr": [
-            "evtr_AVG",
-            "ltr_AVG",
-            "wtr_AVG",
-            "ftr_AVG",
-            "cmtr_AVG",
-            "lvtr_AVG",
-            "vtr_AVG",
-            "ptr_AVG",
-            "lsst_AVG",
-            "wtd_v2_AVG",
-            "cpr_AVG",
-            "wtd_finish_score_AVG",
-            "session_play_time_AVG",
-            "qtr_AVG",
-            "dtr_AVG",
-            "epstr_AVG",
-            "cmef_AVG",
-            "cltr_AVG",
-            "adp_wtd_AVG",
-            "playlet_ctr_AVG",
-            "setr2_AVG",
-            "f1_score_AVG",
-            "log_p_AVG"
-          ],
-          "lua_script": "function calc()\n                local evtr = math.floor(evtr_AVG*10000)\nlocal ltr = math.floor(ltr_AVG*10000)\nlocal wtr = math.floor(wtr_AVG*10000)\nlocal ftr = math.floor(ftr_AVG*10000)\nlocal cmtr = math.floor(cmtr_AVG*10000)\nlocal lvtr = math.floor(lvtr_AVG*10000)\nlocal vtr = math.floor(vtr_AVG*10000)\nlocal ptr = math.floor(ptr_AVG*10000)\nlocal lsst = math.floor(lsst_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_AVG*10000)\nlocal cpr = math.floor(cpr_AVG*10000)\nlocal wtd_finish_score = math.floor(wtd_finish_score_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_AVG*10000)\nlocal qtr = math.floor(qtr_AVG*10000)\nlocal dtr = math.floor(dtr_AVG*10000)\nlocal epstr = math.floor(epstr_AVG*10000)\nlocal cmef = math.floor(cmef_AVG*10000)\nlocal cltr = math.floor(cltr_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_AVG*10000)\nlocal setr2 = math.floor(setr2_AVG*10000)\nlocal f1_score = math.floor(f1_score_AVG*10000)\nlocal log_p = math.floor(log_p_AVG*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, wtd_finish_score, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score, log_p\n            end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -1469,6 +1240,114 @@
           "skip": "{{_if_control_attr_5}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
+        "enrich_attr_by_lua_AB6A22": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "adp_wtd_MAX",
+              "cltr_MAX",
+              "cmef_MAX",
+              "cmtr_MAX",
+              "cpr_MAX",
+              "dtr_MAX",
+              "epstr_MAX",
+              "evtr_MAX",
+              "f1_score_MAX",
+              "ftr_MAX",
+              "log_p_MAX",
+              "lsst_MAX",
+              "ltr_MAX",
+              "lvtr_MAX",
+              "playlet_ctr_MAX",
+              "ptr_MAX",
+              "qtr_MAX",
+              "session_play_time_MAX",
+              "setr2_MAX",
+              "vtr_MAX",
+              "wtd_v2_MAX",
+              "wtr_MAX"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "adp_wtd_MAX",
+              "cltr_MAX",
+              "cmef_MAX",
+              "cmtr_MAX",
+              "cpr_MAX",
+              "dtr_MAX",
+              "epstr_MAX",
+              "evtr_MAX",
+              "f1_score_MAX",
+              "ftr_MAX",
+              "log_p_MAX",
+              "lsst_MAX",
+              "ltr_MAX",
+              "lvtr_MAX",
+              "playlet_ctr_MAX",
+              "ptr_MAX",
+              "qtr_MAX",
+              "session_play_time_MAX",
+              "setr2_MAX",
+              "vtr_MAX",
+              "wtd_v2_MAX",
+              "wtr_MAX"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "evtr_MAX",
+            "ltr_MAX",
+            "wtr_MAX",
+            "ftr_MAX",
+            "cmtr_MAX",
+            "lvtr_MAX",
+            "vtr_MAX",
+            "ptr_MAX",
+            "lsst_MAX",
+            "wtd_v2_MAX",
+            "cpr_MAX",
+            "session_play_time_MAX",
+            "qtr_MAX",
+            "dtr_MAX",
+            "epstr_MAX",
+            "cmef_MAX",
+            "cltr_MAX",
+            "adp_wtd_MAX",
+            "playlet_ctr_MAX",
+            "setr2_MAX",
+            "f1_score_MAX",
+            "log_p_MAX"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "evtr_MAX",
+            "ltr_MAX",
+            "wtr_MAX",
+            "ftr_MAX",
+            "cmtr_MAX",
+            "lvtr_MAX",
+            "vtr_MAX",
+            "ptr_MAX",
+            "lsst_MAX",
+            "wtd_v2_MAX",
+            "cpr_MAX",
+            "session_play_time_MAX",
+            "qtr_MAX",
+            "dtr_MAX",
+            "epstr_MAX",
+            "cmef_MAX",
+            "cltr_MAX",
+            "adp_wtd_MAX",
+            "playlet_ctr_MAX",
+            "setr2_MAX",
+            "f1_score_MAX",
+            "log_p_MAX"
+          ],
+          "lua_script": "function calc()\n                local evtr = math.floor(evtr_MAX*10000)\nlocal ltr = math.floor(ltr_MAX*10000)\nlocal wtr = math.floor(wtr_MAX*10000)\nlocal ftr = math.floor(ftr_MAX*10000)\nlocal cmtr = math.floor(cmtr_MAX*10000)\nlocal lvtr = math.floor(lvtr_MAX*10000)\nlocal vtr = math.floor(vtr_MAX*10000)\nlocal ptr = math.floor(ptr_MAX*10000)\nlocal lsst = math.floor(lsst_MAX*10000)\nlocal wtd_v2 = math.floor(wtd_v2_MAX*10000)\nlocal cpr = math.floor(cpr_MAX*10000)\nlocal session_play_time = math.floor(session_play_time_MAX*10000)\nlocal qtr = math.floor(qtr_MAX*10000)\nlocal dtr = math.floor(dtr_MAX*10000)\nlocal epstr = math.floor(epstr_MAX*10000)\nlocal cmef = math.floor(cmef_MAX*10000)\nlocal cltr = math.floor(cltr_MAX*10000)\nlocal adp_wtd = math.floor(adp_wtd_MAX*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_MAX*10000)\nlocal setr2 = math.floor(setr2_MAX*10000)\nlocal f1_score = math.floor(f1_score_MAX*10000)\nlocal log_p = math.floor(log_p_MAX*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score, log_p\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_attr_by_lua_ADAD5A": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1540,6 +1419,114 @@
             "htr_MIN"
           ],
           "lua_script": "function calc()\n                local svr = math.floor(svr_MIN*10000)\nlocal htr = math.floor(htr_MIN*10000)\n                return svr, htr\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_E7068A": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "adp_wtd_AVG",
+              "cltr_AVG",
+              "cmef_AVG",
+              "cmtr_AVG",
+              "cpr_AVG",
+              "dtr_AVG",
+              "epstr_AVG",
+              "evtr_AVG",
+              "f1_score_AVG",
+              "ftr_AVG",
+              "log_p_AVG",
+              "lsst_AVG",
+              "ltr_AVG",
+              "lvtr_AVG",
+              "playlet_ctr_AVG",
+              "ptr_AVG",
+              "qtr_AVG",
+              "session_play_time_AVG",
+              "setr2_AVG",
+              "vtr_AVG",
+              "wtd_v2_AVG",
+              "wtr_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "adp_wtd_AVG",
+              "cltr_AVG",
+              "cmef_AVG",
+              "cmtr_AVG",
+              "cpr_AVG",
+              "dtr_AVG",
+              "epstr_AVG",
+              "evtr_AVG",
+              "f1_score_AVG",
+              "ftr_AVG",
+              "log_p_AVG",
+              "lsst_AVG",
+              "ltr_AVG",
+              "lvtr_AVG",
+              "playlet_ctr_AVG",
+              "ptr_AVG",
+              "qtr_AVG",
+              "session_play_time_AVG",
+              "setr2_AVG",
+              "vtr_AVG",
+              "wtd_v2_AVG",
+              "wtr_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "evtr_AVG",
+            "ltr_AVG",
+            "wtr_AVG",
+            "ftr_AVG",
+            "cmtr_AVG",
+            "lvtr_AVG",
+            "vtr_AVG",
+            "ptr_AVG",
+            "lsst_AVG",
+            "wtd_v2_AVG",
+            "cpr_AVG",
+            "session_play_time_AVG",
+            "qtr_AVG",
+            "dtr_AVG",
+            "epstr_AVG",
+            "cmef_AVG",
+            "cltr_AVG",
+            "adp_wtd_AVG",
+            "playlet_ctr_AVG",
+            "setr2_AVG",
+            "f1_score_AVG",
+            "log_p_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "evtr_AVG",
+            "ltr_AVG",
+            "wtr_AVG",
+            "ftr_AVG",
+            "cmtr_AVG",
+            "lvtr_AVG",
+            "vtr_AVG",
+            "ptr_AVG",
+            "lsst_AVG",
+            "wtd_v2_AVG",
+            "cpr_AVG",
+            "session_play_time_AVG",
+            "qtr_AVG",
+            "dtr_AVG",
+            "epstr_AVG",
+            "cmef_AVG",
+            "cltr_AVG",
+            "adp_wtd_AVG",
+            "playlet_ctr_AVG",
+            "setr2_AVG",
+            "f1_score_AVG",
+            "log_p_AVG"
+          ],
+          "lua_script": "function calc()\n                local evtr = math.floor(evtr_AVG*10000)\nlocal ltr = math.floor(ltr_AVG*10000)\nlocal wtr = math.floor(wtr_AVG*10000)\nlocal ftr = math.floor(ftr_AVG*10000)\nlocal cmtr = math.floor(cmtr_AVG*10000)\nlocal lvtr = math.floor(lvtr_AVG*10000)\nlocal vtr = math.floor(vtr_AVG*10000)\nlocal ptr = math.floor(ptr_AVG*10000)\nlocal lsst = math.floor(lsst_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_AVG*10000)\nlocal cpr = math.floor(cpr_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_AVG*10000)\nlocal qtr = math.floor(qtr_AVG*10000)\nlocal dtr = math.floor(dtr_AVG*10000)\nlocal epstr = math.floor(epstr_AVG*10000)\nlocal cmef = math.floor(cmef_AVG*10000)\nlocal cltr = math.floor(cltr_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_AVG*10000)\nlocal setr2 = math.floor(setr2_AVG*10000)\nlocal f1_score = math.floor(f1_score_AVG*10000)\nlocal log_p = math.floor(log_p_AVG*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score, log_p\n            end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -1657,6 +1644,116 @@
           "timeout_ms": 100,
           "type_name": "CommonRecoRemoteEmbeddingAttrRawLiteEnricher"
         },
+        "log_debug_info_2DF83A": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "adp_wtd_AVG",
+              "adp_wtd_MAX",
+              "cltr_AVG",
+              "cltr_MAX",
+              "cmef_AVG",
+              "cmef_MAX",
+              "cmtr_AVG",
+              "cmtr_MAX",
+              "cpr_AVG",
+              "cpr_MAX",
+              "dtr_AVG",
+              "dtr_MAX",
+              "epstr_AVG",
+              "epstr_MAX",
+              "evtr_AVG",
+              "evtr_MAX",
+              "f1_score_AVG",
+              "f1_score_MAX",
+              "ftr_AVG",
+              "ftr_MAX",
+              "htr_MIN",
+              "log_p_AVG",
+              "log_p_MAX",
+              "lsst_AVG",
+              "lsst_MAX",
+              "ltr_AVG",
+              "ltr_MAX",
+              "lvtr_AVG",
+              "lvtr_MAX",
+              "playlet_ctr_AVG",
+              "playlet_ctr_MAX",
+              "ptr_AVG",
+              "ptr_MAX",
+              "qtr_AVG",
+              "qtr_MAX",
+              "session_play_time_AVG",
+              "session_play_time_MAX",
+              "setr2_AVG",
+              "setr2_MAX",
+              "svr_MIN",
+              "vtr_AVG",
+              "vtr_MAX",
+              "wtd_v2_AVG",
+              "wtd_v2_MAX",
+              "wtr_AVG",
+              "wtr_MAX"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "evtr_MAX",
+            "ltr_MAX",
+            "wtr_MAX",
+            "ftr_MAX",
+            "cmtr_MAX",
+            "lvtr_MAX",
+            "vtr_MAX",
+            "ptr_MAX",
+            "lsst_MAX",
+            "wtd_v2_MAX",
+            "cpr_MAX",
+            "session_play_time_MAX",
+            "qtr_MAX",
+            "dtr_MAX",
+            "epstr_MAX",
+            "cmef_MAX",
+            "cltr_MAX",
+            "adp_wtd_MAX",
+            "playlet_ctr_MAX",
+            "setr2_MAX",
+            "f1_score_MAX",
+            "log_p_MAX",
+            "evtr_AVG",
+            "ltr_AVG",
+            "wtr_AVG",
+            "ftr_AVG",
+            "cmtr_AVG",
+            "lvtr_AVG",
+            "vtr_AVG",
+            "ptr_AVG",
+            "lsst_AVG",
+            "wtd_v2_AVG",
+            "cpr_AVG",
+            "session_play_time_AVG",
+            "qtr_AVG",
+            "dtr_AVG",
+            "epstr_AVG",
+            "cmef_AVG",
+            "cltr_AVG",
+            "adp_wtd_AVG",
+            "playlet_ctr_AVG",
+            "setr2_AVG",
+            "f1_score_AVG",
+            "log_p_AVG",
+            "svr_MIN",
+            "htr_MIN"
+          ],
+          "for_debug_request_only": false,
+          "log_tag": "hqg_debug.onerec.eval.perf",
+          "respect_sample_logging": false,
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
         "log_debug_info_2F9B4F": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1737,120 +1834,6 @@
           "respect_sample_logging": false,
           "type_name": "CommonRecoDebugInfoObserver"
         },
-        "log_debug_info_FA57FF": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "adp_wtd_AVG",
-              "adp_wtd_MAX",
-              "cltr_AVG",
-              "cltr_MAX",
-              "cmef_AVG",
-              "cmef_MAX",
-              "cmtr_AVG",
-              "cmtr_MAX",
-              "cpr_AVG",
-              "cpr_MAX",
-              "dtr_AVG",
-              "dtr_MAX",
-              "epstr_AVG",
-              "epstr_MAX",
-              "evtr_AVG",
-              "evtr_MAX",
-              "f1_score_AVG",
-              "f1_score_MAX",
-              "ftr_AVG",
-              "ftr_MAX",
-              "htr_MIN",
-              "log_p_AVG",
-              "log_p_MAX",
-              "lsst_AVG",
-              "lsst_MAX",
-              "ltr_AVG",
-              "ltr_MAX",
-              "lvtr_AVG",
-              "lvtr_MAX",
-              "playlet_ctr_AVG",
-              "playlet_ctr_MAX",
-              "ptr_AVG",
-              "ptr_MAX",
-              "qtr_AVG",
-              "qtr_MAX",
-              "session_play_time_AVG",
-              "session_play_time_MAX",
-              "setr2_AVG",
-              "setr2_MAX",
-              "svr_MIN",
-              "vtr_AVG",
-              "vtr_MAX",
-              "wtd_finish_score_AVG",
-              "wtd_finish_score_MAX",
-              "wtd_v2_AVG",
-              "wtd_v2_MAX",
-              "wtr_AVG",
-              "wtr_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "common_attrs": [
-            "evtr_MAX",
-            "ltr_MAX",
-            "wtr_MAX",
-            "ftr_MAX",
-            "cmtr_MAX",
-            "lvtr_MAX",
-            "vtr_MAX",
-            "ptr_MAX",
-            "lsst_MAX",
-            "wtd_v2_MAX",
-            "cpr_MAX",
-            "wtd_finish_score_MAX",
-            "session_play_time_MAX",
-            "qtr_MAX",
-            "dtr_MAX",
-            "epstr_MAX",
-            "cmef_MAX",
-            "cltr_MAX",
-            "adp_wtd_MAX",
-            "playlet_ctr_MAX",
-            "setr2_MAX",
-            "f1_score_MAX",
-            "log_p_MAX",
-            "evtr_AVG",
-            "ltr_AVG",
-            "wtr_AVG",
-            "ftr_AVG",
-            "cmtr_AVG",
-            "lvtr_AVG",
-            "vtr_AVG",
-            "ptr_AVG",
-            "lsst_AVG",
-            "wtd_v2_AVG",
-            "cpr_AVG",
-            "wtd_finish_score_AVG",
-            "session_play_time_AVG",
-            "qtr_AVG",
-            "dtr_AVG",
-            "epstr_AVG",
-            "cmef_AVG",
-            "cltr_AVG",
-            "adp_wtd_AVG",
-            "playlet_ctr_AVG",
-            "setr2_AVG",
-            "f1_score_AVG",
-            "log_p_AVG",
-            "svr_MIN",
-            "htr_MIN"
-          ],
-          "for_debug_request_only": false,
-          "log_tag": "hqg_debug.onerec.eval.perf",
-          "respect_sample_logging": false,
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoDebugInfoObserver"
-        },
         "pack_item_attr_06A36D": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1927,7 +1910,72 @@
           },
           "type_name": "CommonRecoItemAttrPackEnricher"
         },
-        "pack_item_attr_1E2060": {
+        "pack_item_attr_218647": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "photo_id",
+              "realshow"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "eval_pos_photo_id_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "from_item_attr": "photo_id",
+              "to_common_attr": "eval_pos_photo_id_list"
+            }
+          ],
+          "target_item": {
+            "realshow": 1
+          },
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "pack_item_attr_2F8984": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$input_item_attrs": [
+              "item_seq",
+              "qtr"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "qtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "avg",
+              "from_item_attr": "qtr",
+              "to_common_attr": "qtr_SORTED_TOP6_AVG"
+            }
+          ],
+          "skip": "{{_if_control_attr_4}}",
+          "target_item": {
+            "item_seq": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "pack_item_attr_38703F": {
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_4"
@@ -1955,7 +2003,6 @@
               "setr2",
               "svr",
               "vtr",
-              "wtd_finish_score",
               "wtd_v2",
               "wtr"
             ],
@@ -2003,8 +2050,6 @@
               "svr_MIN",
               "vtr_AVG",
               "vtr_MAX",
-              "wtd_finish_score_AVG",
-              "wtd_finish_score_MAX",
               "wtd_v2_AVG",
               "wtd_v2_MAX",
               "wtr_AVG",
@@ -2070,11 +2115,6 @@
               "aggregator": "max",
               "from_item_attr": "cpr",
               "to_common_attr": "cpr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "wtd_finish_score",
-              "to_common_attr": "wtd_finish_score_MAX"
             },
             {
               "aggregator": "max",
@@ -2188,11 +2228,6 @@
             },
             {
               "aggregator": "avg",
-              "from_item_attr": "wtd_finish_score",
-              "to_common_attr": "wtd_finish_score_AVG"
-            },
-            {
-              "aggregator": "avg",
               "from_item_attr": "session_play_time",
               "to_common_attr": "session_play_time_AVG"
             },
@@ -2258,109 +2293,6 @@
             }
           ],
           "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoItemAttrPackEnricher"
-        },
-        "pack_item_attr_218647": {
-          "$metadata": {
-            "$input_common_attrs": [],
-            "$input_item_attrs": [
-              "photo_id",
-              "realshow"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "eval_pos_photo_id_list"
-            ],
-            "$output_item_attrs": []
-          },
-          "item_source": {
-            "reco_results": true
-          },
-          "mappings": [
-            {
-              "from_item_attr": "photo_id",
-              "to_common_attr": "eval_pos_photo_id_list"
-            }
-          ],
-          "target_item": {
-            "realshow": 1
-          },
-          "type_name": "CommonRecoItemAttrPackEnricher"
-        },
-        "pack_item_attr_23AA43": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [
-              "item_seq",
-              "wtd_finish_score"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "wtd_finish_score_SORTED_TOP6_AVG"
-            ],
-            "$output_item_attrs": []
-          },
-          "item_source": {
-            "reco_results": true
-          },
-          "mappings": [
-            {
-              "aggregator": "avg",
-              "from_item_attr": "wtd_finish_score",
-              "to_common_attr": "wtd_finish_score_SORTED_TOP6_AVG"
-            }
-          ],
-          "skip": "{{_if_control_attr_4}}",
-          "target_item": {
-            "item_seq": [
-              0,
-              1,
-              2,
-              3,
-              4,
-              5
-            ]
-          },
-          "type_name": "CommonRecoItemAttrPackEnricher"
-        },
-        "pack_item_attr_2F8984": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [
-              "item_seq",
-              "qtr"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "qtr_SORTED_TOP6_AVG"
-            ],
-            "$output_item_attrs": []
-          },
-          "item_source": {
-            "reco_results": true
-          },
-          "mappings": [
-            {
-              "aggregator": "avg",
-              "from_item_attr": "qtr",
-              "to_common_attr": "qtr_SORTED_TOP6_AVG"
-            }
-          ],
-          "skip": "{{_if_control_attr_4}}",
-          "target_item": {
-            "item_seq": [
-              0,
-              1,
-              2,
-              3,
-              4,
-              5
-            ]
-          },
           "type_name": "CommonRecoItemAttrPackEnricher"
         },
         "pack_item_attr_67614E": {
@@ -3487,29 +3419,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{cmef_SORTED_TOP6_AVG}}"
         },
-        "perflog_1AD66AB7": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtd_finish_score_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtd_finish_score_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_finish_score_AVG}}"
-        },
         "perflog_1D1693DC": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4614,29 +4523,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{playlet_ctr_AVG}}"
         },
-        "perflog_9B47FF2C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtd_finish_score_TOP6_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtd_finish_score_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_finish_score_TOP6_AVG}}"
-        },
         "perflog_9B68F3BC": {
           "$metadata": {
             "$input_common_attrs": [
@@ -5166,29 +5052,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{ftr_AVG}}"
         },
-        "perflog_C9FACD49": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtd_finish_score_MAX"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtd_finish_score_MAX",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_finish_score_MAX}}"
-        },
         "perflog_CFCD24C4": {
           "$metadata": {
             "$input_common_attrs": [
@@ -5257,29 +5120,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{epstr_AVG}}"
-        },
-        "perflog_DB17E8AA": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtd_finish_score_SORTED_TOP6_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtd_finish_score_SORTED_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_finish_score_SORTED_TOP6_AVG}}"
         },
         "perflog_DB41FFDB": {
           "$metadata": {
@@ -6129,25 +5969,6 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoScoreSortArranger"
         },
-        "sort_by_score_67892F": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [
-              "wtd_finish_score"
-            ],
-            "$modify_item_tables": [
-              ""
-            ],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "desc": true,
-          "score_from_attr": "wtd_finish_score",
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoScoreSortArranger"
-        },
         "sort_by_score_73D75F": {
           "$metadata": {
             "$input_common_attrs": [
@@ -6461,13 +6282,13 @@
           "enrich_attr_by_lua_58578D",
           "delegate_enrich_main_model",
           "log_debug_info_2F9B4F",
-          "calc_by_formula1_F26760",
+          "calc_by_formula1_9AFA12",
           "enrich_attr_by_lua_64B83F",
           "perflog_attr_value_88EED3",
-          "pack_item_attr_1E2060",
-          "enrich_attr_by_lua_0F00F9",
-          "log_debug_info_FA57FF",
-          "enrich_attr_by_lua_5DFA4F",
+          "pack_item_attr_38703F",
+          "enrich_attr_by_lua_AB6A22",
+          "log_debug_info_2DF83A",
+          "enrich_attr_by_lua_E7068A",
           "enrich_attr_by_lua_B1FE5E",
           "perflog_F736B5B2",
           "perflog_23C1FDDB",
@@ -6502,9 +6323,6 @@
           "perflog_15990177",
           "perflog_F0B3D366",
           "perflog_91BF3F63",
-          "perflog_C9FACD49",
-          "perflog_1AD66AB7",
-          "perflog_9B47FF2C",
           "perflog_74E1B752",
           "perflog_E2F073B2",
           "perflog_502F888C",
@@ -6584,10 +6402,6 @@
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_73EBB9",
           "perflog_47E9DAA9",
-          "sort_by_score_67892F",
-          "copy_item_meta_info_2DD71A",
-          "pack_item_attr_23AA43",
-          "perflog_DB17E8AA",
           "sort_by_score_65BEFC",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BF3CBC",
