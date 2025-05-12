@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "13e544da0764f550411881bf97f11f6d_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 17:04:00",
+  "_CONFIG_VERSION": "d500d3e9a97fa136905c233a177268b0_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 18:06:44",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -20,6 +20,35 @@
   "pipeline_manager_config": {
     "base_pipeline": {
       "processor": {
+        "_branch_controller_180B909D": {
+          "$branch_start": "_branch_controller_180B909D",
+          "$code_info": "[if] 180B909D main_process_flow.py in fetch_photo_info(): .if_(\"enable_use_nebula_request_type == 1 and is_nebula_user == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "enable_use_nebula_request_type",
+              "is_nebula_user"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_4"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_3",
+            "enable_use_nebula_request_type",
+            "is_nebula_user"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (enable_use_nebula_request_type == 1 and is_nebula_user == 1)) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "_branch_controller_2CFC0311": {
           "$branch_start": "_branch_controller_2CFC0311",
           "$code_info": "[if] 2CFC0311 direct_retrieval_flow.py in _do_retr(): return self.if_(\"enable_frequency_control == 1 and frequency_enable == 0\")",
@@ -82,12 +111,12 @@
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_if_control_attr_6"
+              "_if_control_attr_7"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_if_control_attr_6"
+            "_if_control_attr_7"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
@@ -102,24 +131,24 @@
           "$code_info": "[else] 82701129 gen_result_flow.py in _default_flow(): abtest_biz_name=\"KUAISHOU_APPS\"",
           "$metadata": {
             "$input_common_attrs": [
-              "_if_control_attr_6"
+              "_if_control_attr_7"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_else_control_attr_7"
+              "_else_control_attr_8"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_else_control_attr_7"
+            "_else_control_attr_8"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
           "import_common_attr": [
-            "_if_control_attr_6"
+            "_if_control_attr_7"
           ],
-          "lua_script": "function evaluate() if (_if_control_attr_6 == 1) then return false else return true end end",
+          "lua_script": "function evaluate() if (_if_control_attr_7 == 1) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_7543B0B2": {
@@ -133,12 +162,12 @@
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_if_control_attr_4"
+              "_if_control_attr_5"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_if_control_attr_4"
+            "_if_control_attr_5"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
@@ -155,25 +184,25 @@
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_3",
-              "_if_control_attr_4"
+              "_if_control_attr_5"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_else_control_attr_5"
+              "_else_control_attr_6"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_else_control_attr_5"
+            "_else_control_attr_6"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
           "import_common_attr": [
             "_if_control_attr_3",
-            "_if_control_attr_4"
+            "_if_control_attr_5"
           ],
-          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (_if_control_attr_4 == 1)) then return false else return true end end",
+          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (_if_control_attr_5 == 1)) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_EB7701DB": {
@@ -229,30 +258,10 @@
           "output_item_attr": "reco_photo_info_str",
           "type_name": "CommonRecoProtobufBuildAttrEnricher"
         },
-        "calc_by_formula1_25CB1B": {
+        "calc_by_formula1_5B1218": {
           "$metadata": {
             "$input_common_attrs": [
-              "_if_control_attr_6"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": [
-              "f1_score"
-            ]
-          },
-          "abtest_biz_name": "KUAISHOU_APPS",
-          "export_formula_value": [
-            "f1_score"
-          ],
-          "kconf_key": "formula.scenarioKey15.retrieval_leaf_xtr_filter_f1_nebula",
-          "skip": "{{_if_control_attr_6}}",
-          "type_name": "CommonRecoFormulaOneEnricher"
-        },
-        "calc_by_formula1_B22B16": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_else_control_attr_7"
+              "_else_control_attr_8"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -266,7 +275,27 @@
             "f1_score"
           ],
           "kconf_key": "formula.scenarioKey60.retrieval_leaf_xtr_filter_f1_gamora",
-          "skip": "{{_else_control_attr_7}}",
+          "skip": "{{_else_control_attr_8}}",
+          "type_name": "CommonRecoFormulaOneEnricher"
+        },
+        "calc_by_formula1_D61250": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_7"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "f1_score"
+            ]
+          },
+          "abtest_biz_name": "KUAISHOU_APPS",
+          "export_formula_value": [
+            "f1_score"
+          ],
+          "kconf_key": "formula.scenarioKey15.retrieval_leaf_xtr_filter_f1_nebula",
+          "skip": "{{_if_control_attr_7}}",
           "type_name": "CommonRecoFormulaOneEnricher"
         },
         "copy_item_meta_info_863564": {
@@ -339,7 +368,8 @@
         "delegate_enrich_main_model": {
           "$metadata": {
             "$input_common_attrs": [
-              "_else_control_attr_5",
+              "_else_control_attr_6",
+              "main_model_request_type",
               "retr_type",
               "reward_model_timeout",
               "tab_id",
@@ -599,7 +629,7 @@
             "search_page_photo_click",
             "l2r_pxtr"
           ],
-          "request_type": "predict_for_gamora",
+          "request_type": "{{main_model_request_type}}",
           "send_common_attrs": [
             {
               "as": "user_info_str",
@@ -618,7 +648,7 @@
               "name": "is_living"
             }
           ],
-          "skip": "{{_else_control_attr_5}}",
+          "skip": "{{_else_control_attr_6}}",
           "timeout_ms": "{{reward_model_timeout}}",
           "type_name": "CommonRecoDelegateEnricher",
           "use_packed_item_attr": true
@@ -626,8 +656,9 @@
         "delegate_enrich_main_model_copy": {
           "$metadata": {
             "$input_common_attrs": [
-              "_if_control_attr_4",
+              "_if_control_attr_5",
               "fr_model_copy_kess_name",
+              "main_model_request_type",
               "retr_type",
               "reward_model_timeout",
               "tab_id",
@@ -887,7 +918,7 @@
             "search_page_photo_click",
             "l2r_pxtr"
           ],
-          "request_type": "predict_for_gamora",
+          "request_type": "{{main_model_request_type}}",
           "send_common_attrs": [
             {
               "as": "user_info_str",
@@ -906,7 +937,7 @@
               "name": "is_living"
             }
           ],
-          "skip": "{{_if_control_attr_4}}",
+          "skip": "{{_if_control_attr_5}}",
           "timeout_ms": "{{reward_model_timeout}}",
           "type_name": "CommonRecoDelegateEnricher",
           "use_packed_item_attr": true
@@ -1283,30 +1314,6 @@
           ],
           "lua_script": "function calc()\n            local wtd = wtd_v2 or 0\n            return wtd\n          end",
           "skip": "{{_if_control_attr_3}}",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_F4F4DF": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "is_gamora_user",
-              "is_nebula_user"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "fr_request_type"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "fr_request_type"
-          ],
-          "function_for_common": "calculate",
-          "import_common_attr": [
-            "is_nebula_user",
-            "is_gamora_user"
-          ],
-          "lua_script": "function calculate()\n          local is_nebula_user = is_nebula_user or 0\n          local is_gamora_user = is_gamora_user or 0\n          if is_nebula_user == 1 then\n            return \"predict_for_nebula\"\n          end\n          if is_gamora_user == 1 then \n            return \"predict_for_gamora\"\n          end\n          return \"default\"\n        end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_with_protobuf_2CC9DE": {
@@ -2101,7 +2108,42 @@
           "on_item_attr": "catorgery_level_1",
           "type_name": "CommonRecoCommonAttrFilterArranger"
         },
-        "get_abtest_params_1FF824": {
+        "get_abtest_params_2111B0": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_ABTEST_USER_TAG_NAMES_",
+              "_ABTEST_USER_TAG_VALUES_"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "enable_use_fr_model_copy_v2",
+              "fr_model_copy_kess_name",
+              "one_piece_leaf_kconfig"
+            ],
+            "$output_item_attrs": []
+          },
+          "ab_params": [
+            {
+              "default_value": "rinf.rlRunner.one_piece_leaf_kconfig",
+              "param_name": "one_piece_leaf_kconfig",
+              "param_type": "string"
+            },
+            {
+              "default_value": false,
+              "param_name": "enable_use_fr_model_copy_v2",
+              "param_type": "bool"
+            },
+            {
+              "default_value": "grpc_hqg24q4ModelComboCopy",
+              "param_name": "fr_model_copy_kess_name",
+              "param_type": "string"
+            }
+          ],
+          "biz_name": "KUAISHOU_APPS",
+          "type_name": "CommonRecoAbtestCommonAttrEnricher"
+        },
+        "get_abtest_params_3762CD": {
           "$metadata": {
             "$input_common_attrs": [
               "_ABTEST_USER_TAG_NAMES_",
@@ -2113,6 +2155,7 @@
               "audit_b_second_tag_expand_normal",
               "audit_risk_immd_tag_filter_str_gamora",
               "author_type_vv_thresh_type_string",
+              "enable_use_nebula_request_type",
               "high_hot_audit_second_level_black_tags",
               "impression_audit_second_level_black_tags",
               "sexy_content_filter_str_gamora",
@@ -2155,46 +2198,16 @@
               "default_value": "2000860",
               "param_name": "audit_b_second_tag_expand_normal",
               "param_type": "int"
+            },
+            {
+              "default_value": "0",
+              "param_name": "enable_use_nebula_request_type",
+              "param_type": "int"
             }
           ],
           "biz_name": "KUAISHOU_APPS",
           "deduplicate": true,
           "parallel_get": 32,
-          "type_name": "CommonRecoAbtestCommonAttrEnricher"
-        },
-        "get_abtest_params_2111B0": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_ABTEST_USER_TAG_NAMES_",
-              "_ABTEST_USER_TAG_VALUES_"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "enable_use_fr_model_copy_v2",
-              "fr_model_copy_kess_name",
-              "one_piece_leaf_kconfig"
-            ],
-            "$output_item_attrs": []
-          },
-          "ab_params": [
-            {
-              "default_value": "rinf.rlRunner.one_piece_leaf_kconfig",
-              "param_name": "one_piece_leaf_kconfig",
-              "param_type": "string"
-            },
-            {
-              "default_value": false,
-              "param_name": "enable_use_fr_model_copy_v2",
-              "param_type": "bool"
-            },
-            {
-              "default_value": "grpc_hqg24q4ModelComboCopy",
-              "param_name": "fr_model_copy_kess_name",
-              "param_type": "string"
-            }
-          ],
-          "biz_name": "KUAISHOU_APPS",
           "type_name": "CommonRecoAbtestCommonAttrEnricher"
         },
         "get_item_attr_by_distributed_index_4AB9B0": {
@@ -2754,6 +2767,28 @@
           "status_code": 0,
           "type_name": "CommonRecoExecutionStatusEnricher"
         },
+        "set_attr_value_4DA3E3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "main_model_request_type"
+            ],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            {
+              "name": "main_model_request_type",
+              "type": "string",
+              "value": "predict_for_nebula"
+            }
+          ],
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoItemAttrDefaultValueEnricher"
+        },
         "set_attr_value_5CE6B9": {
           "$metadata": {
             "$input_common_attrs": [
@@ -2774,6 +2809,28 @@
             }
           ],
           "no_overwrite": true,
+          "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoItemAttrDefaultValueEnricher"
+        },
+        "set_attr_value_D7EC3E": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "main_model_request_type"
+            ],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            {
+              "name": "main_model_request_type",
+              "type": "string",
+              "value": "predict_for_gamora"
+            }
+          ],
           "skip": "{{_if_control_attr_3}}",
           "type_name": "CommonRecoItemAttrDefaultValueEnricher"
         },
@@ -2957,9 +3014,9 @@
         "__PARENT": "base_pipeline",
         "pipeline": [
           "_branch_controller_306DCE5F",
-          "calc_by_formula1_25CB1B",
+          "calc_by_formula1_D61250",
           "_branch_controller_306DCE5F_else",
-          "calc_by_formula1_B22B16",
+          "calc_by_formula1_5B1218",
           "perflog_attr_value_4CA779",
           "perflog_attr_value_8C6404",
           "sort_by_score_FB8439"
@@ -2975,6 +3032,9 @@
           "build_protobuf_640AD3",
           "_branch_controller_EB7701DB",
           "set_attr_value_5CE6B9",
+          "set_attr_value_D7EC3E",
+          "_branch_controller_180B909D",
+          "set_attr_value_4DA3E3",
           "_branch_controller_7543B0B2",
           "delegate_enrich_main_model_copy",
           "_branch_controller_7543B0B2_else",
@@ -2987,12 +3047,11 @@
         "pipeline": [
           "parse_protobuf_from_string_5F9EFF",
           "copy_user_meta_info_D8585E",
-          "enrich_attr_by_lua_F4F4DF",
           "enrich_with_protobuf_2CC9DE",
           "enrich_attr_by_lua_171426",
           "get_kconf_params_B3F91C",
           "get_kconf_params_DEA748",
-          "get_abtest_params_1FF824",
+          "get_abtest_params_3762CD",
           "split_string_list_60E188",
           "split_string_list_151641",
           "split_string_list_EC5996",
