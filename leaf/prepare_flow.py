@@ -122,7 +122,7 @@ class PrepareFlow(LeafFlow, NrApiMixin):
     )
   
   def get_abtest_params(self):
-    return (
+    (
       self.get_abtest_params(
         biz_name = "KUAISHOU_APPS",
         ab_params = [{
