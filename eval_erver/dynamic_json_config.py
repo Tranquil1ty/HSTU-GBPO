@@ -588,13 +588,13 @@ class CallEvalServer(LeafFlow):
                 target_item = { "item_seq": [0, 1, 2, 3, 4, 5] }
             )
             .enrich_attr_by_lua(
-                import_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
-                export_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
+                import_common_attr=[f"{sorted_attr_name}_SORTED_TOP6_AVG"],
+                export_common_attr=[f"{sorted_attr_name}_SORTED_TOP6_AVG"],
                 function_for_common="calc",
                 lua_script=f"""
                 function calc()
-                    {EOL.join(f"local {x} = math.floor({x}_SORTED_TOP6_AVG*10000)" for x in perf_pxtrs)}
-                    return {", ".join(x for x in perf_pxtrs)}
+                    {EOL.join(f"local {sorted_attr_name} = math.floor({sorted_attr_name}_SORTED_TOP6_AVG*10000)" for x in perf_pxtrs)}
+                    return {sorted_attr_name}
                 end
                 """
             )
