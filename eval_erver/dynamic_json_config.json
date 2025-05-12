@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "f19a1c7317edb413aa866f78e8aedc2b_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:15:26",
+  "_CONFIG_VERSION": "af01ff4847790754cd12ee21f8f44c0c_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:54:23",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1504,6 +1504,118 @@
           "lua_script": "function calculate()\n                    local common_eval_kess_list_index = common_eval_kess_list_index or 1\n                    common_eval_kess_list_index = common_eval_kess_list_index + 1\n                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size\n                    local common_eval_kess_name = \"\"\n                    if (is_keep_call_eval) then\n                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]\n                    end\n                    return common_eval_kess_list_index,\n                           common_eval_kess_name,\n                           is_keep_call_eval\n                end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
+        "enrich_attr_by_lua_7ABC25": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "adp_wtd_AVG",
+              "cltr_AVG",
+              "cmef_AVG",
+              "cmtr_AVG",
+              "cpr_AVG",
+              "dtr_AVG",
+              "epstr_AVG",
+              "evtr_AVG",
+              "f1_score_AVG",
+              "ftr_AVG",
+              "htr_AVG",
+              "lsst_AVG",
+              "ltr_AVG",
+              "lvtr_AVG",
+              "playlet_ctr_AVG",
+              "ptr_AVG",
+              "qtr_AVG",
+              "session_play_time_AVG",
+              "setr2_AVG",
+              "svr_AVG",
+              "vtr_AVG",
+              "wtd_v2_AVG",
+              "wtr_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "adp_wtd_AVG",
+              "cltr_AVG",
+              "cmef_AVG",
+              "cmtr_AVG",
+              "cpr_AVG",
+              "dtr_AVG",
+              "epstr_AVG",
+              "evtr_AVG",
+              "f1_score_AVG",
+              "ftr_AVG",
+              "htr_AVG",
+              "lsst_AVG",
+              "ltr_AVG",
+              "lvtr_AVG",
+              "playlet_ctr_AVG",
+              "ptr_AVG",
+              "qtr_AVG",
+              "session_play_time_AVG",
+              "setr2_AVG",
+              "svr_AVG",
+              "vtr_AVG",
+              "wtd_v2_AVG",
+              "wtr_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "evtr_AVG",
+            "ltr_AVG",
+            "wtr_AVG",
+            "ftr_AVG",
+            "cmtr_AVG",
+            "lvtr_AVG",
+            "vtr_AVG",
+            "ptr_AVG",
+            "lsst_AVG",
+            "wtd_v2_AVG",
+            "cpr_AVG",
+            "session_play_time_AVG",
+            "qtr_AVG",
+            "dtr_AVG",
+            "epstr_AVG",
+            "cmef_AVG",
+            "cltr_AVG",
+            "adp_wtd_AVG",
+            "playlet_ctr_AVG",
+            "setr2_AVG",
+            "f1_score_AVG",
+            "svr_AVG",
+            "htr_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "evtr_AVG",
+            "ltr_AVG",
+            "wtr_AVG",
+            "ftr_AVG",
+            "cmtr_AVG",
+            "lvtr_AVG",
+            "vtr_AVG",
+            "ptr_AVG",
+            "lsst_AVG",
+            "wtd_v2_AVG",
+            "cpr_AVG",
+            "session_play_time_AVG",
+            "qtr_AVG",
+            "dtr_AVG",
+            "epstr_AVG",
+            "cmef_AVG",
+            "cltr_AVG",
+            "adp_wtd_AVG",
+            "playlet_ctr_AVG",
+            "setr2_AVG",
+            "f1_score_AVG",
+            "svr_AVG",
+            "htr_AVG"
+          ],
+          "lua_script": "function calc()\n                local evtr = math.floor(evtr_AVG*10000)\nlocal ltr = math.floor(ltr_AVG*10000)\nlocal wtr = math.floor(wtr_AVG*10000)\nlocal ftr = math.floor(ftr_AVG*10000)\nlocal cmtr = math.floor(cmtr_AVG*10000)\nlocal lvtr = math.floor(lvtr_AVG*10000)\nlocal vtr = math.floor(vtr_AVG*10000)\nlocal ptr = math.floor(ptr_AVG*10000)\nlocal lsst = math.floor(lsst_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_AVG*10000)\nlocal cpr = math.floor(cpr_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_AVG*10000)\nlocal qtr = math.floor(qtr_AVG*10000)\nlocal dtr = math.floor(dtr_AVG*10000)\nlocal epstr = math.floor(epstr_AVG*10000)\nlocal cmef = math.floor(cmef_AVG*10000)\nlocal cltr = math.floor(cltr_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_AVG*10000)\nlocal setr2 = math.floor(setr2_AVG*10000)\nlocal f1_score = math.floor(f1_score_AVG*10000)\nlocal svr = math.floor(svr_AVG*10000)\nlocal htr = math.floor(htr_AVG*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score, svr, htr\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_attr_by_lua_81186C": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1598,110 +1710,6 @@
           ],
           "lua_script": "function gen_common_attrs() return (tostring(tab_id)) end",
           "skip": "{{_if_control_attr_5}}",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_A78DE2": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "adp_wtd_AVG",
-              "cltr_AVG",
-              "cmef_AVG",
-              "cmtr_AVG",
-              "cpr_AVG",
-              "dtr_AVG",
-              "epstr_AVG",
-              "evtr_AVG",
-              "f1_score_AVG",
-              "ftr_AVG",
-              "lsst_AVG",
-              "ltr_AVG",
-              "lvtr_AVG",
-              "playlet_ctr_AVG",
-              "ptr_AVG",
-              "qtr_AVG",
-              "session_play_time_AVG",
-              "setr2_AVG",
-              "vtr_AVG",
-              "wtd_v2_AVG",
-              "wtr_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "adp_wtd_AVG",
-              "cltr_AVG",
-              "cmef_AVG",
-              "cmtr_AVG",
-              "cpr_AVG",
-              "dtr_AVG",
-              "epstr_AVG",
-              "evtr_AVG",
-              "f1_score_AVG",
-              "ftr_AVG",
-              "lsst_AVG",
-              "ltr_AVG",
-              "lvtr_AVG",
-              "playlet_ctr_AVG",
-              "ptr_AVG",
-              "qtr_AVG",
-              "session_play_time_AVG",
-              "setr2_AVG",
-              "vtr_AVG",
-              "wtd_v2_AVG",
-              "wtr_AVG"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "evtr_AVG",
-            "ltr_AVG",
-            "wtr_AVG",
-            "ftr_AVG",
-            "cmtr_AVG",
-            "lvtr_AVG",
-            "vtr_AVG",
-            "ptr_AVG",
-            "lsst_AVG",
-            "wtd_v2_AVG",
-            "cpr_AVG",
-            "session_play_time_AVG",
-            "qtr_AVG",
-            "dtr_AVG",
-            "epstr_AVG",
-            "cmef_AVG",
-            "cltr_AVG",
-            "adp_wtd_AVG",
-            "playlet_ctr_AVG",
-            "setr2_AVG",
-            "f1_score_AVG"
-          ],
-          "function_for_common": "calc",
-          "import_common_attr": [
-            "evtr_AVG",
-            "ltr_AVG",
-            "wtr_AVG",
-            "ftr_AVG",
-            "cmtr_AVG",
-            "lvtr_AVG",
-            "vtr_AVG",
-            "ptr_AVG",
-            "lsst_AVG",
-            "wtd_v2_AVG",
-            "cpr_AVG",
-            "session_play_time_AVG",
-            "qtr_AVG",
-            "dtr_AVG",
-            "epstr_AVG",
-            "cmef_AVG",
-            "cltr_AVG",
-            "adp_wtd_AVG",
-            "playlet_ctr_AVG",
-            "setr2_AVG",
-            "f1_score_AVG"
-          ],
-          "lua_script": "function calc()\n                local evtr = math.floor(evtr_AVG*10000)\nlocal ltr = math.floor(ltr_AVG*10000)\nlocal wtr = math.floor(wtr_AVG*10000)\nlocal ftr = math.floor(ftr_AVG*10000)\nlocal cmtr = math.floor(cmtr_AVG*10000)\nlocal lvtr = math.floor(lvtr_AVG*10000)\nlocal vtr = math.floor(vtr_AVG*10000)\nlocal ptr = math.floor(ptr_AVG*10000)\nlocal lsst = math.floor(lsst_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_AVG*10000)\nlocal cpr = math.floor(cpr_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_AVG*10000)\nlocal qtr = math.floor(qtr_AVG*10000)\nlocal dtr = math.floor(dtr_AVG*10000)\nlocal epstr = math.floor(epstr_AVG*10000)\nlocal cmef = math.floor(cmef_AVG*10000)\nlocal cltr = math.floor(cltr_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_AVG*10000)\nlocal setr2 = math.floor(setr2_AVG*10000)\nlocal f1_score = math.floor(f1_score_AVG*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score\n            end",
-          "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_A8B83F": {
@@ -2483,6 +2491,325 @@
               5
             ]
           },
+          "type_name": "CommonRecoItemAttrPackEnricher"
+        },
+        "pack_item_attr_5018D3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$input_item_attrs": [
+              "adp_wtd",
+              "cltr",
+              "cmef",
+              "cmtr",
+              "cpr",
+              "dtr",
+              "epstr",
+              "evtr",
+              "f1_score",
+              "ftr",
+              "htr",
+              "lsst",
+              "ltr",
+              "lvtr",
+              "playlet_ctr",
+              "ptr",
+              "qtr",
+              "session_play_time",
+              "setr2",
+              "svr",
+              "vtr",
+              "wtd_v2",
+              "wtr"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "adp_wtd_AVG",
+              "adp_wtd_MAX",
+              "cltr_AVG",
+              "cltr_MAX",
+              "cmef_AVG",
+              "cmef_MAX",
+              "cmtr_AVG",
+              "cmtr_MAX",
+              "cpr_AVG",
+              "cpr_MAX",
+              "dtr_AVG",
+              "dtr_MAX",
+              "epstr_AVG",
+              "epstr_MAX",
+              "evtr_AVG",
+              "evtr_MAX",
+              "f1_score_AVG",
+              "f1_score_MAX",
+              "ftr_AVG",
+              "ftr_MAX",
+              "htr_AVG",
+              "htr_MIN",
+              "lsst_AVG",
+              "lsst_MAX",
+              "ltr_AVG",
+              "ltr_MAX",
+              "lvtr_AVG",
+              "lvtr_MAX",
+              "playlet_ctr_AVG",
+              "playlet_ctr_MAX",
+              "ptr_AVG",
+              "ptr_MAX",
+              "qtr_AVG",
+              "qtr_MAX",
+              "session_play_time_AVG",
+              "session_play_time_MAX",
+              "setr2_AVG",
+              "setr2_MAX",
+              "svr_AVG",
+              "svr_MIN",
+              "vtr_AVG",
+              "vtr_MAX",
+              "wtd_v2_AVG",
+              "wtd_v2_MAX",
+              "wtr_AVG",
+              "wtr_MAX"
+            ],
+            "$output_item_attrs": []
+          },
+          "item_source": {
+            "reco_results": true
+          },
+          "mappings": [
+            {
+              "aggregator": "max",
+              "from_item_attr": "evtr",
+              "to_common_attr": "evtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "ltr",
+              "to_common_attr": "ltr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "wtr",
+              "to_common_attr": "wtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "ftr",
+              "to_common_attr": "ftr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "cmtr",
+              "to_common_attr": "cmtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "lvtr",
+              "to_common_attr": "lvtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "vtr",
+              "to_common_attr": "vtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "ptr",
+              "to_common_attr": "ptr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "lsst",
+              "to_common_attr": "lsst_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "wtd_v2",
+              "to_common_attr": "wtd_v2_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "cpr",
+              "to_common_attr": "cpr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "session_play_time",
+              "to_common_attr": "session_play_time_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "qtr",
+              "to_common_attr": "qtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "dtr",
+              "to_common_attr": "dtr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "epstr",
+              "to_common_attr": "epstr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "cmef",
+              "to_common_attr": "cmef_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "cltr",
+              "to_common_attr": "cltr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "adp_wtd",
+              "to_common_attr": "adp_wtd_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "playlet_ctr",
+              "to_common_attr": "playlet_ctr_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "setr2",
+              "to_common_attr": "setr2_MAX"
+            },
+            {
+              "aggregator": "max",
+              "from_item_attr": "f1_score",
+              "to_common_attr": "f1_score_MAX"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "evtr",
+              "to_common_attr": "evtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "ltr",
+              "to_common_attr": "ltr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "wtr",
+              "to_common_attr": "wtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "ftr",
+              "to_common_attr": "ftr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "cmtr",
+              "to_common_attr": "cmtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "lvtr",
+              "to_common_attr": "lvtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "vtr",
+              "to_common_attr": "vtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "ptr",
+              "to_common_attr": "ptr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "lsst",
+              "to_common_attr": "lsst_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "wtd_v2",
+              "to_common_attr": "wtd_v2_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "cpr",
+              "to_common_attr": "cpr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "session_play_time",
+              "to_common_attr": "session_play_time_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "qtr",
+              "to_common_attr": "qtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "dtr",
+              "to_common_attr": "dtr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "epstr",
+              "to_common_attr": "epstr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "cmef",
+              "to_common_attr": "cmef_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "cltr",
+              "to_common_attr": "cltr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "adp_wtd",
+              "to_common_attr": "adp_wtd_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "playlet_ctr",
+              "to_common_attr": "playlet_ctr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "setr2",
+              "to_common_attr": "setr2_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "f1_score",
+              "to_common_attr": "f1_score_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "svr",
+              "to_common_attr": "svr_AVG"
+            },
+            {
+              "aggregator": "avg",
+              "from_item_attr": "htr",
+              "to_common_attr": "htr_AVG"
+            },
+            {
+              "aggregator": "min",
+              "from_item_attr": "svr",
+              "to_common_attr": "svr_MIN"
+            },
+            {
+              "aggregator": "min",
+              "from_item_attr": "htr",
+              "to_common_attr": "htr_MIN"
+            }
+          ],
+          "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoItemAttrPackEnricher"
         },
         "pack_item_attr_67614E": {
@@ -3429,313 +3756,6 @@
           },
           "type_name": "CommonRecoItemAttrPackEnricher"
         },
-        "pack_item_attr_ED4327": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [
-              "adp_wtd",
-              "cltr",
-              "cmef",
-              "cmtr",
-              "cpr",
-              "dtr",
-              "epstr",
-              "evtr",
-              "f1_score",
-              "ftr",
-              "htr",
-              "lsst",
-              "ltr",
-              "lvtr",
-              "playlet_ctr",
-              "ptr",
-              "qtr",
-              "session_play_time",
-              "setr2",
-              "svr",
-              "vtr",
-              "wtd_v2",
-              "wtr"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "adp_wtd_AVG",
-              "adp_wtd_MAX",
-              "cltr_AVG",
-              "cltr_MAX",
-              "cmef_AVG",
-              "cmef_MAX",
-              "cmtr_AVG",
-              "cmtr_MAX",
-              "cpr_AVG",
-              "cpr_MAX",
-              "dtr_AVG",
-              "dtr_MAX",
-              "epstr_AVG",
-              "epstr_MAX",
-              "evtr_AVG",
-              "evtr_MAX",
-              "f1_score_AVG",
-              "f1_score_MAX",
-              "ftr_AVG",
-              "ftr_MAX",
-              "htr_MIN",
-              "lsst_AVG",
-              "lsst_MAX",
-              "ltr_AVG",
-              "ltr_MAX",
-              "lvtr_AVG",
-              "lvtr_MAX",
-              "playlet_ctr_AVG",
-              "playlet_ctr_MAX",
-              "ptr_AVG",
-              "ptr_MAX",
-              "qtr_AVG",
-              "qtr_MAX",
-              "session_play_time_AVG",
-              "session_play_time_MAX",
-              "setr2_AVG",
-              "setr2_MAX",
-              "svr_MIN",
-              "vtr_AVG",
-              "vtr_MAX",
-              "wtd_v2_AVG",
-              "wtd_v2_MAX",
-              "wtr_AVG",
-              "wtr_MAX"
-            ],
-            "$output_item_attrs": []
-          },
-          "item_source": {
-            "reco_results": true
-          },
-          "mappings": [
-            {
-              "aggregator": "max",
-              "from_item_attr": "evtr",
-              "to_common_attr": "evtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "ltr",
-              "to_common_attr": "ltr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "wtr",
-              "to_common_attr": "wtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "ftr",
-              "to_common_attr": "ftr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "cmtr",
-              "to_common_attr": "cmtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "lvtr",
-              "to_common_attr": "lvtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "vtr",
-              "to_common_attr": "vtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "ptr",
-              "to_common_attr": "ptr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "lsst",
-              "to_common_attr": "lsst_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "wtd_v2",
-              "to_common_attr": "wtd_v2_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "cpr",
-              "to_common_attr": "cpr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "session_play_time",
-              "to_common_attr": "session_play_time_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "qtr",
-              "to_common_attr": "qtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "dtr",
-              "to_common_attr": "dtr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "epstr",
-              "to_common_attr": "epstr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "cmef",
-              "to_common_attr": "cmef_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "cltr",
-              "to_common_attr": "cltr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "adp_wtd",
-              "to_common_attr": "adp_wtd_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "playlet_ctr",
-              "to_common_attr": "playlet_ctr_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "setr2",
-              "to_common_attr": "setr2_MAX"
-            },
-            {
-              "aggregator": "max",
-              "from_item_attr": "f1_score",
-              "to_common_attr": "f1_score_MAX"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "evtr",
-              "to_common_attr": "evtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "ltr",
-              "to_common_attr": "ltr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "wtr",
-              "to_common_attr": "wtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "ftr",
-              "to_common_attr": "ftr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "cmtr",
-              "to_common_attr": "cmtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "lvtr",
-              "to_common_attr": "lvtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "vtr",
-              "to_common_attr": "vtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "ptr",
-              "to_common_attr": "ptr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "lsst",
-              "to_common_attr": "lsst_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "wtd_v2",
-              "to_common_attr": "wtd_v2_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "cpr",
-              "to_common_attr": "cpr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "session_play_time",
-              "to_common_attr": "session_play_time_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "qtr",
-              "to_common_attr": "qtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "dtr",
-              "to_common_attr": "dtr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "epstr",
-              "to_common_attr": "epstr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "cmef",
-              "to_common_attr": "cmef_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "cltr",
-              "to_common_attr": "cltr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "adp_wtd",
-              "to_common_attr": "adp_wtd_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "playlet_ctr",
-              "to_common_attr": "playlet_ctr_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "setr2",
-              "to_common_attr": "setr2_AVG"
-            },
-            {
-              "aggregator": "avg",
-              "from_item_attr": "f1_score",
-              "to_common_attr": "f1_score_AVG"
-            },
-            {
-              "aggregator": "min",
-              "from_item_attr": "svr",
-              "to_common_attr": "svr_MIN"
-            },
-            {
-              "aggregator": "min",
-              "from_item_attr": "htr",
-              "to_common_attr": "htr_MIN"
-            }
-          ],
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoItemAttrPackEnricher"
-        },
         "parse_protobuf_from_string_9CCC3F": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4330,6 +4350,29 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{setr2_AVG}}"
         },
+        "perflog_71FD5B97": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "common_eval_kess_name",
+              "svr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "{{common_eval_kess_name}}",
+          "extra2": "svr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_4}}",
+          "subtag": "onerec_reward_value_eval",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{svr_AVG}}"
+        },
         "perflog_73AB58CE": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4398,6 +4441,29 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{epstr_MAX}}"
+        },
+        "perflog_76200F4D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "common_eval_kess_name",
+              "htr_AVG",
+              "tab_id_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "extra1": "{{common_eval_kess_name}}",
+          "extra2": "htr_AVG",
+          "extra3": "{{tab_id_str}}",
+          "mode": "interval",
+          "namespace": "common.leaf",
+          "skip": "{{_if_control_attr_4}}",
+          "subtag": "onerec_reward_value_eval",
+          "type_name": "CommonRecoPerflogObserver",
+          "value": "{{htr_AVG}}"
         },
         "perflog_77B5CCAD": {
           "$metadata": {
@@ -6187,52 +6253,54 @@
           "calc_by_formula1_9AFA12",
           "enrich_attr_by_lua_64B83F",
           "perflog_attr_value_88EED3",
-          "pack_item_attr_ED4327",
+          "pack_item_attr_5018D3",
           "enrich_attr_by_lua_CB628D",
-          "enrich_attr_by_lua_A78DE2",
+          "enrich_attr_by_lua_7ABC25",
           "enrich_attr_by_lua_B1FE5E",
           "perflog_F736B5B2",
-          "perflog_23C1FDDB",
           "perflog_ABF1FF67",
-          "perflog_E5E4BE38",
           "perflog_ADB7A5BF",
-          "perflog_BFA3B86C",
           "perflog_A523BDC5",
-          "perflog_C8C7DE47",
           "perflog_1FE9E5C6",
-          "perflog_0DF2CD3C",
           "perflog_A6876BF1",
-          "perflog_20A31894",
           "perflog_469F09FF",
-          "perflog_73AB58CE",
           "perflog_B7EDE64D",
-          "perflog_6484332C",
           "perflog_A8571BDD",
-          "perflog_5714B176",
           "perflog_5A447208",
-          "perflog_F7C5E4CF",
           "perflog_15990177",
-          "perflog_F0B3D366",
           "perflog_74E1B752",
-          "perflog_E2F073B2",
           "perflog_65F1DD71",
-          "perflog_AE3EDAFD",
           "perflog_9B68F3BC",
-          "perflog_E73A7961",
           "perflog_75D2FB0D",
-          "perflog_D9A3F839",
           "perflog_0745D962",
-          "perflog_4C671BA3",
           "perflog_5E6D8F45",
-          "perflog_346AB368",
           "perflog_BA12F432",
-          "perflog_9870DEB6",
           "perflog_F131BE99",
-          "perflog_9A99FA01",
           "perflog_6A83FC68",
-          "perflog_6D61BC01",
           "perflog_8F6D0D79",
+          "perflog_23C1FDDB",
+          "perflog_E5E4BE38",
+          "perflog_BFA3B86C",
+          "perflog_C8C7DE47",
+          "perflog_0DF2CD3C",
+          "perflog_20A31894",
+          "perflog_73AB58CE",
+          "perflog_6484332C",
+          "perflog_5714B176",
+          "perflog_F7C5E4CF",
+          "perflog_F0B3D366",
+          "perflog_E2F073B2",
+          "perflog_AE3EDAFD",
+          "perflog_E73A7961",
+          "perflog_D9A3F839",
+          "perflog_4C671BA3",
+          "perflog_346AB368",
+          "perflog_9870DEB6",
+          "perflog_9A99FA01",
+          "perflog_6D61BC01",
           "perflog_C458592A",
+          "perflog_71FD5B97",
+          "perflog_76200F4D",
           "perflog_DB41FFDB",
           "perflog_9791B53D",
           "sort_by_score_C629CE",
