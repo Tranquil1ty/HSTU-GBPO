@@ -9,6 +9,7 @@ class PrepareFlow(LeafFlow, NrApiMixin):
 
   def _default_flow(self):
     self._pre_pare()
+    self.get_abtest_params()
     return self
     
   def _pre_pare(self):
@@ -23,24 +24,6 @@ class PrepareFlow(LeafFlow, NrApiMixin):
       save_request_id_to_attr="request_id", # = std::to_string(llsid)
       save_request_time_to_attr="request_time",
       save_current_time_ms_to_attr="current_time_ms",
-    ) \
-    .enrich_attr_by_lua(
-      import_common_attr = ["is_nebula_user", "is_gamora_user"],
-      export_common_attr = ["fr_request_type"],
-      function_for_common = "calculate",
-      lua_script = """
-        function calculate()
-          local is_nebula_user = is_nebula_user or 0
-          local is_gamora_user = is_gamora_user or 0
-          if is_nebula_user == 1 then
-            return "predict_for_nebula"
-          end
-          if is_gamora_user == 1 then 
-            return "predict_for_gamora"
-          end
-          return "default"
-        end
-      """
     ) \
     .enrich_with_protobuf(
       from_extra_var="user_info_ptr",
@@ -102,7 +85,45 @@ class PrepareFlow(LeafFlow, NrApiMixin):
         "value_type": "set_int64"
       }]
     ) \
-    .get_abtest_params(
+    .split_string_list(
+        input_common_attr = "audit_risk_immd_tag_filter_str_gamora",
+        output_common_attr = "audit_risk_immd_tag_list",
+        delimiters=",",
+        parse_to_int=True
+    ) \
+    .split_string_list(
+        input_common_attr = "sexy_content_filter_str_gamora",
+        output_common_attr = "sexy_content_filter_list",
+        delimiters=",",
+        parse_to_int=True
+    ) \
+    .split_string_list(
+        input_common_attr = "impression_audit_second_level_black_tags",
+        output_common_attr = "impression_audit_second_level_black_tag_list",
+        delimiters=",",
+        parse_to_int=True
+    ) \
+    .split_string_list(
+        input_common_attr = "high_hot_audit_second_level_black_tags",
+        output_common_attr = "high_hot_audit_second_level_black_tag_list",
+        delimiters=",",
+        parse_to_int=True
+    ) \
+    .split_string_list(
+        input_common_attr = "topk_audit_second_level_black_tags",
+        output_common_attr = "topk_audit_second_level_black_tag_list",
+        delimiters=",",
+        parse_to_int=True
+    ) \
+    .split_string_list(
+        input_common_attr = "author_type_vv_thresh_type_string",
+        output_common_attr = "author_type_vv_thresh_type_string_list",
+        delimiters=",",
+    )
+  
+  def get_abtest_params(self):
+    return (
+      self.get_abtest_params(
         biz_name = "KUAISHOU_APPS",
         ab_params = [{
             "param_name": "audit_risk_immd_tag_filter_str_gamora",
@@ -138,43 +159,14 @@ class PrepareFlow(LeafFlow, NrApiMixin):
             "param_name": "audit_b_second_tag_expand_normal",
             "param_type": "int",
             "default_value": "2000860"
+        },
+        {
+          "param_name": "enable_use_nebula_request_type",
+          "param_type": "int",
+          "default_value": "0"
         }
         ],
         deduplicate=True,
         parallel_get=32
-    ) \
-    .split_string_list(
-        input_common_attr = "audit_risk_immd_tag_filter_str_gamora",
-        output_common_attr = "audit_risk_immd_tag_list",
-        delimiters=",",
-        parse_to_int=True
-    ) \
-    .split_string_list(
-        input_common_attr = "sexy_content_filter_str_gamora",
-        output_common_attr = "sexy_content_filter_list",
-        delimiters=",",
-        parse_to_int=True
-    ) \
-    .split_string_list(
-        input_common_attr = "impression_audit_second_level_black_tags",
-        output_common_attr = "impression_audit_second_level_black_tag_list",
-        delimiters=",",
-        parse_to_int=True
-    ) \
-    .split_string_list(
-        input_common_attr = "high_hot_audit_second_level_black_tags",
-        output_common_attr = "high_hot_audit_second_level_black_tag_list",
-        delimiters=",",
-        parse_to_int=True
-    ) \
-    .split_string_list(
-        input_common_attr = "topk_audit_second_level_black_tags",
-        output_common_attr = "topk_audit_second_level_black_tag_list",
-        delimiters=",",
-        parse_to_int=True
-    ) \
-    .split_string_list(
-        input_common_attr = "author_type_vv_thresh_type_string",
-        output_common_attr = "author_type_vv_thresh_type_string_list",
-        delimiters=",",
+      )
     )

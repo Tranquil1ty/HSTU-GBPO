@@ -113,11 +113,27 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
           "value": 1
         }]
       ) \
+      .set_attr_value(
+        common_attrs=[{
+          "name": "main_model_request_type",
+          "type": "string",
+          "value": "predict_for_gamora"
+        }]
+      ) \
+      .if_("enable_use_nebula_request_type == 1 and is_nebula_user == 1") \
+      .set_attr_value(
+        common_attrs=[{
+          "name": "main_model_request_type",
+          "type": "string",
+          "value": "predict_for_nebula"
+        }]
+      ) \
+      .end_if_() \
       .if_("enable_use_fr_model_copy_v2 == 1") \
       .delegate_enrich(
         name = "delegate_enrich_main_model_copy",
         kess_service="{{fr_model_copy_kess_name}}",
-        request_type="predict_for_gamora",
+        request_type="{{main_model_request_type}}",
         timeout_ms="{{reward_model_timeout}}",
         send_common_attrs = [
             {"name": "user_info_attr", "as": "user_info_str"},
@@ -136,7 +152,7 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
       .delegate_enrich(
         name = "delegate_enrich_main_model",
         kess_service="grpc_hqg24q4ModelComboFinal",
-        request_type="predict_for_gamora",
+        request_type="{{main_model_request_type}}",
         timeout_ms="{{reward_model_timeout}}",
         send_common_attrs = [
             {"name": "user_info_attr", "as": "user_info_str"},
