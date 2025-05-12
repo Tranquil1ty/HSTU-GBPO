@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "ed60b40a3c6a61251626ada8b89f0039_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 10:41:21",
+  "_CONFIG_VERSION": "de8b065718a7511b4f4d2c86eaa201cc_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:00:51",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1636,54 +1636,73 @@
           "timeout_ms": 100,
           "type_name": "CommonRecoRemoteEmbeddingAttrRawLiteEnricher"
         },
-        "log_debug_info_1BFC0D": {
+        "log_debug_info_7B7D0B": {
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_4",
               "adp_wtd_AVG",
               "adp_wtd_MAX",
+              "adp_wtd_SORTED_TOP6_AVG",
               "cltr_AVG",
               "cltr_MAX",
+              "cltr_SORTED_TOP6_AVG",
               "cmef_AVG",
               "cmef_MAX",
+              "cmef_SORTED_TOP6_AVG",
               "cmtr_AVG",
               "cmtr_MAX",
+              "cmtr_SORTED_TOP6_AVG",
               "cpr_AVG",
               "cpr_MAX",
+              "cpr_SORTED_TOP6_AVG",
               "dtr_AVG",
               "dtr_MAX",
+              "dtr_SORTED_TOP6_AVG",
               "epstr_AVG",
               "epstr_MAX",
+              "epstr_SORTED_TOP6_AVG",
               "evtr_AVG",
               "evtr_MAX",
+              "evtr_SORTED_TOP6_AVG",
               "f1_score_AVG",
               "f1_score_MAX",
+              "f1_score_SORTED_TOP6_AVG",
               "ftr_AVG",
               "ftr_MAX",
-              "htr_MIN",
+              "ftr_SORTED_TOP6_AVG",
               "lsst_AVG",
               "lsst_MAX",
+              "lsst_SORTED_TOP6_AVG",
               "ltr_AVG",
               "ltr_MAX",
+              "ltr_SORTED_TOP6_AVG",
               "lvtr_AVG",
               "lvtr_MAX",
+              "lvtr_SORTED_TOP6_AVG",
               "playlet_ctr_AVG",
               "playlet_ctr_MAX",
+              "playlet_ctr_SORTED_TOP6_AVG",
               "ptr_AVG",
               "ptr_MAX",
+              "ptr_SORTED_TOP6_AVG",
               "qtr_AVG",
               "qtr_MAX",
+              "qtr_SORTED_TOP6_AVG",
               "session_play_time_AVG",
               "session_play_time_MAX",
+              "session_play_time_SORTED_TOP6_AVG",
               "setr2_AVG",
               "setr2_MAX",
-              "svr_MIN",
+              "setr2_SORTED_TOP6_AVG",
               "vtr_AVG",
               "vtr_MAX",
+              "vtr_SORTED_TOP6_AVG",
               "wtd_v2_AVG",
               "wtd_v2_MAX",
+              "wtd_v2_SORTED_TOP6_AVG",
               "wtr_AVG",
-              "wtr_MAX"
+              "wtr_MAX",
+              "wtr_SORTED_TOP6_AVG"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -1733,41 +1752,30 @@
             "playlet_ctr_AVG",
             "setr2_AVG",
             "f1_score_AVG",
-            "svr_MIN",
-            "htr_MIN"
+            "evtr_SORTED_TOP6_AVG",
+            "ltr_SORTED_TOP6_AVG",
+            "wtr_SORTED_TOP6_AVG",
+            "ftr_SORTED_TOP6_AVG",
+            "cmtr_SORTED_TOP6_AVG",
+            "lvtr_SORTED_TOP6_AVG",
+            "vtr_SORTED_TOP6_AVG",
+            "ptr_SORTED_TOP6_AVG",
+            "lsst_SORTED_TOP6_AVG",
+            "wtd_v2_SORTED_TOP6_AVG",
+            "cpr_SORTED_TOP6_AVG",
+            "session_play_time_SORTED_TOP6_AVG",
+            "qtr_SORTED_TOP6_AVG",
+            "dtr_SORTED_TOP6_AVG",
+            "epstr_SORTED_TOP6_AVG",
+            "cmef_SORTED_TOP6_AVG",
+            "cltr_SORTED_TOP6_AVG",
+            "adp_wtd_SORTED_TOP6_AVG",
+            "playlet_ctr_SORTED_TOP6_AVG",
+            "setr2_SORTED_TOP6_AVG",
+            "f1_score_SORTED_TOP6_AVG"
           ],
           "for_debug_request_only": false,
-          "log_tag": "hqg_debug.onerec.eval.perf",
-          "respect_sample_logging": false,
-          "skip": "{{_if_control_attr_4}}",
-          "type_name": "CommonRecoDebugInfoObserver"
-        },
-        "log_debug_info_2F9B4F": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_list_index",
-              "common_eval_kess_list_size",
-              "common_eval_kess_name",
-              "full_rank_req_type",
-              "is_keep_call_eval",
-              "item_num"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "common_attrs": [
-            "common_eval_kess_list_size",
-            "common_eval_kess_list_index",
-            "common_eval_kess_name",
-            "is_keep_call_eval",
-            "item_num",
-            "full_rank_req_type"
-          ],
-          "for_debug_request_only": false,
-          "log_tag": "hqg_debug.onerec.eval.reward_eval_after_fr",
+          "log_tag": "hqg_debug.onerec.eval.sorted_perf",
           "respect_sample_logging": false,
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoDebugInfoObserver"
@@ -3287,29 +3295,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{session_play_time_SORTED_TOP6_AVG}}"
         },
-        "perflog_1568528D": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "cmef_TOP6_AVG",
-              "common_eval_kess_name",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "cmef_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cmef_TOP6_AVG}}"
-        },
         "perflog_15990177": {
           "$metadata": {
             "$input_common_attrs": [
@@ -3355,52 +3340,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{cmef_SORTED_TOP6_AVG}}"
-        },
-        "perflog_1D1693DC": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "lvtr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "lvtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{lvtr_TOP6_AVG}}"
-        },
-        "perflog_1FE150B5": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "lsst_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "lsst_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{lsst_TOP6_AVG}}"
         },
         "perflog_1FE9E5C6": {
           "$metadata": {
@@ -3471,29 +3410,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{evtr_AVG}}"
         },
-        "perflog_26683940": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "dtr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "dtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{dtr_TOP6_AVG}}"
-        },
         "perflog_28B6116E": {
           "$metadata": {
             "$input_common_attrs": [
@@ -3563,29 +3479,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{cltr_AVG}}"
         },
-        "perflog_35D4EA88": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "epstr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "epstr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{epstr_TOP6_AVG}}"
-        },
         "perflog_364C6172": {
           "$metadata": {
             "$input_common_attrs": [
@@ -3608,52 +3501,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{ftr_SORTED_TOP6_AVG}}"
-        },
-        "perflog_40163AF4": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "vtr_TOP6_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "vtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{vtr_TOP6_AVG}}"
-        },
-        "perflog_44321433": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "f1_score_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "f1_score_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{f1_score_TOP6_AVG}}"
         },
         "perflog_45EFA4D4": {
           "$metadata": {
@@ -3770,29 +3617,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{cmef_AVG}}"
         },
-        "perflog_502F888C": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "session_play_time_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "session_play_time_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{session_play_time_TOP6_AVG}}"
-        },
         "perflog_5714B176": {
           "$metadata": {
             "$input_common_attrs": [
@@ -3908,29 +3732,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{qtr_MAX}}"
         },
-        "perflog_67AD2699": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "adp_wtd_TOP6_AVG",
-              "common_eval_kess_name",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "adp_wtd_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{adp_wtd_TOP6_AVG}}"
-        },
         "perflog_6A83FC68": {
           "$metadata": {
             "$input_common_attrs": [
@@ -3977,29 +3778,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{setr2_AVG}}"
         },
-        "perflog_6F416074": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtd_v2_TOP6_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtd_v2_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtd_v2_TOP6_AVG}}"
-        },
         "perflog_73AB58CE": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4045,29 +3823,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{session_play_time_MAX}}"
-        },
-        "perflog_75C396F5": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "setr2_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "setr2_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{setr2_TOP6_AVG}}"
         },
         "perflog_75D2FB0D": {
           "$metadata": {
@@ -4184,29 +3939,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{f1_score_MAX}}"
         },
-        "perflog_91BF3F63": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "cpr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "cpr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cpr_TOP6_AVG}}"
-        },
         "perflog_92AC2465": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4252,29 +3984,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{evtr_SORTED_TOP6_AVG}}"
-        },
-        "perflog_94257DDA": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "playlet_ctr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "playlet_ctr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{playlet_ctr_TOP6_AVG}}"
         },
         "perflog_95C373AB": {
           "$metadata": {
@@ -4644,29 +4353,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{qtr_AVG}}"
         },
-        "perflog_B00ABA8B": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "ltr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "ltr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ltr_TOP6_AVG}}"
-        },
         "perflog_B73E8206": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4713,29 +4399,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{ptr_MAX}}"
         },
-        "perflog_B824A5CA": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "tab_id_str",
-              "wtr_TOP6_AVG"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "wtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{wtr_TOP6_AVG}}"
-        },
         "perflog_BA12F432": {
           "$metadata": {
             "$input_common_attrs": [
@@ -4758,29 +4421,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{adp_wtd_MAX}}"
-        },
-        "perflog_BF09C596": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "cmtr_TOP6_AVG",
-              "common_eval_kess_name",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "cmtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cmtr_TOP6_AVG}}"
         },
         "perflog_BFA3B86C": {
           "$metadata": {
@@ -4850,29 +4490,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{f1_score_AVG}}"
-        },
-        "perflog_C8411EA4": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "qtr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "qtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{qtr_TOP6_AVG}}"
         },
         "perflog_C8C7DE47": {
           "$metadata": {
@@ -5012,29 +4629,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{wtr_SORTED_TOP6_AVG}}"
         },
-        "perflog_E206034A": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "evtr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "evtr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{evtr_TOP6_AVG}}"
-        },
         "perflog_E2F073B2": {
           "$metadata": {
             "$input_common_attrs": [
@@ -5149,29 +4743,6 @@
           "subtag": "onerec_hit_rate_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{hit_rate_1}}"
-        },
-        "perflog_EC8D0115": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "cltr_TOP6_AVG",
-              "common_eval_kess_name",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "cltr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{cltr_TOP6_AVG}}"
         },
         "perflog_F0B3D366": {
           "$metadata": {
@@ -5288,29 +4859,6 @@
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{wtd_v2_AVG}}"
         },
-        "perflog_F88C6F01": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "ptr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "ptr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ptr_TOP6_AVG}}"
-        },
         "perflog_F92DE165": {
           "$metadata": {
             "$input_common_attrs": [
@@ -5333,29 +4881,6 @@
           "subtag": "onerec_reward_value_eval",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{cmtr_SORTED_TOP6_AVG}}"
-        },
-        "perflog_FCD87C41": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4",
-              "common_eval_kess_name",
-              "ftr_TOP6_AVG",
-              "tab_id_str"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "extra1": "{{common_eval_kess_name}}",
-          "extra2": "ftr_TOP6_AVG",
-          "extra3": "{{tab_id_str}}",
-          "mode": "interval",
-          "namespace": "common.leaf",
-          "skip": "{{_if_control_attr_4}}",
-          "subtag": "onerec_reward_value_eval",
-          "type_name": "CommonRecoPerflogObserver",
-          "value": "{{ftr_TOP6_AVG}}"
         },
         "perflog_attr_value_151D3F": {
           "$metadata": {
@@ -6107,164 +5632,162 @@
           "set_attr_value_6C647F",
           "enrich_attr_by_lua_58578D",
           "delegate_enrich_main_model",
-          "log_debug_info_2F9B4F",
           "calc_by_formula1_9AFA12",
           "enrich_attr_by_lua_64B83F",
           "perflog_attr_value_88EED3",
           "pack_item_attr_ED4327",
           "enrich_attr_by_lua_CB628D",
-          "log_debug_info_1BFC0D",
           "enrich_attr_by_lua_A78DE2",
           "enrich_attr_by_lua_B1FE5E",
           "perflog_F736B5B2",
           "perflog_23C1FDDB",
-          "perflog_E206034A",
           "perflog_ABF1FF67",
           "perflog_E5E4BE38",
-          "perflog_B00ABA8B",
           "perflog_ADB7A5BF",
           "perflog_BFA3B86C",
-          "perflog_B824A5CA",
           "perflog_A523BDC5",
           "perflog_C8C7DE47",
-          "perflog_FCD87C41",
           "perflog_1FE9E5C6",
           "perflog_0DF2CD3C",
-          "perflog_BF09C596",
           "perflog_A6876BF1",
           "perflog_20A31894",
-          "perflog_1D1693DC",
           "perflog_469F09FF",
           "perflog_73AB58CE",
-          "perflog_40163AF4",
           "perflog_B7EDE64D",
           "perflog_6484332C",
-          "perflog_F88C6F01",
           "perflog_A8571BDD",
           "perflog_5714B176",
-          "perflog_1FE150B5",
           "perflog_5A447208",
           "perflog_F7C5E4CF",
-          "perflog_6F416074",
           "perflog_15990177",
           "perflog_F0B3D366",
-          "perflog_91BF3F63",
           "perflog_74E1B752",
           "perflog_E2F073B2",
-          "perflog_502F888C",
           "perflog_65F1DD71",
           "perflog_AE3EDAFD",
-          "perflog_C8411EA4",
           "perflog_9B68F3BC",
           "perflog_E73A7961",
-          "perflog_26683940",
           "perflog_75D2FB0D",
           "perflog_D9A3F839",
-          "perflog_35D4EA88",
           "perflog_0745D962",
           "perflog_4C671BA3",
-          "perflog_1568528D",
           "perflog_5E6D8F45",
           "perflog_346AB368",
-          "perflog_EC8D0115",
           "perflog_BA12F432",
           "perflog_9870DEB6",
-          "perflog_67AD2699",
           "perflog_F131BE99",
           "perflog_9A99FA01",
-          "perflog_94257DDA",
           "perflog_6A83FC68",
           "perflog_6D61BC01",
-          "perflog_75C396F5",
           "perflog_8F6D0D79",
           "perflog_C458592A",
-          "perflog_44321433",
           "perflog_DB41FFDB",
           "perflog_9791B53D",
           "sort_by_score_C629CE",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_A5CE3E",
           "perflog_92E24A13",
+          "log_debug_info_7B7D0B",
           "sort_by_score_16BB49",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BFAB7F",
           "perflog_C00DD9E2",
+          "log_debug_info_7B7D0B",
           "sort_by_score_4A3027",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D3C1BF",
           "perflog_DC123F6D",
+          "log_debug_info_7B7D0B",
           "sort_by_score_9F9082",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_1AA7E9",
           "perflog_364C6172",
+          "log_debug_info_7B7D0B",
           "sort_by_score_22273F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_AFF27C",
           "perflog_F92DE165",
+          "log_debug_info_7B7D0B",
           "sort_by_score_803A31",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_9145B4",
           "perflog_A724EA5D",
+          "log_debug_info_7B7D0B",
           "sort_by_score_4EF005",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_94D3BF",
           "perflog_F1895DB9",
+          "log_debug_info_7B7D0B",
           "sort_by_score_B9A788",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_6D3D91",
           "perflog_4B915D84",
+          "log_debug_info_7B7D0B",
           "sort_by_score_40CC9D",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D05165",
           "perflog_45EFA4D4",
+          "log_debug_info_7B7D0B",
           "sort_by_score_8798B1",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_94C73A",
           "perflog_77B5CCAD",
+          "log_debug_info_7B7D0B",
           "sort_by_score_3B476F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_73EBB9",
           "perflog_47E9DAA9",
+          "log_debug_info_7B7D0B",
           "sort_by_score_65BEFC",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BF3CBC",
           "perflog_14F97D7B",
+          "log_debug_info_7B7D0B",
           "sort_by_score_1906B1",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_2F8984",
           "perflog_9E3E7775",
+          "log_debug_info_7B7D0B",
           "sort_by_score_73D75F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_CA0C9C",
           "perflog_28B6116E",
+          "log_debug_info_7B7D0B",
           "sort_by_score_EB1DD5",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_A9DFDD",
           "perflog_95C373AB",
+          "log_debug_info_7B7D0B",
           "sort_by_score_E13387",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_AFAE1C",
           "perflog_184A112C",
+          "log_debug_info_7B7D0B",
           "sort_by_score_F5FEB5",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_67614E",
           "perflog_A90DBEDE",
+          "log_debug_info_7B7D0B",
           "sort_by_score_828369",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_9541EB",
           "perflog_E90321EC",
+          "log_debug_info_7B7D0B",
           "sort_by_score_2D5C8C",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BC9841",
           "perflog_92AC2465",
+          "log_debug_info_7B7D0B",
           "sort_by_score_43AA69",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_DFBEC6",
           "perflog_A35AAF5F",
+          "log_debug_info_7B7D0B",
           "sort_by_score_32D09E",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_CAD498",
           "perflog_B73E8206",
+          "log_debug_info_7B7D0B",
           "sort_by_score_C16408",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D0E4A1",
@@ -6330,5 +5853,5 @@
       "thread_num": -1
     }
   },
-  "service_identifier": "common-tdm-eval"
+  "service_identifier": "common-onerec-eval"
 }
