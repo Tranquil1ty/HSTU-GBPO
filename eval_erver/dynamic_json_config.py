@@ -71,8 +71,8 @@ main_model_pxtrs = [
     "bubble_sr", "search_page_photo_show", "search_page_photo_click"
 ]
 
-perf_pxtrs = ["", "", "", "", "", "", "", "", "", "", ""]
-perf_pxtrs += ["", "", "", "", "", "", "", "", "setr2"]
+perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
+perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
 perf_pxtrs += ["f1_score"]
 
 min_pxtrs = ["svr", "htr"]
