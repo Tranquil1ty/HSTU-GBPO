@@ -450,15 +450,6 @@ class CallEvalServer(LeafFlow):
             partition_size=256,
             use_packed_item_attr=True
         )
-        .log_debug_info(
-                log_tag="hqg_debug.onerec.eval.reward_eval_after_fr",
-                common_attrs=["common_eval_kess_list_size",
-                                    "common_eval_kess_list_index",
-                                    "common_eval_kess_name",
-                                    "is_keep_call_eval", "item_num", "full_rank_req_type"],
-                for_debug_request_only=False,
-                respect_sample_logging=False
-        )
         .calc_by_formula1(
             import_item_attr=main_model_pxtrs,
             kconf_key="formula.scenarioKey58.ll_dpo_train_f1",
@@ -509,11 +500,6 @@ class CallEvalServer(LeafFlow):
                 return {", ".join(x for x in perf_pxtrs)}
             end
             """
-        ).log_debug_info(
-            log_tag="hqg_debug.onerec.eval.perf",
-            common_attrs=[f"{x}_MAX" for x in perf_pxtrs] + [f"{x}_AVG" for x in perf_pxtrs] + [f"{x}_MIN" for x in min_pxtrs],
-            for_debug_request_only=False,
-            respect_sample_logging=False
         )
 
         self.enrich_attr_by_lua(
@@ -560,16 +546,6 @@ class CallEvalServer(LeafFlow):
                 extra2=x+"_AVG",
                 extra3="{{tab_id_str}}"
             )
-
-            self.perflog(
-                mode="interval",
-                value="{{" + x+"_TOP6_AVG" + "}}",
-                namespace=namespace,
-                subtag=subtag,
-                extra1="{{common_eval_kess_name}}",
-                extra2=x+"_TOP6_AVG",
-                extra3="{{tab_id_str}}"
-            )
         
         for x in min_pxtrs:
             self.perflog(
@@ -584,7 +560,13 @@ class CallEvalServer(LeafFlow):
 
         # 按精排 排序后的 top6
         for x in perf_pxtrs:
-            self.perf_sorted_reward_value(namespace, subtag, x)
+            self.perf_sorted_reward_value(namespace, subtag, x) \
+            .log_debug_info(
+                log_tag="hqg_debug.onerec.eval.sorted_perf",
+                common_attrs=[f"{x}_MAX" for x in perf_pxtrs] + [f"{x}_AVG" for x in perf_pxtrs] + [f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
+                for_debug_request_only=False,
+                respect_sample_logging=False
+            )
         for x in min_pxtrs:
             self.perf_sorted_reward_value(namespace, subtag, x, desc=False)
 
@@ -650,7 +632,7 @@ finish_stage = FinishStage("finish_stage")
 finish_stage.finish_clean("finish_eval")
 
 def generate_pipeline():
-    runner = OfflineRunner("common-tdm-eval")
+    runner = OfflineRunner("grpc_onerec_eval_runner")
     runner.ENABLE_ATTR_CHECK = False
     runner.add_leaf_flows(leaf_flows=[
         read_log,
@@ -662,7 +644,7 @@ def generate_pipeline():
     return runner
 
 def generate_debug_pipeline():
-    runner = OfflineRunner("common-grm-eval-debug")
+    runner = OfflineRunner("grpc_onerec_eval_runner")
     runner.ENABLE_ATTR_CHECK = False
     runner.add_leaf_flows(leaf_flows=[
         read_log,
