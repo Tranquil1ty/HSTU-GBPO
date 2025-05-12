@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "b474b56639e9019599949917805242ab_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:07:11",
+  "_CONFIG_VERSION": "f19a1c7317edb413aa866f78e8aedc2b_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:15:26",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1053,6 +1053,54 @@
           "timeout_ms": 10000,
           "type_name": "CommonRecoDelegateRetriever"
         },
+        "enrich_attr_by_lua_09D6DA": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "ftr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "ftr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "ftr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "ftr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\n                    return ftr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_0A9A21": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "adp_wtd_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "adp_wtd_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "adp_wtd_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "adp_wtd_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\n                    return adp_wtd\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_attr_by_lua_0E3C5F": {
           "$metadata": {
             "$downstream_item_attrs": [
@@ -1087,107 +1135,99 @@
           "skip": "{{_if_control_attr_3}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_2F4404": {
+        "enrich_attr_by_lua_1ED557": {
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_4",
-              "adp_wtd_SORTED_TOP6_AVG",
-              "cltr_SORTED_TOP6_AVG",
-              "cmef_SORTED_TOP6_AVG",
-              "cmtr_SORTED_TOP6_AVG",
-              "cpr_SORTED_TOP6_AVG",
-              "dtr_SORTED_TOP6_AVG",
-              "epstr_SORTED_TOP6_AVG",
-              "evtr_SORTED_TOP6_AVG",
-              "f1_score_SORTED_TOP6_AVG",
-              "ftr_SORTED_TOP6_AVG",
-              "lsst_SORTED_TOP6_AVG",
-              "ltr_SORTED_TOP6_AVG",
-              "lvtr_SORTED_TOP6_AVG",
-              "playlet_ctr_SORTED_TOP6_AVG",
-              "ptr_SORTED_TOP6_AVG",
-              "qtr_SORTED_TOP6_AVG",
-              "session_play_time_SORTED_TOP6_AVG",
-              "setr2_SORTED_TOP6_AVG",
-              "vtr_SORTED_TOP6_AVG",
-              "wtd_v2_SORTED_TOP6_AVG",
-              "wtr_SORTED_TOP6_AVG"
+              "cpr_SORTED_TOP6_AVG"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "adp_wtd_SORTED_TOP6_AVG",
-              "cltr_SORTED_TOP6_AVG",
-              "cmef_SORTED_TOP6_AVG",
-              "cmtr_SORTED_TOP6_AVG",
-              "cpr_SORTED_TOP6_AVG",
-              "dtr_SORTED_TOP6_AVG",
-              "epstr_SORTED_TOP6_AVG",
-              "evtr_SORTED_TOP6_AVG",
-              "f1_score_SORTED_TOP6_AVG",
-              "ftr_SORTED_TOP6_AVG",
-              "lsst_SORTED_TOP6_AVG",
-              "ltr_SORTED_TOP6_AVG",
-              "lvtr_SORTED_TOP6_AVG",
-              "playlet_ctr_SORTED_TOP6_AVG",
-              "ptr_SORTED_TOP6_AVG",
-              "qtr_SORTED_TOP6_AVG",
-              "session_play_time_SORTED_TOP6_AVG",
-              "setr2_SORTED_TOP6_AVG",
-              "vtr_SORTED_TOP6_AVG",
-              "wtd_v2_SORTED_TOP6_AVG",
-              "wtr_SORTED_TOP6_AVG"
+              "cpr_SORTED_TOP6_AVG"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "evtr_SORTED_TOP6_AVG",
-            "ltr_SORTED_TOP6_AVG",
-            "wtr_SORTED_TOP6_AVG",
-            "ftr_SORTED_TOP6_AVG",
-            "cmtr_SORTED_TOP6_AVG",
-            "lvtr_SORTED_TOP6_AVG",
-            "vtr_SORTED_TOP6_AVG",
-            "ptr_SORTED_TOP6_AVG",
-            "lsst_SORTED_TOP6_AVG",
-            "wtd_v2_SORTED_TOP6_AVG",
-            "cpr_SORTED_TOP6_AVG",
-            "session_play_time_SORTED_TOP6_AVG",
-            "qtr_SORTED_TOP6_AVG",
-            "dtr_SORTED_TOP6_AVG",
-            "epstr_SORTED_TOP6_AVG",
-            "cmef_SORTED_TOP6_AVG",
-            "cltr_SORTED_TOP6_AVG",
-            "adp_wtd_SORTED_TOP6_AVG",
-            "playlet_ctr_SORTED_TOP6_AVG",
-            "setr2_SORTED_TOP6_AVG",
-            "f1_score_SORTED_TOP6_AVG"
+            "cpr_SORTED_TOP6_AVG"
           ],
           "function_for_common": "calc",
           "import_common_attr": [
-            "evtr_SORTED_TOP6_AVG",
-            "ltr_SORTED_TOP6_AVG",
-            "wtr_SORTED_TOP6_AVG",
-            "ftr_SORTED_TOP6_AVG",
-            "cmtr_SORTED_TOP6_AVG",
-            "lvtr_SORTED_TOP6_AVG",
-            "vtr_SORTED_TOP6_AVG",
-            "ptr_SORTED_TOP6_AVG",
-            "lsst_SORTED_TOP6_AVG",
-            "wtd_v2_SORTED_TOP6_AVG",
-            "cpr_SORTED_TOP6_AVG",
-            "session_play_time_SORTED_TOP6_AVG",
-            "qtr_SORTED_TOP6_AVG",
-            "dtr_SORTED_TOP6_AVG",
-            "epstr_SORTED_TOP6_AVG",
-            "cmef_SORTED_TOP6_AVG",
-            "cltr_SORTED_TOP6_AVG",
-            "adp_wtd_SORTED_TOP6_AVG",
-            "playlet_ctr_SORTED_TOP6_AVG",
-            "setr2_SORTED_TOP6_AVG",
-            "f1_score_SORTED_TOP6_AVG"
+            "cpr_SORTED_TOP6_AVG"
           ],
-          "lua_script": "function calc()\n                    local evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal ftr = math.floor(ftr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal adp_wtd = math.floor(adp_wtd_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\n                    return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score\n                end",
+          "lua_script": "function calc()\n                    local cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\nlocal cpr = math.floor(cpr_SORTED_TOP6_AVG*10000)\n                    return cpr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_25C8D3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "cmef_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "cmef_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "cmef_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "cmef_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\nlocal cmef = math.floor(cmef_SORTED_TOP6_AVG*10000)\n                    return cmef\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_2D961C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "cltr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "cltr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "cltr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "cltr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\nlocal cltr = math.floor(cltr_SORTED_TOP6_AVG*10000)\n                    return cltr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_387BEC": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "epstr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "epstr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "epstr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "epstr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\nlocal epstr = math.floor(epstr_SORTED_TOP6_AVG*10000)\n                    return epstr\n                end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -1213,6 +1253,126 @@
           "lua_script": "function gen_common_attrs() return (tostring(tab_id)) end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
+        "enrich_attr_by_lua_415945": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "cmtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "cmtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "cmtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "cmtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\nlocal cmtr = math.floor(cmtr_SORTED_TOP6_AVG*10000)\n                    return cmtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_465D30": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "htr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "htr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "htr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "htr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\nlocal htr = math.floor(htr_SORTED_TOP6_AVG*10000)\n                    return htr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_4812D4": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "evtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "evtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "evtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "evtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\nlocal evtr = math.floor(evtr_SORTED_TOP6_AVG*10000)\n                    return evtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_4DED79": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "ptr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "ptr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "ptr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "ptr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\nlocal ptr = math.floor(ptr_SORTED_TOP6_AVG*10000)\n                    return ptr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_4EB351": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "lsst_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "lsst_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "lsst_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "lsst_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\nlocal lsst = math.floor(lsst_SORTED_TOP6_AVG*10000)\n                    return lsst\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_attr_by_lua_58578D": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1234,6 +1394,30 @@
             "tab_id"
           ],
           "lua_script": "function func()\n                local full_rank_req_type = 'predict_for_gamora'\n                if tab_id == 30000 then\n                    full_rank_req_type = 'predict_for_nebula'\n                end\n                return full_rank_req_type\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_5D8593": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "playlet_ctr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "playlet_ctr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "playlet_ctr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "playlet_ctr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_SORTED_TOP6_AVG*10000)\n                    return playlet_ctr\n                end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -1318,6 +1502,78 @@
             "common_eval_kess_list_index"
           ],
           "lua_script": "function calculate()\n                    local common_eval_kess_list_index = common_eval_kess_list_index or 1\n                    common_eval_kess_list_index = common_eval_kess_list_index + 1\n                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size\n                    local common_eval_kess_name = \"\"\n                    if (is_keep_call_eval) then\n                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]\n                    end\n                    return common_eval_kess_list_index,\n                           common_eval_kess_name,\n                           is_keep_call_eval\n                end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_81186C": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "wtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "wtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "wtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "wtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\nlocal wtr = math.floor(wtr_SORTED_TOP6_AVG*10000)\n                    return wtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_831F65": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "setr2_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "setr2_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "setr2_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "setr2_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\nlocal setr2 = math.floor(setr2_SORTED_TOP6_AVG*10000)\n                    return setr2\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_8337A4": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "session_play_time_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "session_play_time_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "session_play_time_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "session_play_time_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\nlocal session_play_time = math.floor(session_play_time_SORTED_TOP6_AVG*10000)\n                    return session_play_time\n                end",
+          "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_8B4B26": {
@@ -1448,6 +1704,30 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
+        "enrich_attr_by_lua_A8B83F": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "wtd_v2_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "wtd_v2_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "wtd_v2_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "wtd_v2_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\nlocal wtd_v2 = math.floor(wtd_v2_SORTED_TOP6_AVG*10000)\n                    return wtd_v2\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_attr_by_lua_ADAD5A": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1519,6 +1799,102 @@
             "htr_MIN"
           ],
           "lua_script": "function calc()\n                local svr = math.floor(svr_MIN*10000)\nlocal htr = math.floor(htr_MIN*10000)\n                return svr, htr\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_B23FC1": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "lvtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "lvtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "lvtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "lvtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\nlocal lvtr = math.floor(lvtr_SORTED_TOP6_AVG*10000)\n                    return lvtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_B99209": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "f1_score_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "f1_score_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "f1_score_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "f1_score_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\nlocal f1_score = math.floor(f1_score_SORTED_TOP6_AVG*10000)\n                    return f1_score\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_C287AA": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "vtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "vtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "vtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "vtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\nlocal vtr = math.floor(vtr_SORTED_TOP6_AVG*10000)\n                    return vtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_C91DE1": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "ltr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "ltr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "ltr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "ltr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\nlocal ltr = math.floor(ltr_SORTED_TOP6_AVG*10000)\n                    return ltr\n                end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -1623,6 +1999,78 @@
             "f1_score_MAX"
           ],
           "lua_script": "function calc()\n                local evtr = math.floor(evtr_MAX*10000)\nlocal ltr = math.floor(ltr_MAX*10000)\nlocal wtr = math.floor(wtr_MAX*10000)\nlocal ftr = math.floor(ftr_MAX*10000)\nlocal cmtr = math.floor(cmtr_MAX*10000)\nlocal lvtr = math.floor(lvtr_MAX*10000)\nlocal vtr = math.floor(vtr_MAX*10000)\nlocal ptr = math.floor(ptr_MAX*10000)\nlocal lsst = math.floor(lsst_MAX*10000)\nlocal wtd_v2 = math.floor(wtd_v2_MAX*10000)\nlocal cpr = math.floor(cpr_MAX*10000)\nlocal session_play_time = math.floor(session_play_time_MAX*10000)\nlocal qtr = math.floor(qtr_MAX*10000)\nlocal dtr = math.floor(dtr_MAX*10000)\nlocal epstr = math.floor(epstr_MAX*10000)\nlocal cmef = math.floor(cmef_MAX*10000)\nlocal cltr = math.floor(cltr_MAX*10000)\nlocal adp_wtd = math.floor(adp_wtd_MAX*10000)\nlocal playlet_ctr = math.floor(playlet_ctr_MAX*10000)\nlocal setr2 = math.floor(setr2_MAX*10000)\nlocal f1_score = math.floor(f1_score_MAX*10000)\n                return evtr, ltr, wtr, ftr, cmtr, lvtr, vtr, ptr, lsst, wtd_v2, cpr, session_play_time, qtr, dtr, epstr, cmef, cltr, adp_wtd, playlet_ctr, setr2, f1_score\n            end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_CD90DE": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "qtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "qtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "qtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "qtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\nlocal qtr = math.floor(qtr_SORTED_TOP6_AVG*10000)\n                    return qtr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_DFF887": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "svr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "svr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "svr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "svr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\nlocal svr = math.floor(svr_SORTED_TOP6_AVG*10000)\n                    return svr\n                end",
+          "skip": "{{_if_control_attr_4}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_E47BAA": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_4",
+              "dtr_SORTED_TOP6_AVG"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "dtr_SORTED_TOP6_AVG"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "dtr_SORTED_TOP6_AVG"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "dtr_SORTED_TOP6_AVG"
+          ],
+          "lua_script": "function calc()\n                    local dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\nlocal dtr = math.floor(dtr_SORTED_TOP6_AVG*10000)\n                    return dtr\n                end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -5790,138 +6238,138 @@
           "sort_by_score_C629CE",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_A5CE3E",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_4812D4",
           "perflog_92E24A13",
           "log_debug_info_7B7D0B",
           "sort_by_score_16BB49",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BFAB7F",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_C91DE1",
           "perflog_C00DD9E2",
           "log_debug_info_7B7D0B",
           "sort_by_score_4A3027",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D3C1BF",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_81186C",
           "perflog_DC123F6D",
           "log_debug_info_7B7D0B",
           "sort_by_score_9F9082",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_1AA7E9",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_09D6DA",
           "perflog_364C6172",
           "log_debug_info_7B7D0B",
           "sort_by_score_22273F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_AFF27C",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_415945",
           "perflog_F92DE165",
           "log_debug_info_7B7D0B",
           "sort_by_score_803A31",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_9145B4",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_B23FC1",
           "perflog_A724EA5D",
           "log_debug_info_7B7D0B",
           "sort_by_score_4EF005",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_94D3BF",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_C287AA",
           "perflog_F1895DB9",
           "log_debug_info_7B7D0B",
           "sort_by_score_B9A788",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_6D3D91",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_4DED79",
           "perflog_4B915D84",
           "log_debug_info_7B7D0B",
           "sort_by_score_40CC9D",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D05165",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_4EB351",
           "perflog_45EFA4D4",
           "log_debug_info_7B7D0B",
           "sort_by_score_8798B1",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_94C73A",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_A8B83F",
           "perflog_77B5CCAD",
           "log_debug_info_7B7D0B",
           "sort_by_score_3B476F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_73EBB9",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_1ED557",
           "perflog_47E9DAA9",
           "log_debug_info_7B7D0B",
           "sort_by_score_65BEFC",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BF3CBC",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_8337A4",
           "perflog_14F97D7B",
           "log_debug_info_7B7D0B",
           "sort_by_score_1906B1",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_2F8984",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_CD90DE",
           "perflog_9E3E7775",
           "log_debug_info_7B7D0B",
           "sort_by_score_73D75F",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_CA0C9C",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_E47BAA",
           "perflog_28B6116E",
           "log_debug_info_7B7D0B",
           "sort_by_score_EB1DD5",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_A9DFDD",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_387BEC",
           "perflog_95C373AB",
           "log_debug_info_7B7D0B",
           "sort_by_score_E13387",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_AFAE1C",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_25C8D3",
           "perflog_184A112C",
           "log_debug_info_7B7D0B",
           "sort_by_score_F5FEB5",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_67614E",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_2D961C",
           "perflog_A90DBEDE",
           "log_debug_info_7B7D0B",
           "sort_by_score_828369",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_9541EB",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_0A9A21",
           "perflog_E90321EC",
           "log_debug_info_7B7D0B",
           "sort_by_score_2D5C8C",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_BC9841",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_5D8593",
           "perflog_92AC2465",
           "log_debug_info_7B7D0B",
           "sort_by_score_43AA69",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_DFBEC6",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_831F65",
           "perflog_A35AAF5F",
           "log_debug_info_7B7D0B",
           "sort_by_score_32D09E",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_CAD498",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_B99209",
           "perflog_B73E8206",
           "log_debug_info_7B7D0B",
           "sort_by_score_C16408",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_D0E4A1",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_DFF887",
           "perflog_3158E541",
           "sort_by_score_FFD3FA",
           "copy_item_meta_info_2DD71A",
           "pack_item_attr_C71911",
-          "enrich_attr_by_lua_2F4404",
+          "enrich_attr_by_lua_465D30",
           "perflog_79721C57",
           "_branch_controller_6B56DD08",
           "enrich_attr_by_lua_ADAD5A",
