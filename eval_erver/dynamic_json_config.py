@@ -485,7 +485,7 @@ class CallEvalServer(LeafFlow):
     def perf_reward_value(self, namespace, subtag):
         perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
         perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
-        perf_pxtrs += ["f1_score", "log_p"]
+        perf_pxtrs += ["f1_score"]
 
         min_pxtrs = ["svr", "htr"]
         self.pack_item_attr(
