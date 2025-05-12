@@ -562,52 +562,45 @@ class CallEvalServer(LeafFlow):
             )
 
         # 按精排 排序后的 top6
-        for x in perf_pxtrs:
-            self.perf_sorted_reward_value(namespace, subtag, x) \
-            .log_debug_info(
-                log_tag="hqg_debug.onerec.eval.sorted_perf",
-                common_attrs=[f"{x}_MAX" for x in perf_pxtrs] + [f"{x}_AVG" for x in perf_pxtrs] + [f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
-                for_debug_request_only=False,
-                respect_sample_logging=False
-            )
-        for x in min_pxtrs:
-            self.perf_sorted_reward_value(namespace, subtag, x, desc=False)
+        self.perf_sorted_reward_value(namespace, subtag)
 
         return self
     
-    def perf_sorted_reward_value(self, namespace, subtag, sorted_attr_name, desc=True):
+    def perf_sorted_reward_value(self, namespace, subtag, desc=True):
         return (
-            self.sort_by(sorted_attr_name, desc=desc)
+            self.sort_by("f1_score", desc=desc)
             .copy_item_meta_info(
                 save_item_seq_to_attr="item_seq"
             )
             .pack_item_attr(
                 item_source={ "reco_results": True },
                 mappings=[
-                    {"from_item_attr": sorted_attr_name, "to_common_attr": sorted_attr_name+"_SORTED_TOP6_AVG", "aggregator": "avg"}
+                    {"from_item_attr": x, "to_common_attr": x+"_SORTED_TOP6_AVG", "aggregator": "avg"} for x in perf_pxtrs + min_pxtrs
                 ],
                 target_item = { "item_seq": [0, 1, 2, 3, 4, 5] }
             )
             .enrich_attr_by_lua(
-                import_common_attr=[f"{sorted_attr_name}_SORTED_TOP6_AVG"],
-                export_common_attr=[f"{sorted_attr_name}_SORTED_TOP6_AVG"],
+                import_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs + min_pxtrs],
+                export_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs + min_pxtrs],
                 function_for_common="calc",
                 lua_script=f"""
                 function calc()
-                    {EOL.join(f"local {sorted_attr_name} = math.floor({sorted_attr_name}_SORTED_TOP6_AVG*10000)" for x in perf_pxtrs)}
-                    return {sorted_attr_name}
+                    {EOL.join(f"local {x} = math.floor({x}_SORTED_TOP6_AVG*10000)" for x in perf_pxtrs + min_pxtrs)}
+                    return {", ".join(x for x in perf_pxtrs + min_pxtrs)}
                 end
                 """
             )
-            .perflog(
-                mode="interval",
-                value="{{" + sorted_attr_name+"_SORTED_TOP6_AVG" + "}}",
-                namespace=namespace,
-                subtag=subtag,
-                extra1="{{common_eval_kess_name}}",
-                extra2=sorted_attr_name+"_SORTED_TOP6_AVG",
-                extra3="{{tab_id_str}}"
-            )
+
+            for x in perf_pxtrs + min_pxtrs:
+                self.perflog(
+                    mode="interval",
+                    value="{{" + x+"_SORTED_TOP6_AVG" + "}}",
+                    namespace=namespace,
+                    subtag=subtag,
+                    extra1="{{common_eval_kess_name}}",
+                    extra2=x+"_SORTED_TOP6_AVG",
+                    extra3="{{tab_id_str}}"
+                )
         )
     
     def hitrate_perf(self, namespace, subtag):
