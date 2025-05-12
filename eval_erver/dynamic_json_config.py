@@ -632,7 +632,7 @@ finish_stage = FinishStage("finish_stage")
 finish_stage.finish_clean("finish_eval")
 
 def generate_pipeline():
-    runner = OfflineRunner("grpc_onerec_eval_runner")
+    runner = OfflineRunner("common-onerec-eval")
     runner.ENABLE_ATTR_CHECK = False
     runner.add_leaf_flows(leaf_flows=[
         read_log,
@@ -644,7 +644,7 @@ def generate_pipeline():
     return runner
 
 def generate_debug_pipeline():
-    runner = OfflineRunner("grpc_onerec_eval_runner")
+    runner = OfflineRunner("common-onerec-eval-debug")
     runner.ENABLE_ATTR_CHECK = False
     runner.add_leaf_flows(leaf_flows=[
         read_log,
