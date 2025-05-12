@@ -567,7 +567,7 @@ class CallEvalServer(LeafFlow):
         return self
     
     def perf_sorted_reward_value(self, namespace, subtag, desc=True):
-        return (
+        (
             self.sort_by("f1_score", desc=desc)
             .copy_item_meta_info(
                 save_item_seq_to_attr="item_seq"
@@ -590,18 +590,18 @@ class CallEvalServer(LeafFlow):
                 end
                 """
             )
-
-            for x in (perf_pxtrs + min_pxtrs):
-                self.perflog(
-                    mode="interval",
-                    value="{{" + x+"_SORTED_TOP6_AVG" + "}}",
-                    namespace=namespace,
-                    subtag=subtag,
-                    extra1="{{common_eval_kess_name}}",
-                    extra2=x+"_SORTED_TOP6_AVG",
-                    extra3="{{tab_id_str}}"
-                )
         )
+        for x in (perf_pxtrs + min_pxtrs):
+            self.perflog(
+                mode="interval",
+                value="{{" + x+"_SORTED_TOP6_AVG" + "}}",
+                namespace=namespace,
+                subtag=subtag,
+                extra1="{{common_eval_kess_name}}",
+                extra2=x+"_SORTED_TOP6_AVG",
+                extra3="{{tab_id_str}}"
+            )
+        return self
     
     def hitrate_perf(self, namespace, subtag):
         return self \
