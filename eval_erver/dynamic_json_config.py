@@ -470,7 +470,7 @@ class CallEvalServer(LeafFlow):
             function_for_item="calc",
             lua_script="""
                 function calc()
-                    return math.min(f1_score, 2000.0)
+                    return math.min(f1_score, 10000.0)
                 end
             """
         )
