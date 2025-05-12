@@ -591,7 +591,7 @@ class CallEvalServer(LeafFlow):
                 """
             )
 
-            for x in perf_pxtrs + min_pxtrs:
+            for x in (perf_pxtrs + min_pxtrs):
                 self.perflog(
                     mode="interval",
                     value="{{" + x+"_SORTED_TOP6_AVG" + "}}",
