@@ -61,7 +61,7 @@ main_model_pxtrs = [
     "cpr", "evtr_exp", "lvtr_exp", "svr_exp", "vtr_exp", "kyplc", "post_at_comment_score",
     "screen_shot", "search_comment_highlight_click", "search_comment_highlight_trending",
     "watchlive_wtd_combine", "sppc_bottom_bar", "interest_evtr_playtime", "wtd_duration_score",
-    "vtr_calibration_score", "fuse_score", "new_svr", "sppc_combine", "wtd_finish_score",
+    "vtr_calibration_score", "fuse_score", "new_svr", "sppc_combine",
     "cpr_wtd", "wtd_duration_score_v2", "wtd_v2", "caption_searchpage", "click_live",
     "effective_watch_live_time", "setr3_low_active", "search_pure_cmt_highlight_ctr", "itr",
     "playlet_ctr", "adp_wtd", "hashtag_ctr", "peak_evtr", "search_comment_trending_click",
@@ -484,7 +484,7 @@ class CallEvalServer(LeafFlow):
 
     def perf_reward_value(self, namespace, subtag):
         perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
-        perf_pxtrs += ["wtd_finish_score", "session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
+        perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
         perf_pxtrs += ["f1_score", "log_p"]
 
         min_pxtrs = ["svr", "htr"]
