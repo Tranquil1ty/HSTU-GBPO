@@ -257,15 +257,6 @@ class CallEvalServer(LeafFlow):
                 {"from_item_attr": "eval_layer_3", "to_common_attr": "eval_layer_3_list", },
             ]
         )
-        .log_debug_info(
-            log_tag="hqg_debug.onerec.eval.kess",
-            common_attrs=["common_eval_kess_list_size",
-                                "common_eval_kess_list_index",
-                                "common_eval_kess_name",
-                                "is_keep_call_eval"],
-            for_debug_request_only=False,
-            respect_sample_logging=False
-        )
         .limit(0)
         .end_()
     )
@@ -281,6 +272,15 @@ class CallEvalServer(LeafFlow):
                 request_type="default",
                 timeout_ms=10000,
                 request_num=1000
+            )
+            .log_debug_info(
+                log_tag="hqg_debug.onerec.eval.kess",
+                common_attrs=["common_eval_kess_list_size",
+                                    "common_eval_kess_list_index",
+                                    "common_eval_kess_name",
+                                    "is_keep_call_eval"],
+                for_debug_request_only=False,
+                respect_sample_logging=False
             )
             .enrich_attr_by_lua(
                 import_common_attr=["common_eval_kess_list",
@@ -386,6 +386,15 @@ class CallEvalServer(LeafFlow):
 
     def reward_eval(self):
         return (self.count_reco_result(save_count_to="item_num")
+        .log_debug_info(
+                log_tag="hqg_debug.onerec.eval.reward_eval",
+                common_attrs=["common_eval_kess_list_size",
+                                    "common_eval_kess_list_index",
+                                    "common_eval_kess_name",
+                                    "is_keep_call_eval", "item_num"],
+                for_debug_request_only=False,
+                respect_sample_logging=False
+        )
         .if_("item_num > 0")
         .copy_item_meta_info(
             save_item_key_to_attr="item_id",
@@ -441,6 +450,15 @@ class CallEvalServer(LeafFlow):
             partition_size=256,
             use_packed_item_attr=True
         )
+        .log_debug_info(
+                log_tag="hqg_debug.onerec.eval.reward_eval_after_fr",
+                common_attrs=["common_eval_kess_list_size",
+                                    "common_eval_kess_list_index",
+                                    "common_eval_kess_name",
+                                    "is_keep_call_eval", "item_num", "full_rank_req_type"],
+                for_debug_request_only=False,
+                respect_sample_logging=False
+        )
         .calc_by_formula1(
             import_item_attr=main_model_pxtrs,
             kconf_key="formula.scenarioKey58.ll_dpo_train_f1",
@@ -491,6 +509,11 @@ class CallEvalServer(LeafFlow):
                 return {", ".join(x for x in perf_pxtrs)}
             end
             """
+        ).log_debug_info(
+            log_tag="hqg_debug.onerec.eval.perf",
+            common_attrs=[f"{x}_MAX" for x in perf_pxtrs] + [f"{x}_AVG" for x in perf_pxtrs] + [f"{x}_MIN" for x in min_pxtrs],
+            for_debug_request_only=False,
+            respect_sample_logging=False
         )
 
         self.enrich_attr_by_lua(
