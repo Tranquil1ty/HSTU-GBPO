@@ -71,8 +71,8 @@ main_model_pxtrs = [
     "bubble_sr", "search_page_photo_show", "search_page_photo_click"
 ]
 
-perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
-perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
+perf_pxtrs = ["", "", "", "", "", "", "", "", "", "", ""]
+perf_pxtrs += ["", "", "", "", "", "", "", "", "setr2"]
 perf_pxtrs += ["f1_score"]
 
 min_pxtrs = ["svr", "htr"]
@@ -486,7 +486,7 @@ class CallEvalServer(LeafFlow):
             mappings=[
                 {"from_item_attr": x, "to_common_attr": x+"_MAX", "aggregator": "max"} for x in perf_pxtrs
             ] + [
-                {"from_item_attr": x, "to_common_attr": x+"_AVG", "aggregator": "avg"} for x in perf_pxtrs
+                {"from_item_attr": x, "to_common_attr": x+"_AVG", "aggregator": "avg"} for x in perf_pxtrs + min_pxtrs
             ] + [
                 {"from_item_attr": x, "to_common_attr": x+"_MIN", "aggregator": "min"} for x in min_pxtrs
             ]
@@ -505,13 +505,13 @@ class CallEvalServer(LeafFlow):
         )
 
         self.enrich_attr_by_lua(
-            import_common_attr=[f"{x}_AVG" for x in perf_pxtrs],
-            export_common_attr=[f"{x}_AVG" for x in perf_pxtrs],
+            import_common_attr=[f"{x}_AVG" for x in perf_pxtrs + min_pxtrs],
+            export_common_attr=[f"{x}_AVG" for x in perf_pxtrs + min_pxtrs],
             function_for_common="calc",
             lua_script=f"""
             function calc()
-                {EOL.join(f"local {x} = math.floor({x}_AVG*10000)" for x in perf_pxtrs)}
-                return {", ".join(x for x in perf_pxtrs)}
+                {EOL.join(f"local {x} = math.floor({x}_AVG*10000)" for x in perf_pxtrs + min_pxtrs)}
+                return {", ".join(x for x in perf_pxtrs + min_pxtrs)}
             end
             """
         )
@@ -538,7 +538,8 @@ class CallEvalServer(LeafFlow):
                 extra2=x+"_MAX",
                 extra3="{{tab_id_str}}"
             )
-
+        
+        for x in perf_pxtrs + min_pxtrs:
             self.perflog(
                 mode="interval",
                 value="{{" + x+"_AVG" + "}}",
