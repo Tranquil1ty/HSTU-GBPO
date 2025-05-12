@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "af01ff4847790754cd12ee21f8f44c0c_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 11:54:23",
+  "_CONFIG_VERSION": "d39ec559cf44b2383de6a08191ba6357_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-12 12:59:43",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1421,7 +1421,7 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_64B83F": {
+        "enrich_attr_by_lua_6491BF": {
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_4"
@@ -1442,7 +1442,7 @@
           "import_item_attr": [
             "f1_score"
           ],
-          "lua_script": "function calc()\n                    return math.min(f1_score, 2000.0)\n                end",
+          "lua_script": "function calc()\n                    return math.min(f1_score, 10000.0)\n                end",
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
@@ -6251,7 +6251,7 @@
           "enrich_attr_by_lua_58578D",
           "delegate_enrich_main_model",
           "calc_by_formula1_9AFA12",
-          "enrich_attr_by_lua_64B83F",
+          "enrich_attr_by_lua_6491BF",
           "perflog_attr_value_88EED3",
           "pack_item_attr_5018D3",
           "enrich_attr_by_lua_CB628D",
