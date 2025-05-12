@@ -9,7 +9,7 @@ class PrepareFlow(LeafFlow, NrApiMixin):
 
   def _default_flow(self):
     self._pre_pare()
-    self.get_abtest_params()
+    self._get_abtest_params()
     return self
     
   def _pre_pare(self):
@@ -121,8 +121,8 @@ class PrepareFlow(LeafFlow, NrApiMixin):
         delimiters=",",
     )
   
-  def get_abtest_params(self):
-    (
+  def _get_abtest_params(self):
+    return (
       self.get_abtest_params(
         biz_name = "KUAISHOU_APPS",
         ab_params = [{
