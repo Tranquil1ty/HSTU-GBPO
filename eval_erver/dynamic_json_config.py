@@ -71,6 +71,12 @@ main_model_pxtrs = [
     "bubble_sr", "search_page_photo_show", "search_page_photo_click"
 ]
 
+perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
+perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
+perf_pxtrs += ["f1_score"]
+
+min_pxtrs = ["svr", "htr"]
+
 EOL = '\n'
 
 def load_feature_list_sign(filename):
@@ -474,11 +480,7 @@ class CallEvalServer(LeafFlow):
     )
 
     def perf_reward_value(self, namespace, subtag):
-        perf_pxtrs = ["evtr", "ltr", "wtr", "ftr", "cmtr", "lvtr", "vtr", "ptr", "lsst", "wtd_v2", "cpr"]
-        perf_pxtrs += ["session_play_time", "qtr", "dtr", "epstr", "cmef", "cltr", "adp_wtd", "playlet_ctr", "setr2"]
-        perf_pxtrs += ["f1_score"]
 
-        min_pxtrs = ["svr", "htr"]
         self.pack_item_attr(
             item_source={ "reco_results": True },
             mappings=[
@@ -584,6 +586,17 @@ class CallEvalServer(LeafFlow):
                     {"from_item_attr": sorted_attr_name, "to_common_attr": sorted_attr_name+"_SORTED_TOP6_AVG", "aggregator": "avg"}
                 ],
                 target_item = { "item_seq": [0, 1, 2, 3, 4, 5] }
+            )
+            .enrich_attr_by_lua(
+                import_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
+                export_common_attr=[f"{x}_SORTED_TOP6_AVG" for x in perf_pxtrs],
+                function_for_common="calc",
+                lua_script=f"""
+                function calc()
+                    {EOL.join(f"local {x} = math.floor({x}_SORTED_TOP6_AVG*10000)" for x in perf_pxtrs)}
+                    return {", ".join(x for x in perf_pxtrs)}
+                end
+                """
             )
             .perflog(
                 mode="interval",
