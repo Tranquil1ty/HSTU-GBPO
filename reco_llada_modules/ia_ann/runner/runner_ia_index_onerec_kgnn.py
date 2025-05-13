@@ -30,7 +30,8 @@ kconf_key = f"rinf.rlRunner.{identifier}"
 kgnn_shard = 4
 timeout = 1500
 max_subflow_num = 100
-prime_scale = 67
+prime_scale_v1 = 10007
+prime_scale_v2 = 67
 prime_range = 100000000001647
 
 emb_server_config = {
@@ -422,23 +423,23 @@ class I2IRunnerFlow(
         self.fetch_remote_embedding(
             protocol=1,
             colossusdb_embd_model_name="rlj-24q2-norm-exp",
-            colossusdb_embd_table_name="se_id_6_1r",
+            colossusdb_embd_table_name="semantic_id_new",
             id_converter={"type_name":"plainIdConverter"},
             input_attr_name="photo_id",
-            output_attr_name="semantic_id",
+            output_attr_name="semantic_id_v1",
             query_source_type="item_attr",
             is_raw_data=True,
             raw_data_type="uint16",
             timeout_ms=10,
-            size=7
+            size=3
         )
         self.enrich_attr_by_lua(
-            import_item_attr = ["semantic_id"],
-            export_item_attr = ["is_valid"],
+            import_item_attr = ["semantic_id_v1"],
+            export_item_attr = ["is_valid_v1"],
             function_for_item = "calculate",
             lua_script = """
             function calculate()
-                if semantic_id ~= nil then
+                if semantic_id_v1 ~= nil then
                     return 1
                 else
                     return 0
@@ -446,85 +447,67 @@ class I2IRunnerFlow(
             end
             """
         )
-        self.filter_by_attr(
-            attr_name="is_valid",
-            remove_if="==",
-            compare_to=0,
-            remove_if_attr_missing=True,
+        self.fetch_remote_embedding(
+            protocol=1,
+            colossusdb_embd_model_name="rlj-24q2-norm-exp",
+            colossusdb_embd_table_name="se_id_6_1r",
+            id_converter={"type_name":"plainIdConverter"},
+            input_attr_name="photo_id",
+            output_attr_name="semantic_id_v2",
+            query_source_type="item_attr",
+            is_raw_data=True,
+            raw_data_type="uint16",
+            timeout_ms=10,
+            size=7
         )
-        return self
-
-class Retr_and_Write_Subflow(
-    LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
-):
-    def _retrieve_ann_and_write(self, target_sub_flow_id):
-        self.count_reco_result(target_item = {"sub_flow_id": target_sub_flow_id},save_count_to="sub_item_count") 
-        self.if_("sub_item_count <= 0").return_(0, "no item_num").end_()
-        self.pack_item_attr(
-            target_item = {"sub_flow_id": target_sub_flow_id},
-            item_source={
-                "reco_results": True,
-            },
-            mappings=[
-                {
-                    "aggregator": "concat",
-                    "to_common_attr": "sub_photo_id_list",
-                },
-                {
-                    "aggregator": "concat",
-                    "from_item_attr": "photo_emb",
-                    "to_common_attr": "sub_photo_emb_list",
-                },
+        self.enrich_attr_by_lua(
+            import_item_attr = ["semantic_id_v2"],
+            export_item_attr = ["is_valid_v2"],
+            function_for_item = "calculate",
+            lua_script = """
+            function calculate()
+                if semantic_id_v2 ~= nil then
+                    return 1
+                else
+                    return 0
+                end
+            end
+            """
+        )
+        self.log_debug_info(
+            item_attrs = [
+                "is_valid_v1",
+                "is_valid_v2",
+                "semantic_id_v1",
+                "semantic_id_v2"
             ],
-            )
-        self.limit(0)\
-        .copy_item_meta_info(target_item =  {"sub_flow_id": target_sub_flow_id},save_item_id_to_attr="item_id") \
-        .copy_attr(
-            target_item =  {"sub_flow_id": target_sub_flow_id},attrs=[{"from_item": "item_id", "to_common": "photo_id"}]
-        ) 
-        self.if_(f"sub_photo_id_list ~= nil and #(sub_photo_id_list or {{}}) > 0")
-        self.delegate_retrieve( 
-            kess_service=ann_kess,
-            send_common_attrs=[{"name": f"sub_photo_id_list", "as": "photo_id_list"}, {"name": f"sub_photo_emb_list", "as": "photo_emb_list"}, "i2i_ann_topk"],  
-            recv_item_attrs=["ann_pid", "filtered_ann_score", "filtered_src_item"],
-            request_type="default",
-            request_num = 1000,
-            timeout_ms=timeout,
-        ) 
-        self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
-            src_attr="filtered_src_item",
-            dst_attr="ann_pid",
-            btq_prefix = "btq_kgnn_i2i_ia_index-I2I",
-            relation_name="I2I",
-            dst_weight_attr="filtered_ann_score",
-            insert_edge_weight_act=2,
-            timeout_ms=1000,
-            shard_num=kgnn_shard,
-            batching_num = 1000
-        ) \
-        .update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
-            src_attr="ann_pid",
-            dst_attr="filtered_src_item",
-            btq_prefix = "btq_kgnn_i2i_ia_index-I2I",
-            relation_name="I2I",
-            dst_weight_attr="filtered_ann_score",
-            insert_edge_weight_act=2,
-            timeout_ms=1000,
-            shard_num=kgnn_shard,
-            batching_num = 1000
+            for_debug_request_only=False
         )
-        self.end_()
+        self.filter_by_rule(
+            rule = {
+                "join": "or",
+                "filters": [{
+                    "attr_name": "is_valid_v1",
+                    "remove_if": "==",
+                    "compare_to": 0
+                    }, {
+                    "attr_name": "is_valid_v2",
+                    "remove_if": "==",
+                    "compare_to": 0
+                }]
+            }
+        )
         return self
 
-class KGNNSubflow(
+class KGNNSubflowV1(
     LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
 ):
 
     @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="idx")
-    def construct_edge(self):
+    def _construct_edge(self):
 
         self.enrich_attr_by_lua(
-            import_item_attr = ["semantic_id"],
+            import_item_attr = ["semantic_id_v1"],
             import_common_attr = ["idx"],
             export_item_attr = ["src_node", "dst_node", "token_id"],
             function_for_item = "calculate",
@@ -535,11 +518,77 @@ class KGNNSubflow(
                     if i == 0 then
                         src_node = 0
                     else
-                        src_node = (src_node * {prime_scale} + semantic_id[i] + 1) % {prime_range}
+                        src_node = (src_node * {prime_scale_v1} + semantic_id_v1[i] + 1) % {prime_range}
                     end
                 end
-                dst_node = (src_node * {prime_scale} + semantic_id[idx+1] + 1) % {prime_range}
-                token_id = semantic_id[idx+1]
+                dst_node = (src_node * {prime_scale_v1} + semantic_id_v1[idx+1] + 1) % {prime_range}
+                token_id = semantic_id_v1[idx+1]
+                return src_node, dst_node, token_id
+            end
+            """
+        )
+        self.log_debug_info(
+            common_attrs = [
+                "idx"
+            ],
+            item_attrs = [
+                "photo_id",
+                "src_node",
+                "dst_node",
+                "token_id"
+            ],
+            for_debug_request_only=False
+        )
+        self.update_inner_item( #向 kgnn 的某个 relation 更新图存储的边信息
+            src_attr="src_node",
+            dst_attr="photo_id",
+            dst_node_attr=NodeAttrSchema(1,0).add_int64_attr("dst_node"),
+            kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
+            btq_prefix = "btq_kgnn_sid_rag-I2I",
+            table_name="semantic_id_kgnn",
+            insert_edge_weight_act=1,
+            timeout_ms=1000,
+            btq_shard_num=4,
+            batching_num = 1000
+        )
+        return self
+
+
+    def _construct_graph(self):
+        # self.count_reco_result(target_item = {"sub_flow_id": sub_flow_id},save_count_to="sub_item_count") 
+        # self.if_("sub_item_count <= 0").return_(0, "no item_num").end_()
+        self.count_reco_result(save_count_to="item_count") 
+        self.if_("item_count <= 0").return_(0, "no item_num").end_()
+        self.gen_common_attr_by_lua(
+            attr_map={"loop_ids": "{2}"}
+        )
+        self._construct_edge()
+        return self
+
+class KGNNSubflowV2(
+    LeafFlow, OfflineApiMixin, KgnnApiMixin, SwingApiMixin, KuibaApiMixin, MioApiMixin, GsuApiMixin, EmbedCalcApiMixin, PDNApiMixin, CofeaApiMixin
+):
+
+    @for_loop(loop_on="loop_ids", loop_index="id_index", loop_value="idx")
+    def _construct_edge(self):
+
+        self.enrich_attr_by_lua(
+            import_item_attr = ["semantic_id_v2"],
+            import_common_attr = ["idx"],
+            export_item_attr = ["src_node", "dst_node", "token_id"],
+            function_for_item = "calculate",
+            lua_script = f"""
+            function calculate()
+                local src_node = 0
+                for i=0, idx do
+                    if i == 0 then
+                        src_node = 0
+                    else
+                        src_node = (src_node * {prime_scale_v2} + semantic_id_v2[i] + 1) % {prime_range}
+                    end
+                end
+                dst_node = (src_node * {prime_scale_v2} + semantic_id_v2[idx+1] + 1) % {prime_range}
+                token_id = semantic_id_v2[idx+1]
                 return src_node, dst_node, token_id
             end
             """
@@ -596,7 +645,7 @@ class KGNNSubflow(
         return self
 
 
-    def construct_graph(self):
+    def _construct_graph(self):
         # self.count_reco_result(target_item = {"sub_flow_id": sub_flow_id},save_count_to="sub_item_count") 
         # self.if_("sub_item_count <= 0").return_(0, "no item_num").end_()
         self.count_reco_result(save_count_to="item_count") 
@@ -604,11 +653,12 @@ class KGNNSubflow(
         self.gen_common_attr_by_lua(
             attr_map={"loop_ids": "{0,1,2,3,4,5,6}"}
         )
-        self.construct_edge()
+        self._construct_edge()
         return self
 
 # subflow_dict = [KGNNSubflow('sub_flow_'+str(i)).construct_graph(i) for i in range(max_subflow_num)]
-kgnn_flow = KGNNSubflow('kgnn_flow').construct_graph()
+kgnn_flow_v1 = KGNNSubflowV1('kgnn_flow_v1')._construct_graph()
+kgnn_flow_v2 = KGNNSubflowV2('kgnn_flow_v2')._construct_graph()
 
 # 实时发现页索引 BTQ
 realtime_update_flow = I2IRunnerFlow(name="realtime_update_flow") \
@@ -648,9 +698,9 @@ missed_trigger_flow = I2IRunnerFlow(name="missed_trigger_flow") \
 LeafService.CHECK_UNUSED_ATTR = False
 runner = OfflineRunner("kgnn_runner")
 
-runner.add_leaf_flows(leaf_flows=[realtime_update_flow, kgnn_flow], name="realtime_update_flow", thread_num=64)
-runner.add_leaf_flows(leaf_flows=[bt_shm_update_flow, kgnn_flow], name="bt_shm_update_flow", thread_num=64)
-runner.add_leaf_flows(leaf_flows=[lite_photo_map_update_flow, kgnn_flow], name="lite_photo_map_update_flow", thread_num=4)
+runner.add_leaf_flows(leaf_flows=[realtime_update_flow, kgnn_flow_v1], name="realtime_update_flow", thread_num=64)
+runner.add_leaf_flows(leaf_flows=[bt_shm_update_flow, kgnn_flow_v1], name="bt_shm_update_flow", thread_num=64)
+runner.add_leaf_flows(leaf_flows=[lite_photo_map_update_flow, kgnn_flow_v1], name="lite_photo_map_update_flow", thread_num=4)
 # runner.add_leaf_flows(leaf_flows=[missed_trigger_flow], name="missed_trigger_flow", thread_num=8)
 
 
