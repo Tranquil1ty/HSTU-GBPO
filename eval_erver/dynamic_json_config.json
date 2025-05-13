@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "b8f01b6c24d19f68d3362a86c11471f9_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 13:44:25",
+  "_CONFIG_VERSION": "d6f7304caf6d0a8107f304701c506720_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-13 17:20:48",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -749,7 +749,7 @@
               "full_rank_req_type",
               "retr_type",
               "tab_id",
-              "user"
+              "user_info_str"
             ],
             "$input_item_attrs": [
               "reco_photo_info_str"
@@ -1002,10 +1002,7 @@
           ],
           "request_type": "{{full_rank_req_type}}",
           "send_common_attrs": [
-            {
-              "as": "user_info_str",
-              "name": "user"
-            },
+            "user_info_str",
             "tab_id",
             "retr_type"
           ],
