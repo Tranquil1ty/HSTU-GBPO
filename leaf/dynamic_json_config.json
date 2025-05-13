@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "d500d3e9a97fa136905c233a177268b0_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-12 18:06:44",
+  "_CONFIG_VERSION": "2caffda0d54c810167d4d7d19c4ff5dd_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-13 16:03:37",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -20,35 +20,6 @@
   "pipeline_manager_config": {
     "base_pipeline": {
       "processor": {
-        "_branch_controller_180B909D": {
-          "$branch_start": "_branch_controller_180B909D",
-          "$code_info": "[if] 180B909D main_process_flow.py in fetch_photo_info(): .if_(\"enable_use_nebula_request_type == 1 and is_nebula_user == 1\")",
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_3",
-              "enable_use_nebula_request_type",
-              "is_nebula_user"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_if_control_attr_4"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "_if_control_attr_3",
-            "enable_use_nebula_request_type",
-            "is_nebula_user"
-          ],
-          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (enable_use_nebula_request_type == 1 and is_nebula_user == 1)) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "_branch_controller_2CFC0311": {
           "$branch_start": "_branch_controller_2CFC0311",
           "$code_info": "[if] 2CFC0311 direct_retrieval_flow.py in _do_retr(): return self.if_(\"enable_frequency_control == 1 and frequency_enable == 0\")",
@@ -203,6 +174,35 @@
             "_if_control_attr_5"
           ],
           "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (_if_control_attr_5 == 1)) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_E93472C0": {
+          "$branch_start": "_branch_controller_E93472C0",
+          "$code_info": "[if] E93472C0 main_process_flow.py in fetch_photo_info(): .if_(\"enable_use_nebula_request_type_new == 1 and is_nebula_user == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "enable_use_nebula_request_type_new",
+              "is_nebula_user"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_4"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_3",
+            "enable_use_nebula_request_type_new",
+            "is_nebula_user"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_3 == 0 and (enable_use_nebula_request_type_new == 1 and is_nebula_user == 1)) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_EB7701DB": {
@@ -2143,7 +2143,7 @@
           "biz_name": "KUAISHOU_APPS",
           "type_name": "CommonRecoAbtestCommonAttrEnricher"
         },
-        "get_abtest_params_3762CD": {
+        "get_abtest_params_47652B": {
           "$metadata": {
             "$input_common_attrs": [
               "_ABTEST_USER_TAG_NAMES_",
@@ -2155,7 +2155,7 @@
               "audit_b_second_tag_expand_normal",
               "audit_risk_immd_tag_filter_str_gamora",
               "author_type_vv_thresh_type_string",
-              "enable_use_nebula_request_type",
+              "enable_use_nebula_request_type_new",
               "high_hot_audit_second_level_black_tags",
               "impression_audit_second_level_black_tags",
               "sexy_content_filter_str_gamora",
@@ -2201,7 +2201,7 @@
             },
             {
               "default_value": "0",
-              "param_name": "enable_use_nebula_request_type",
+              "param_name": "enable_use_nebula_request_type_new",
               "param_type": "int"
             }
           ],
@@ -3033,7 +3033,7 @@
           "_branch_controller_EB7701DB",
           "set_attr_value_5CE6B9",
           "set_attr_value_D7EC3E",
-          "_branch_controller_180B909D",
+          "_branch_controller_E93472C0",
           "set_attr_value_4DA3E3",
           "_branch_controller_7543B0B2",
           "delegate_enrich_main_model_copy",
@@ -3051,7 +3051,7 @@
           "enrich_attr_by_lua_171426",
           "get_kconf_params_B3F91C",
           "get_kconf_params_DEA748",
-          "get_abtest_params_3762CD",
+          "get_abtest_params_47652B",
           "split_string_list_60E188",
           "split_string_list_151641",
           "split_string_list_EC5996",
