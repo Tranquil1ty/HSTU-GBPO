@@ -36,6 +36,7 @@ service_name= "grpc_item_rag_server"
 item_RAG_num = 32
 kgnn_item_RAG_num = 512
 kgnn_item_RAG_num_7x64 = 64
+kgnn_item_RAG_num_3x8192 = 64
 token_num = 16
 token_num_7x64 = 7
 item_rag_attrs = ["1520", "1606", "1607", "26", "128", "71", "93", "141", "142", "143", "417", "418", "430", "776", "777", "778", "779", "780", "781", "782", "6677", "6678"]
@@ -158,7 +159,10 @@ class PrepareFlow(LeafFlow):
             "infer_rag_kgnn_topk": kgnn_item_RAG_num,
             "train_rag_kgnn_topk_7x64": kgnn_item_RAG_num_7x64,
             "infer_rag_kgnn_topk_7x64": kgnn_item_RAG_num_7x64,
+            "train_rag_kgnn_topk_3x8192": kgnn_item_RAG_num_3x8192,
+            "infer_rag_kgnn_topk_3x8192": kgnn_item_RAG_num_3x8192,
             "prime_scale_16x512": 521,
+            "prime_scale_3x8192": 10007,
             "prime_scale_7x64": 67,
             "prime_range": 100000000001647
         }
@@ -417,13 +421,15 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                 ]
             )
             .enrich_attr_by_lua(
-                import_common_attr = ["request_type", "prime_scale_16x512", "prime_scale_7x64"],
+                import_common_attr = ["request_type", "prime_scale_16x512", "prime_scale_7x64", "prime_scale_3x8192"],
                 export_common_attr = ["prime_scale"],
                 function_for_common = "calculate",
                 lua_script = """
                 function calculate()
                     if request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' then
                         return prime_scale_16x512
+                    elseif request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192' then
+                        return prime_scale_3x8192
                     else
                         return prime_scale_7x64
                     end
@@ -476,6 +482,19 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                         padding_type='zero',
                         sample_without_replacement=True
                     )
+                .else_if_("request_type == 'ntp_train_request_3x8192'")
+                    .fetch_kgnn_neighbors(
+                        id_from_item_attr='src_node',
+                        save_neighbors_to='neighbors',
+                        edge_attr_schema=NodeAttrSchema(1, 0).add_int64_attr('dst_node'),
+                        kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
+                        table_name='semantic_id_kgnn',
+                        btq_shard_num=4,
+                        sample_num="{{train_rag_kgnn_topk_3x8192}}",
+                        sample_type='random',
+                        padding_type='zero',
+                        sample_without_replacement=True
+                )
                 .else_if_("request_type == 'ntp_infer_request'")
                     .fetch_kgnn_neighbors(
                         id_from_item_attr='src_node',
@@ -498,6 +517,19 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                         table_name='semantic_id_7x64_kgnn',
                         btq_shard_num=4,
                         sample_num="{{infer_rag_kgnn_topk_7x64}}",
+                        sample_type='random',
+                        padding_type='zero',
+                        sample_without_replacement=True
+                    )
+                .else_if_("request_type == 'ntp_infer_request_3x8192'")
+                    .fetch_kgnn_neighbors(
+                        id_from_item_attr='src_node',
+                        save_neighbors_to='neighbors',
+                        edge_attr_schema=NodeAttrSchema(1, 0).add_int64_attr('dst_node'),
+                        kess_service="grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
+                        table_name='semantic_id_kgnn',
+                        btq_shard_num=4,
+                        sample_num="{{infer_rag_kgnn_topk_3x8192}}",
                         sample_type='random',
                         padding_type='zero',
                         sample_without_replacement=True
@@ -551,6 +583,8 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                 function calculate()
                     if request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' then
                         return 4
+                    elseif request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192' then
+                        return 1
                     else
                         return 6
                     end
@@ -636,6 +670,10 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
             .if_("request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'")
                 .gen_common_attr_by_lua(
                     attr_map={"loop_ids": "{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}"}
+                )
+            .else_if_("request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'")
+                .gen_common_attr_by_lua(
+                    attr_map={"loop_ids": "{2}"}
                 )
             .else_()
                 .gen_common_attr_by_lua(
@@ -789,7 +827,7 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                 is_common_attr=False,
                 slot_as_attr_name=True
             )
-            .if_("request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64'")
+            .if_("request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'")
                 .extract_kuiba_parameter(
                     target_item = { "id_tag": [0,1,2] },
                     config={
@@ -840,6 +878,18 @@ class ItemRAGFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, OfflineApi
                         {"from_common_attr" : "all_kgnn_token_id", "to_item_attr" : "kgnn_token_id", "by_list_size": kgnn_item_RAG_num_7x64 * token_num_7x64}
                     ] + [
                         {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": kgnn_item_RAG_num_7x64 * token_num_7x64 * 2 if attr == "93" else kgnn_item_RAG_num_7x64 * token_num_7x64 * 3 if attr=="418" else kgnn_item_RAG_num_7x64 * token_num_7x64} for attr in returned_item_rag_attrs
+                    ]
+                )
+            .else_if_("request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'")
+                .truncate(size_limit=0)
+                .retrieve_by_common_attr(attr="req_keys", reason=666)
+                .copy_item_meta_info(save_item_key_to_attr="photo_id")
+                .dispatch_common_attr(
+                    dispatch_config = [
+                        {"from_common_attr" : "all_kgnn_neighbors", "to_item_attr" : "kgnn_neighbors", "by_list_size": kgnn_item_RAG_num_3x8192},
+                        {"from_common_attr" : "all_kgnn_token_id", "to_item_attr" : "kgnn_token_id", "by_list_size": kgnn_item_RAG_num_3x8192}
+                    ] + [
+                        {"from_common_attr" : attr, "to_item_attr" : attr, "by_list_size": kgnn_item_RAG_num_3x8192 * 2 if attr == "93" else kgnn_item_RAG_num_3x8192 * 3 if attr=="418" else kgnn_item_RAG_num_3x8192} for attr in returned_item_rag_attrs
                     ]
                 )
             .else_()
@@ -1006,8 +1056,8 @@ item_rag_flow = ItemRAGFlow(name="item_rag_flow").run_ann_item_rag()
 item_rag_infer_flow = ItemRAGFlow(name="item_rag_infer_flow").run_ann_item_rag().infer_format()
 kgnn_item_rag_flow = ItemRAGFlow(name="kgnn_item_rag_flow").run_kgnn_item_rag()
 kgnn_item_rag_infer_flow = ItemRAGFlow(name="kgnn_item_rag_infer_flow").run_kgnn_item_rag().infer_format()
-kgnn_item_rag_flow_7x64 = ItemRAGFlow(name="kgnn_item_rag_flow_7x64").run_kgnn_item_rag()
-kgnn_item_rag_infer_flow_7x64 = ItemRAGFlow(name="kgnn_item_rag_infer_flow_7x64").run_kgnn_item_rag().infer_format()
+# kgnn_item_rag_flow_7x64 = ItemRAGFlow(name="kgnn_item_rag_flow_7x64").run_kgnn_item_rag()
+# kgnn_item_rag_infer_flow_7x64 = ItemRAGFlow(name="kgnn_item_rag_infer_flow_7x64").run_kgnn_item_rag().infer_format()
 
 kess_name = service_name
 print(f"kess name: {kess_name}")
@@ -1043,9 +1093,12 @@ service.add_leaf_flows(request_type="test_request", leaf_flows=[prepare_flow, to
 service.add_leaf_flows(request_type="test_infer_request", leaf_flows=[prepare_flow, tokenize_flow, user_seq_flow])
 # service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, user_seq_flow, kgnn_item_rag_flow_7x64])
 # service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, user_seq_flow, kgnn_item_rag_infer_flow_7x64])
-service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, kgnn_item_rag_flow_7x64, user_seq_flow])
-service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow_7x64, user_seq_flow])
+service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, kgnn_item_rag_flow, user_seq_flow])
+service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow, user_seq_flow])
 service.add_leaf_flows(request_type="item_token_request", leaf_flows=[prepare_flow, tokenize_item_token_flow, user_seq_flow])
+
+service.add_leaf_flows(request_type="ntp_train_request_3x8192", leaf_flows=[prepare_flow, tokenize_flow, kgnn_item_rag_flow, user_seq_flow])
+service.add_leaf_flows(request_type="ntp_infer_request_3x8192", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow, user_seq_flow])
 
 
 service.build(output_file=__file__.replace(".py", ".json"))

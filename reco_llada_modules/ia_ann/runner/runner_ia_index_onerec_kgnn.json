@@ -1,64 +1,14 @@
 {
-  "_CONFIG_VERSION": "fb24ed89461fd67f6c83d23edd3b23ed_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-04-30 16:55:00",
+  "_CONFIG_VERSION": "7df87448aac4b54d26efcabdc375ea46_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-13 15:26:35",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
     "base_pipeline": {
       "processor": {
-        "_branch_controller_9A40F5C1": {
-          "$branch_start": "_branch_controller_9A40F5C1",
-          "$code_info": "[if] 9A40F5C1 runner_ia_index_onerec_test.py in construct_edge(): self.if_(\"idx <= 5\") # 前6次检索（bos to t5）只返回节点feature",
-          "$metadata": {
-            "$input_common_attrs": [
-              "idx"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_if_control_attr_2"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_if_control_attr_2"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "idx"
-          ],
-          "lua_script": "function evaluate() if (idx <= 5) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "_branch_controller_9A40F5C1_else": {
-          "$branch_start": "_branch_controller_9A40F5C1",
-          "$code_info": "[else] 49676E1B runner_ia_index_onerec_test.py in construct_edge(): self.else_() # 第7次检索（t6 to t7）返回节点和边信息",
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_2"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_else_control_attr_3"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_else_control_attr_3"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "_if_control_attr_2"
-          ],
-          "lua_script": "function evaluate() if (_if_control_attr_2 == 1) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "_branch_controller_A45BC6B5": {
           "$branch_start": "_branch_controller_A45BC6B5",
-          "$code_info": "[if] A45BC6B5 runner_ia_index_onerec_test.py in construct_graph(): self.if_(\"item_count <= 0\").return_(0, \"no item_num\").end_()",
+          "$code_info": "[if] A45BC6B5 runner_ia_index_onerec_kgnn.py in _construct_graph(): self.if_(\"item_count <= 0\").return_(0, \"no item_num\").end_()",
           "$metadata": {
             "$input_common_attrs": [
               "item_count"
@@ -83,32 +33,7 @@
         },
         "_branch_controller_CB0CDDBB": {
           "$branch_start": "_branch_controller_CB0CDDBB",
-          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_test.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
-          "$metadata": {
-            "$input_common_attrs": [
-              "item_num"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_if_control_attr_4"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "item_num"
-          ],
-          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "_branch_controller_CB0CDDBB_1": {
-          "$branch_start": "_branch_controller_CB0CDDBB_1",
-          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_test.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_kgnn.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
           "$metadata": {
             "$input_common_attrs": [
               "item_num"
@@ -131,9 +56,9 @@
           "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "_branch_controller_CB0CDDBB_2": {
-          "$branch_start": "_branch_controller_CB0CDDBB_2",
-          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_test.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+        "_branch_controller_CB0CDDBB_1": {
+          "$branch_start": "_branch_controller_CB0CDDBB_1",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_kgnn.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
           "$metadata": {
             "$input_common_attrs": [
               "item_num"
@@ -147,6 +72,31 @@
           },
           "export_common_attr": [
             "_if_control_attr_6"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "item_num"
+          ],
+          "lua_script": "function evaluate() if (item_num <= 0) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_CB0CDDBB_2": {
+          "$branch_start": "_branch_controller_CB0CDDBB_2",
+          "$code_info": "[if] CB0CDDBB runner_ia_index_onerec_kgnn.py in _get_item_index_attr(): self.if_(\"item_num <= 0\").return_(0, \"no item_num\").end_()",
+          "$metadata": {
+            "$input_common_attrs": [
+              "item_num"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_7"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_7"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
@@ -209,38 +159,81 @@
           },
           "type_name": "CommonRecoResultsDeduplicateArranger"
         },
-        "enrich_attr_by_lua_6B30BB": {
+        "enrich_attr_by_lua_2CE158": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "loop_ids"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "loop_ids"
+          ],
+          "function_for_common": "gen_common_attrs",
+          "import_common_attr": [],
+          "lua_script": "function gen_common_attrs() return ({2}) end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_61BF3D": {
           "$metadata": {
             "$downstream_item_attrs": [
-              "semantic_id"
+              "semantic_id_v1"
             ],
             "$input_common_attrs": [],
             "$input_item_attrs": [
-              "semantic_id"
+              "semantic_id_v1"
             ],
             "$modify_item_tables": [],
             "$output_common_attrs": [],
             "$output_item_attrs": [
-              "is_valid"
+              "is_valid_v1"
             ]
           },
           "export_item_attr": [
-            "is_valid"
+            "is_valid_v1"
           ],
           "function_for_item": "calculate",
           "import_item_attr": [
-            "semantic_id"
+            "semantic_id_v1"
           ],
-          "lua_script": "function calculate()\n                if semantic_id ~= nil then\n                    return 1\n                else\n                    return 0\n                end\n            end",
+          "lua_script": "function calculate()\n                if semantic_id_v1 ~= nil then\n                    return 1\n                else\n                    return 0\n                end\n            end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_894407": {
+        "enrich_attr_by_lua_8558F4": {
+          "$metadata": {
+            "$downstream_item_attrs": [
+              "semantic_id_v2"
+            ],
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "semantic_id_v2"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_valid_v2"
+            ]
+          },
+          "export_item_attr": [
+            "is_valid_v2"
+          ],
+          "function_for_item": "calculate",
+          "import_item_attr": [
+            "semantic_id_v2"
+          ],
+          "lua_script": "function calculate()\n                if semantic_id_v2 ~= nil then\n                    return 1\n                else\n                    return 0\n                end\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_BD1257": {
           "$metadata": {
             "$input_common_attrs": [
               "idx"
             ],
             "$input_item_attrs": [
-              "semantic_id"
+              "semantic_id_v1"
             ],
             "$modify_item_tables": [],
             "$output_common_attrs": [],
@@ -260,27 +253,9 @@
             "idx"
           ],
           "import_item_attr": [
-            "semantic_id"
+            "semantic_id_v1"
           ],
-          "lua_script": "function calculate()\n                local src_node = 0\n                for i=0, idx do\n                    if i == 0 then\n                        src_node = 0\n                    else\n                        src_node = (src_node * 67 + semantic_id[i] + 1) % 100000000001647\n                    end\n                end\n                dst_node = (src_node * 67 + semantic_id[idx+1] + 1) % 100000000001647\n                token_id = semantic_id[idx+1]\n                return src_node, dst_node, token_id\n            end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_988ED1": {
-          "$metadata": {
-            "$input_common_attrs": [],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "loop_ids"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "loop_ids"
-          ],
-          "function_for_common": "gen_common_attrs",
-          "import_common_attr": [],
-          "lua_script": "function gen_common_attrs() return ({0,1,2,3,4,5,6}) end",
+          "lua_script": "function calculate()\n                local src_node = 0\n                for i=0, idx do\n                    if i == 0 then\n                        src_node = 0\n                    else\n                        src_node = (src_node * 10007 + semantic_id_v1[i] + 1) % 100000000001647\n                    end\n                end\n                dst_node = (src_node * 10007 + semantic_id_v1[idx+1] + 1) % 100000000001647\n                token_id = semantic_id_v1[idx+1]\n                return src_node, dst_node, token_id\n            end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_C729C0": {
@@ -325,31 +300,31 @@
           "lua_script": "function calc()\n                local is_remove = 0;\n                local e_vv = e_vv_cnt or 0;\n                local n_vv = n_vv_cnt or 0;\n                local g_vv = g_vv_cnt or 0;\n                local total_vv = n_vv + g_vv + e_vv;\n                local duration = duration_ms or -1;\n                local pid = photo_id or -1;\n                local upload_t = upload_time or 0;\n                local now_in_ms = os.time() * 1000;\n                local ms_per_day = 24 * 60 * 60 * 1000;\n                \n                if ((pid < 0) or (duration < 0) or (total_vv < 100)) then\n                    is_remove = 1;\n                end \n                -- if (upload_t < now_in_ms - 30 * ms_per_day) then\n                -- is_remove = 1; \n                -- end \n                return is_remove;\n            end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_by_sub_flow_4DD595": {
+        "enrich_by_sub_flow_5EA53A": {
           "$metadata": {
             "$input_common_attrs": [
               "loop_ids"
             ],
             "$input_item_attrs": [
               "photo_id",
-              "semantic_id"
+              "semantic_id_v1"
             ],
             "$modify_item_tables": [],
             "$output_common_attrs": [],
             "$output_item_attrs": []
           },
           "downstream_processor": "__pipeline_end",
-          "flow_name": "kgnn_flow.construct_edge",
+          "flow_name": "kgnn_flow_v1._construct_edge",
           "pass_common_attrs": [
             "loop_ids"
           ],
           "pass_item_attrs": [
             "photo_id",
-            "semantic_id"
+            "semantic_id_v1"
           ],
           "type_name": "CommonRecoPipelineEnricher"
         },
-        "fetch_remote_embedding_C09F12": {
+        "fetch_remote_embedding_A32020": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [
@@ -358,18 +333,18 @@
             "$modify_item_tables": [],
             "$output_common_attrs": [],
             "$output_item_attrs": [
-              "semantic_id"
+              "semantic_id_v2"
             ]
           },
           "colossusdb_embd_model_name": "rlj-24q2-norm-exp",
           "colossusdb_embd_table_name": "se_id_6_1r",
-          "downstream_processor": "enrich_attr_by_lua_6B30BB",
+          "downstream_processor": "enrich_attr_by_lua_8558F4",
           "id_converter": {
             "type_name": "plainIdConverter"
           },
           "input_attr_name": "photo_id",
           "is_raw_data": true,
-          "output_attr_name": "semantic_id",
+          "output_attr_name": "semantic_id_v2",
           "protocol": 1,
           "query_source_type": "item_attr",
           "raw_data_type": "uint16",
@@ -377,23 +352,33 @@
           "timeout_ms": 10,
           "type_name": "FetchRemoteEmbeddingEnricher"
         },
-        "filter_by_attr_35E48D": {
+        "fetch_remote_embedding_C6EB39": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [
-              "is_valid"
+              "photo_id"
             ],
-            "$modify_item_tables": [
-              ""
-            ],
+            "$modify_item_tables": [],
             "$output_common_attrs": [],
-            "$output_item_attrs": []
+            "$output_item_attrs": [
+              "semantic_id_v1"
+            ]
           },
-          "attr_name": "is_valid",
-          "compare_to": 0,
-          "remove_if": "==",
-          "remove_if_attr_missing": true,
-          "type_name": "CommonRecoAttrFilterArranger"
+          "colossusdb_embd_model_name": "rlj-24q2-norm-exp",
+          "colossusdb_embd_table_name": "semantic_id_new",
+          "downstream_processor": "enrich_attr_by_lua_61BF3D",
+          "id_converter": {
+            "type_name": "plainIdConverter"
+          },
+          "input_attr_name": "photo_id",
+          "is_raw_data": true,
+          "output_attr_name": "semantic_id_v1",
+          "protocol": 1,
+          "query_source_type": "item_attr",
+          "raw_data_type": "uint16",
+          "size": 3,
+          "timeout_ms": 10,
+          "type_name": "FetchRemoteEmbeddingEnricher"
         },
         "filter_by_attr_D65A99": {
           "$metadata": {
@@ -412,6 +397,36 @@
           "remove_if": "==",
           "remove_if_attr_missing": true,
           "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_rule_6F7E64": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_valid_v1",
+              "is_valid_v2"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "rule": {
+            "filters": [
+              {
+                "attr_name": "is_valid_v1",
+                "compare_to": 0,
+                "remove_if": "=="
+              },
+              {
+                "attr_name": "is_valid_v2",
+                "compare_to": 0,
+                "remove_if": "=="
+              }
+            ],
+            "join": "or"
+          },
+          "type_name": "CommonRecoRuleFilterArranger"
         },
         "get_item_attr_by_distributed_index_77ACF2": {
           "$metadata": {
@@ -528,6 +543,28 @@
           ],
           "type_name": "CommonRecoDebugInfoObserver"
         },
+        "log_debug_info_EB8FA5": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "is_valid_v1",
+              "is_valid_v2",
+              "semantic_id_v1",
+              "semantic_id_v2"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "for_debug_request_only": false,
+          "item_attrs": [
+            "is_valid_v1",
+            "is_valid_v2",
+            "semantic_id_v1",
+            "semantic_id_v2"
+          ],
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
         "pack_item_attr_B37BC4": {
           "$metadata": {
             "$input_common_attrs": [],
@@ -550,44 +587,6 @@
             }
           ],
           "type_name": "CommonRecoItemAttrPackEnricher"
-        },
-        "perflog_attr_value_2BFA42": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_2",
-              "idx"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "aggregator": "count",
-          "check_point": "kgnn.node_type.hash",
-          "common_attrs": [
-            "idx"
-          ],
-          "skip": "{{_if_control_attr_2}}",
-          "type_name": "CommonRecoAttrValuePerflogObserver"
-        },
-        "perflog_attr_value_AD4EB1": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_else_control_attr_3",
-              "idx"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "aggregator": "count",
-          "check_point": "kgnn.node_type.pid",
-          "common_attrs": [
-            "idx"
-          ],
-          "skip": "{{_else_control_attr_3}}",
-          "type_name": "CommonRecoAttrValuePerflogObserver"
         },
         "retrieve_by_common_attr_E8155E": {
           "$metadata": {
@@ -674,21 +673,6 @@
           "status_code": 0,
           "type_name": "CommonRecoExecutionStatusEnricher"
         },
-        "return__88F770": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "message": "no item_num",
-          "skip": "{{_if_control_attr_4}}",
-          "status_code": 0,
-          "type_name": "CommonRecoExecutionStatusEnricher"
-        },
         "return__AD7F7B": {
           "$metadata": {
             "$input_common_attrs": [
@@ -701,6 +685,21 @@
           },
           "message": "no item_num",
           "skip": "{{_if_control_attr_6}}",
+          "status_code": 0,
+          "type_name": "CommonRecoExecutionStatusEnricher"
+        },
+        "return__E311C1": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_7"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "message": "no item_num",
+          "skip": "{{_if_control_attr_7}}",
           "status_code": 0,
           "type_name": "CommonRecoExecutionStatusEnricher"
         },
@@ -732,69 +731,20 @@
           "size_limit": 0,
           "type_name": "CommonRecoTruncateArranger"
         },
-        "update_inner_item_84EEE8": {
+        "update_inner_item_9C4C98": {
           "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_2"
-            ],
-            "$input_item_attrs": [
-              "dst_node",
-              "src_node",
-              "token_id"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": []
-          },
-          "batching_num": 1000,
-          "btq_prefix": "btq_kgnn_sid_7x64_rag-I2I",
-          "btq_shard_num": 4,
-          "downstream_processor": "__none",
-          "dst_attr": "dst_node",
-          "dst_node_attr": {
-            "degree_output": null,
-            "edge_num_output": null,
-            "float_config": [],
-            "float_max_size": 0,
-            "int64_config": [
-              {
-                "is_list": false,
-                "max_size": 1,
-                "name": "dst_node"
-              },
-              {
-                "is_list": false,
-                "max_size": 1,
-                "name": "token_id"
-              }
-            ],
-            "int_max_size": 2
-          },
-          "insert_edge_weight_act": 1,
-          "kess_service": "grpc_clsdb_kgnn-reco-llada-sid-kgnn-7x64_biz",
-          "skip": "{{_if_control_attr_2}}",
-          "src_attr": "src_node",
-          "table_name": "semantic_id_7x64_kgnn",
-          "timeout_ms": 1000,
-          "type_name": "KgnnUpdateInnerItemObserver"
-        },
-        "update_inner_item_CB3E33": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_else_control_attr_3"
-            ],
+            "$input_common_attrs": [],
             "$input_item_attrs": [
               "dst_node",
               "photo_id",
-              "src_node",
-              "token_id"
+              "src_node"
             ],
             "$modify_item_tables": [],
             "$output_common_attrs": [],
             "$output_item_attrs": []
           },
           "batching_num": 1000,
-          "btq_prefix": "btq_kgnn_sid_7x64_rag-I2I",
+          "btq_prefix": "btq_kgnn_sid_rag-I2I",
           "btq_shard_num": 4,
           "downstream_processor": "__none",
           "dst_attr": "photo_id",
@@ -808,20 +758,14 @@
                 "is_list": false,
                 "max_size": 1,
                 "name": "dst_node"
-              },
-              {
-                "is_list": false,
-                "max_size": 1,
-                "name": "token_id"
               }
             ],
-            "int_max_size": 2
+            "int_max_size": 1
           },
           "insert_edge_weight_act": 1,
-          "kess_service": "grpc_clsdb_kgnn-reco-llada-sid-kgnn-7x64_biz",
-          "skip": "{{_else_control_attr_3}}",
+          "kess_service": "grpc_clsdb_kgnn-reco-llada-sid-kgnn_biz",
           "src_attr": "src_node",
-          "table_name": "semantic_id_7x64_kgnn",
+          "table_name": "semantic_id_kgnn",
           "timeout_ms": 1000,
           "type_name": "KgnnUpdateInnerItemObserver"
         }
@@ -840,28 +784,31 @@
           "filter_by_attr_D65A99",
           "count_reco_result_B061F6",
           "_branch_controller_CB0CDDBB_1",
-          "return__FA928D",
+          "return__AD7F7B",
           "pack_item_attr_B37BC4",
           "truncate_EA6E76",
           "retrieve_by_common_attr_E8155E",
           "deduplicate_BBE8FF",
           "copy_item_meta_info_7EC1F0",
-          "fetch_remote_embedding_C09F12",
-          "enrich_attr_by_lua_6B30BB",
-          "filter_by_attr_35E48D"
+          "fetch_remote_embedding_C6EB39",
+          "enrich_attr_by_lua_61BF3D",
+          "fetch_remote_embedding_A32020",
+          "enrich_attr_by_lua_8558F4",
+          "log_debug_info_EB8FA5",
+          "filter_by_rule_6F7E64"
         ]
       },
-      "kgnn_flow": {
+      "kgnn_flow_v1": {
         "__PARENT": "base_pipeline",
         "pipeline": [
           "count_reco_result_3B0809",
           "_branch_controller_A45BC6B5",
           "return__4BEED4",
-          "enrich_attr_by_lua_988ED1",
-          "enrich_by_sub_flow_4DD595"
+          "enrich_attr_by_lua_2CE158",
+          "enrich_by_sub_flow_5EA53A"
         ]
       },
-      "kgnn_flow.construct_edge": {
+      "kgnn_flow_v1._construct_edge": {
         "__PARENT": "base_pipeline",
         "loop_control_attr": "",
         "loop_index": "id_index",
@@ -869,14 +816,9 @@
         "loop_value": "idx",
         "max_loop_count": 0,
         "pipeline": [
-          "enrich_attr_by_lua_894407",
+          "enrich_attr_by_lua_BD1257",
           "log_debug_info_437CAE",
-          "_branch_controller_9A40F5C1",
-          "update_inner_item_84EEE8",
-          "perflog_attr_value_2BFA42",
-          "_branch_controller_9A40F5C1_else",
-          "update_inner_item_CB3E33",
-          "perflog_attr_value_AD4EB1"
+          "update_inner_item_9C4C98"
         ]
       },
       "lite_photo_map_update_flow": {
@@ -890,15 +832,18 @@
           "filter_by_attr_D65A99",
           "count_reco_result_B061F6",
           "_branch_controller_CB0CDDBB_2",
-          "return__AD7F7B",
+          "return__E311C1",
           "pack_item_attr_B37BC4",
           "truncate_EA6E76",
           "retrieve_by_common_attr_E8155E",
           "deduplicate_BBE8FF",
           "copy_item_meta_info_7EC1F0",
-          "fetch_remote_embedding_C09F12",
-          "enrich_attr_by_lua_6B30BB",
-          "filter_by_attr_35E48D"
+          "fetch_remote_embedding_C6EB39",
+          "enrich_attr_by_lua_61BF3D",
+          "fetch_remote_embedding_A32020",
+          "enrich_attr_by_lua_8558F4",
+          "log_debug_info_EB8FA5",
+          "filter_by_rule_6F7E64"
         ]
       },
       "realtime_update_flow": {
@@ -912,15 +857,18 @@
           "filter_by_attr_D65A99",
           "count_reco_result_B061F6",
           "_branch_controller_CB0CDDBB",
-          "return__88F770",
+          "return__FA928D",
           "pack_item_attr_B37BC4",
           "truncate_EA6E76",
           "retrieve_by_common_attr_E8155E",
           "deduplicate_BBE8FF",
           "copy_item_meta_info_7EC1F0",
-          "fetch_remote_embedding_C09F12",
-          "enrich_attr_by_lua_6B30BB",
-          "filter_by_attr_35E48D"
+          "fetch_remote_embedding_C6EB39",
+          "enrich_attr_by_lua_61BF3D",
+          "fetch_remote_embedding_A32020",
+          "enrich_attr_by_lua_8558F4",
+          "log_debug_info_EB8FA5",
+          "filter_by_rule_6F7E64"
         ]
       }
     }
@@ -930,7 +878,7 @@
       "core_num_thread_ratio": 0.0,
       "pipeline": [
         "bt_shm_update_flow",
-        "kgnn_flow"
+        "kgnn_flow_v1"
       ],
       "thread_num": 64
     },
@@ -938,7 +886,7 @@
       "core_num_thread_ratio": 0.0,
       "pipeline": [
         "lite_photo_map_update_flow",
-        "kgnn_flow"
+        "kgnn_flow_v1"
       ],
       "thread_num": 4
     },
@@ -946,7 +894,7 @@
       "core_num_thread_ratio": 0.0,
       "pipeline": [
         "realtime_update_flow",
-        "kgnn_flow"
+        "kgnn_flow_v1"
       ],
       "thread_num": 64
     }
