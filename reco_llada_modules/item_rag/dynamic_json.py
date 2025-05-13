@@ -5,8 +5,8 @@ import os, sys
 
 os.environ["DRAGON_MATX_USE_REMOTE_DSO"] = "true"
 os.environ["DRAGON_MATX_REMOTE_COMPILE"] = "true"
-os.environ["DRAGON_MATX_COMPILE_LOG"] = "true"
-os.environ["DRAGON_MATX_DEVELOP_ENV"] = "hb1-internal"
+# os.environ["DRAGON_MATX_COMPILE_LOG"] = "true"
+# os.environ["DRAGON_MATX_DEVELOP_ENV"] = "hb1-internal"
 
 import base64
 import collections
@@ -31,7 +31,7 @@ from ann_retrieve_flow import AnnRetrieveFlow
 from extract_user_his import user_seq_flow, returned_user_seq_attrs
 from pyfunc import RAGFuncSet
 
-service_name= "grpc_item_rag_server"
+service_name= "grpc_item_rag_user_longterm"
 
 item_RAG_num = 32
 kgnn_item_RAG_num = 512
@@ -1001,10 +1001,15 @@ class TokenizeItemTokenFlow(LeafFlow, KuibaApiMixin, MioApiMixin, KgnnApiMixin, 
                 kconf_configs=[
                     {
                         "kconf_key": "reco.model2.item_token_gen_kconf",
+                        "json_path": "use_ia_token",
                         "export_common_attr": "use_ia_token",
                         "default_value": 1
                     }
                 ]
+            )
+            .log_debug_info(
+                common_attrs=["use_ia_token"],
+                for_debug_request_only=False,
             )
         )
 
@@ -1091,8 +1096,8 @@ service.add_leaf_flows(request_type="ntp_train_request", leaf_flows=[prepare_flo
 service.add_leaf_flows(request_type="ntp_infer_request", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow, user_seq_flow])
 service.add_leaf_flows(request_type="test_request", leaf_flows=[prepare_flow, tokenize_flow, user_seq_flow])
 service.add_leaf_flows(request_type="test_infer_request", leaf_flows=[prepare_flow, tokenize_flow, user_seq_flow])
-# service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, user_seq_flow, kgnn_item_rag_flow_7x64])
-# service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, user_seq_flow, kgnn_item_rag_infer_flow_7x64])
+# service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, user_seq_flow, kgnn_item_rag_flow])
+# service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, user_seq_flow, kgnn_item_rag_flow])
 service.add_leaf_flows(request_type="ntp_train_request_7x64", leaf_flows=[prepare_flow, tokenize_7x64_flow, kgnn_item_rag_flow, user_seq_flow])
 service.add_leaf_flows(request_type="ntp_infer_request_7x64", leaf_flows=[prepare_flow, kgnn_item_rag_infer_flow, user_seq_flow])
 service.add_leaf_flows(request_type="item_token_request", leaf_flows=[prepare_flow, tokenize_item_token_flow, user_seq_flow])
