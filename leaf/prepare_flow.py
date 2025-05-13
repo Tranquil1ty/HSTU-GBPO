@@ -127,7 +127,7 @@ class PrepareFlow(LeafFlow, NrApiMixin):
             "default_value": "2000860"
         },
         {
-          "param_name": "enable_use_nebula_request_type",
+          "param_name": "enable_use_nebula_request_type_new",
           "param_type": "int",
           "default_value": "0"
         }

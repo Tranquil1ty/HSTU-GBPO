@@ -120,7 +120,7 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
           "value": "predict_for_gamora"
         }]
       ) \
-      .if_("enable_use_nebula_request_type == 1 and is_nebula_user == 1") \
+      .if_("enable_use_nebula_request_type_new == 1 and is_nebula_user == 1") \
       .set_attr_value(
         common_attrs=[{
           "name": "main_model_request_type",
