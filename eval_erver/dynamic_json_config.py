@@ -447,7 +447,7 @@ class CallEvalServer(LeafFlow):
             request_type="{{full_rank_req_type}}",
             timeout_ms=10000,
             send_common_attrs = [
-                {"name": "user", "as": "user_info_str"},
+                "user_info_str",
                 "tab_id",
                 "retr_type"
             ],
