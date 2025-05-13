@@ -27,14 +27,14 @@ from hit_rate_perf import HitRatePerfFlow
 from eval_flow import EvalFlow
 
 TAB_NEBULA = 30000
-kess_name = "grpc_rag_exp"
+kess_name = "grpc_norag_7x64"
 
 model_config = dict(
-    model_config=load_model("./causal_large_config_fp16"),
+    model_config=load_model("./norag_beam64_graph"),
     colossusdb_embd_service_name="reco_llada",
-    colossusdb_embd_table_name="reco_ar_7x64",
+    colossusdb_embd_table_name="norag_7x64_emb",
     embedding_shard_num=8,
-    queue_prefix="reco_llm_small_zzx",
+    queue_prefix="reco_ar_cuzhao_large",
     embedding_dtype="scale_int8",
     common_slots_mapping=[
         # (704, 702), (704, 706), # wtd_v2
@@ -64,7 +64,7 @@ model_config = dict(
         #'MatmulBiasaddReluFusion',
         # 'CascadeMatMulFusion',
     ],
-    explicit_batchsizes=[64], #, 2, 8, 16, 32],
+    explicit_batchsizes=[1], #, 2, 8, 16, 32],
     explicit_max_enqueued_batches=1,
     use_tvm=False
 )
@@ -488,21 +488,21 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         ).perflog_attr_value(check_point="fullrank.tab_id", common_attrs=["tab_id"])
 
     def prepare_fake_item(self):
-        self.enrich_attr_by_lua(
-            import_common_attr=["gen_item_num", "fake_item_num"],
-            function_for_common="calculate",
-            export_common_attr=["fake_item_num"],
-            lua_script="""
-                function calculate()
-                    if gen_item_num ~= nil then
-                        return gen_item_num
-                    else
-                        return fake_item_num
-                    end
-                end
-            """
-        )
-        self.fake_retrieve(num="{{fake_item_num}}", reason=777)
+        # self.enrich_attr_by_lua(
+        #     import_common_attr=["gen_item_num", "fake_item_num"],
+        #     function_for_common="calculate",
+        #     export_common_attr=["fake_item_num"],
+        #     lua_script="""
+        #         function calculate()
+        #             if gen_item_num ~= nil then
+        #                 return gen_item_num
+        #             else
+        #                 return fake_item_num
+        #             end
+        #         end
+        #     """
+        # )
+        self.fake_retrieve(num=1, reason=777) # beam in graph
 
     def prepare_user_info(self):
         self.if_("user_info_str ~= nil")
@@ -696,22 +696,22 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 "to_item": "time_ms"
             }]
         )
-        self.cast_attr_type(
-            attr_type_cast_configs=[
-                {
-                "to_type": "int",
-                "from_item_attr": "semantic_id_v2",
-                "to_item_attr": "semantic_id_v2_int"
-                },
-            ]
-        )
+        # self.cast_attr_type(
+        #     attr_type_cast_configs=[
+        #         {
+        #         "to_type": "int",
+        #         "from_item_attr": "semantic_id_v2",
+        #         "to_item_attr": "semantic_id_v2_int"
+        #         },
+        #     ]
+        # )
         self.delegate_enrich(
             name="onerec_rag",
             kess_service="{{rag_service_kess_name}}",
             # timeout_ms="{{rag_service_timeout_ms}}",
             timeout_ms=3000,
             send_item_attrs = [
-                {"name": "semantic_id_v2_int", "as": "semantic_id_v2"},
+                # {"name": "semantic_id_v2_int", "as": "semantic_id_v2"},
                 "time_ms"
             ],
             recv_item_attrs=["item_rag_slots", "item_rag_parameters", "ann_pids"],
@@ -719,13 +719,13 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
             request_type="ntp_infer_request_7x64",
         )
 
-        self.log_debug_info(
-            log_tag="item_rag",
-            item_attrs=["semantic_id_v2", "item_rag_slots"],
-            common_attrs=["user_seq_slots", "colossus_time_s"],
-            for_debug_request_only=True,
-            respect_sample_logging=False,
-        )
+        # self.log_debug_info(
+        #     log_tag="item_rag",
+        #     item_attrs=["semantic_id_v2", "item_rag_slots"],
+        #     common_attrs=["user_seq_slots", "colossus_time_s"],
+        #     for_debug_request_only=True,
+        #     respect_sample_logging=False,
+        # )
 
         self.if_("request_type == 'debug_request'")
         self.pack_item_attr(
@@ -800,8 +800,8 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         )
 
         fused_input = [extract_input_from_slot_config(c) for c in model.slots_config]
-        fused_input.append(dict(attr_name="semantic_id_v2", 
-                                tensor_name="semantic_id_v2", common=False, dim=7))
+        # fused_input.append(dict(attr_name="semantic_id_v2", 
+        #                         tensor_name="semantic_id_v2", common=False, dim=7))
         fused_input.append(dict(attr_name="adp_effective_view_fix",
                                 tensor_name="adp_effective_view_fix", common=False, dim=1))
 
@@ -815,9 +815,9 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         fused_input.append(dict(attr_name="play_complete", tensor_name="play_complete", common=False, dim=1))
         fused_input.append(dict(attr_name="p_temp", tensor_name="p_temp", common=False, dim=1))
         fused_input.append(dict(attr_name="colossus_time_s", tensor_name="colossus_time_s", common=True, dim=512))
-        fused_input.append(dict(attr_name="beam_prob", tensor_name="beam_prob", common=False, dim=1))
-        fused_input.append(dict(attr_name="cur_step", tensor_name="cur_step", common=False, dim=1))
-        fused_input.append(dict(attr_name="batch_mask", tensor_name="batch_mask", common=False, dim=1))
+        # fused_input.append(dict(attr_name="beam_prob", tensor_name="beam_prob", common=False, dim=1))
+        # fused_input.append(dict(attr_name="cur_step", tensor_name="cur_step", common=False, dim=1))
+        # fused_input.append(dict(attr_name="batch_mask", tensor_name="batch_mask", common=False, dim=1))
 
         print("fused_input: ", fused_input)
         max_batchsize = max(explicit_batchsizes)
@@ -869,6 +869,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
                 dict(
                     attr_name=output_prefix + attr_name,
                     tensor_name=tensor_name,
+                    common=True
                 )
                 for attr_name, tensor_name in model.outputs
             ],
@@ -1065,145 +1066,55 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         self.copy_item_meta_info(save_item_key_to_attr="pid")
         return self
 
-    @for_loop(loop_on="infer_steps", loop_value="current_step")
     def infer_step(self):
-        self.if_("current_step == 0")
-        self.copy_attr(
-            attrs=[
-                {"from_item": "init_semantic_id_v2", "to_item": "semantic_id_v2"},
-                {"from_item": "init_semantic_id_v2_mask", "to_item": "semantic_id_v2_mask"},
-            ]
-        )
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            import_item_attr=["semantic_id_v2"],
-            export_item_attr=["semantic_id_v2_prob", "beam_prob", "batch_mask"],
-            lua_script="""
-                function calculate(seq)
-                    local semantic_id_v2_prob = {}
-                    for i = 1, #semantic_id_v2 do
-                        semantic_id_v2_prob[i] = 0.0
-                    end
-                    if seq == 0 then
-                        return semantic_id_v2_prob, {0.0}, {1.0}
-                    else
-                        return semantic_id_v2_prob, {0.0}, {0.0}
-                    end
-                end
-            """
-        )
-        self.else_()
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            export_item_attr=["batch_mask"],
-            lua_script="""
-                function calculate()
-                    return {1.0}
-                end
-            """
-        )
-        self.end_if_()
-        self.log_debug_info(
-            common_attrs=[
-                "adp_effective_view_fix",
-                "click",
-                "like",
-                "follow",
-                "forward",
-                "comment",
-                "long_view",
-                "short_view",
-                "play_complete",
-                "p_topk",
-                "p_topp",
-                "p_temp",
-                "random_remask_flag",
-                "current_step",
-            ],
-            item_attrs=[
-                "semantic_id_v2",
-                "semantic_id_v2_mask",
-                "adp_effective_view_fix",
-                "click",
-                "like",
-                "follow",
-                "forward",
-                "comment",
-                "long_view",
-                "short_view",
-                "play_complete",
-                "p_temp",
-                "beam_prob",
-                "batch_mask"
-            ],
-            for_debug_request_only=True,
-            respect_sample_logging=False
-        )
+        
         self.item_rag()
-
-        self.enrich_attr_by_lua(
-            import_common_attr=["current_step"],
-            function_for_item="calculate",
-            export_item_attr=["cur_step"],
-            lua_script="""
-                function calculate()
-                    local cur_step = {current_step * 1.0}
-                    return cur_step
-                end
-            """,
-        )
-
         self.infer()
 
-        self.enrich_attr_by_py(
-            function_set=ChooseTokenStrategy,
-            py_function=ChooseTokenStrategy.choose_token_beam,
-        )
-
         self.log_debug_info(
-            log_tag=f"after_choose_token_beam",
+            log_tag=f"infer_result",
             common_attrs=[
-                "current_step",
-            ],
-            item_attrs=[
-                "semantic_id_v2",
-                "semantic_id_v2_prob",
-                "beam_prob",
+                "pred_tokens",
+                "pred_scores",
             ],
             for_debug_request_only=True,
             respect_sample_logging=False
         )
-
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            import_item_attr=["semantic_id_v2", "semantic_id_v2_prob"],
-            import_common_attr=["current_step"],
-            export_item_attr=["token_indices", "token_probs"],
-            lua_script="""
-                function calculate()
-                    local token_indices = {}
-                    local token_probs = {}
-                    for i = 1, #semantic_id_v2 do
-                        table.insert(token_indices, math.ceil(semantic_id_v2[i]))
-                        table.insert(token_probs, semantic_id_v2_prob[i])
-                    end
-                    return token_indices, token_probs
-                end
-            """
+        self.truncate(size_limit=0)
+        self.gen_common_attr_by_lua(
+            attr_map={
+                "beam_size_calc": "math.ceil(#pred_tokens / 7)",
+            }
         )
-
+        self.fake_retrieve(num="{{beam_size_calc}}")
+        self.dispatch_common_attr(
+            dispatch_config = [
+                {
+                "from_common_attr" : "pred_tokens",
+                "to_item_attr" : "token_indices_float",
+                "by_list_size": 7
+                },
+                {
+                "from_common_attr" : "pred_scores",
+                "to_item_attr" : "token_probs",
+                "by_list_size": 1
+                }
+            ]
+        )
+        self.cast_attr_type(
+            attr_type_cast_configs=[
+                {
+                "to_type": "int",
+                "from_item_attr": "token_indices_float",
+                "to_item_attr": "token_indices"
+                }
+            ]
+        )
         self.log_debug_info(
-            log_tag=f"step_infer_result",
-            common_attrs=[
-                "current_step",
-            ],
+            log_tag=f"after_token_beam",
             item_attrs=[
-                "semantic_id_v2",
-                "semantic_id_v2_prob",
                 "token_indices",
                 "token_probs",
-                "topk_indices",
-                "topk_prob",
             ],
             for_debug_request_only=True,
             respect_sample_logging=False
@@ -1234,20 +1145,6 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         )
         self.infer_step()
 
-        self.enrich_attr_by_lua(
-            function_for_item="calculate",
-            import_item_attr=["semantic_id_v2"],
-            export_item_attr=["token_indices"],
-            lua_script="""
-                function calculate()
-                    local token_indices = {}
-                    for i = 1, #semantic_id_v2 do
-                        table.insert(token_indices, math.ceil(semantic_id_v2[i]))
-                    end
-                    return token_indices
-                end
-            """,
-        )
         self.log_debug_info(
             log_tag="final_output",
             item_attrs=["token_indices", "token_probs"],
@@ -1256,6 +1153,7 @@ class PredictServerFlow(LeafFlow, CommonApiMixin, KuibaApiMixin, MioApiMixin, Un
         )
         self.retrieve_from_tokens()
         return self
+
 
 
 predict_for_all = PredictServerFlow(name="predict_for_all").main()

@@ -167,7 +167,7 @@ class GSUServerFlow(LeafFlow, KuibaApiMixin, MioApiMixin, OfflineApiMixin, GsuAp
       .perflog_attr_value(check_point="recogpt.new_time_stat", common_attrs=["last_time_gap", "session_num"]) \
 
     if share:
-      self.if_("request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192'") \
+      self.if_("request_type == 'user_seq_request' or request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192'") \
         .extract_kuiba_parameter(
           config={
             f"extract_colossus_field_{field}": {

@@ -17,7 +17,6 @@ parser.add_argument('--trt_transformer_fallback', action="store_true")
 parser.add_argument('--no_kai_v2', dest="with_kai_v2", action="store_false")
 parser.add_argument('--local_debug', action="store_true", help="启用本地调试模式，不依赖线上环境")
 parser.add_argument('--debug_batch_size', type=int, default=32, help="本地调试时的批大小")
-parser.add_argument('--fp16', dest="fp16", action="store_true")
 args = parser.parse_known_args()[0]
 # 导入必要的库
 import os
@@ -32,6 +31,7 @@ token_rag_size = 64
 item_rag_size = token_rag_size * senmantic_id_token_num
 item_rag_magic_num = 30000
 short_term_list_seq_len = 20
+pid_fea_seq_size = 6
 # 在本地调试模式下，首先导入TensorFlow
 # python reco_llada.py --mode train --local_debug --with_kai_v2 --debug_batch_size 10  
 if args.local_debug:
@@ -413,10 +413,10 @@ if args.with_kai_v2 and not args.local_debug:
     
     # remove: "1520"，"93", 
    
-    # item_rag_output_slots = ["1606", "1607", "26", "128", "71", "141", 
-    #                          "142", "143", "417", "430", "776", "777", "778", 
-    #                          "779", "780", "781", "782"]
-    # item_rag_output_slots = [str(item_rag_magic_num + int(slot)) for slot in item_rag_output_slots]
+    item_rag_output_slots = ["1606", "1607", "26", "128", "71", "141", 
+                             "142", "143", "417", "430", "776", "777", "778", 
+                             "779", "780", "781", "782"] + ["6677", "6678"]
+    item_rag_output_slots = [str(item_rag_magic_num + int(slot)) for slot in item_rag_output_slots]
     gsu_output_slots = ["1001", "1002", "1004", "1006", "1007", "1008", "1009", "1010", "1011", "1013", "1014"]
     
     config.declare_remote_gsu(
@@ -427,11 +427,12 @@ if args.with_kai_v2 and not args.local_debug:
         pid_attr="photo_id",
         input_attrs=["time_ms", "user_id"],
         input_common_flags= [False, True],
-        output_attrs=["tokens", "colossus_time_s"] + gsu_output_slots,
-        output_column_types=["list<int64>", "list<int64>"] + ["list<int64>"] * len(gsu_output_slots),
-        output_common_flags=[False, False] + [False] * len(gsu_output_slots),
+        output_attrs=["tokens", "colossus_time_s"] + item_rag_output_slots + gsu_output_slots,
+        output_column_types=["list<int64>", "list<int64>"] + ["list<int64>"] * len(item_rag_output_slots) + ["list<int64>"] * len(gsu_output_slots),
+        output_common_flags=[False, False] + [False] * len(item_rag_output_slots) + [False] * len(gsu_output_slots),
         data_source_name="train",
         timeout_ms=60000)
+    
     def filter_mask_wrapper(dataset):
         dataset.add_feature('llsid', dataset.DENSE, tf.int64, 1)
         dataset.add_feature('stid_mix_filter_flag', dataset.DENSE, tf.int64, 1)
@@ -505,8 +506,6 @@ else:
     import tensorflow as tf
     from mio_tensorflow.config import MioConfig
     from mio_tensorflow.variable import MioVariable, MioEmbedding
-    from mio_tensorflow.variable import set_infer_with_tf_variable
-    set_infer_with_tf_variable(True)
     if not args.dryrun:
         # monkey patch
         import mio_tensorflow.patch as mio_tensorflow_patch
@@ -571,11 +570,15 @@ def new_xla_jit_context():
         else:
             return contextlib.suppress()
 def tf_name_scope(scope_name):
-    if args.mode == "predict":
-        return tf.variable_scope("", reuse=tf.AUTO_REUSE)
-    else:
+    if args.local_debug:
+        # 在本地调试模式下使用tf的name_scope
         return tf.name_scope(scope_name)
-    
+    else:
+        # 恢复原始逻辑
+        if args.mode == "predict":
+            return tf.name_scope(None)
+        else:
+            return tf.name_scope(scope_name)
 def P_new(tensor, name=None, summarize=17, **kwargs):
     if args.mode == "train":
         return tf.Print(tensor, [tf.shape(tensor), tensor], tensor.name if name is None else name, summarize=summarize,
@@ -716,17 +719,6 @@ def simple_lhuc_network(inputs, unit1, unit2, name, weight_name, norm_type=None)
                                            weight_name=f"{weight_name}_layer2_param",
                                            norm_type=norm_type)
         return output
-
-def cast_16_wrapper(func):
-    def new_func(*args, **kwargs):
-        x=func(*args, **kwargs, dtype=tf.float16, trainable=False)
-        return x #cast_16(x)
-    return new_func
-
-if args.fp16:
-    config.new_embedding=cast_16_wrapper(config.new_embedding)
-    tf.get_variable=cast_16_wrapper(tf.get_variable)
-
 ###################### user embedding ###########################
 compress_kwargs = {}
 if args.mode in ["predict", "gsu"]:
@@ -881,58 +873,62 @@ item_long_term_abspose3 = config.new_embedding("item_long_term_abspose3", dim=8,
 colossus_time_s = config.get_dense_fea("colossus_time_s", long_term_seq_len, dtype=tf.int64)
 ### item RAG embedding
 # item_rag_item_age_hour = config.new_embedding("item_rag_1520", dim=16, expand=item_rag_size, slots=[1520])
-# rag_item_local_life_id_1 = config.new_embedding("rag_item_local_life_id_1", dim=8, 
-#                                                 expand=item_rag_size, slots=[item_rag_magic_num + 1606])
-# rag_item_local_life_id_2 = config.new_embedding("rag_item_local_life_id_2", dim=8, 
-#                                                 expand=item_rag_size, slots=[item_rag_magic_num + 1607])
-# rag_item_local_life_emb = tf.concat([
-#     tf.reshape(rag_item_local_life_id_1, (-1, item_rag_size, 8)), 
-#     tf.reshape(rag_item_local_life_id_2, (-1, item_rag_size, 8))
-# ], axis=-1)
-# rag_item_embedding_64_pid = config.new_embedding("rag_item_embedding_64_pid", dim=64, 
-#                                                  expand=item_rag_size, slots=[item_rag_magic_num + 26])
-# rag_item_embedding_64_aid = config.new_embedding("rag_item_embedding_64_aid", dim=64, 
-#                                                  expand=item_rag_size, slots=[item_rag_magic_num + 128])
-# rag_item_embedding_64 = tf.concat([
-#     tf.reshape(rag_item_embedding_64_pid, (-1, item_rag_size, 64)), 
-#     tf.reshape(rag_item_embedding_64_aid, (-1, item_rag_size, 64))
-# ], axis=-1)
-# rag_item_embedding_8_list = []
-# rag_item_embedding_slot_list = [71, 141, 142, 143, 430, 417]
-# rag_item_embedding_slot_list = [item_rag_magic_num + slot for slot in rag_item_embedding_slot_list]
-# for slot_id in rag_item_embedding_slot_list:
+rag_item_local_life_id_1 = config.new_embedding("rag_item_local_life_id_1", dim=8, 
+                                                expand=item_rag_size, slots=[item_rag_magic_num + 1606])
+rag_item_local_life_id_2 = config.new_embedding("rag_item_local_life_id_2", dim=8, 
+                                                expand=item_rag_size, slots=[item_rag_magic_num + 1607])
+rag_item_local_life_emb = tf.concat([
+    tf.reshape(rag_item_local_life_id_1, (-1, item_rag_size, 8)), 
+    tf.reshape(rag_item_local_life_id_2, (-1, item_rag_size, 8))
+], axis=-1)
+rag_item_embedding_64_pid = config.new_embedding("rag_item_embedding_64_pid", dim=64, 
+                                                 expand=item_rag_size, slots=[item_rag_magic_num + 26])
+rag_item_embedding_64_aid = config.new_embedding("rag_item_embedding_64_aid", dim=64, 
+                                                 expand=item_rag_size, slots=[item_rag_magic_num + 128])
+rag_item_embedding_64 = tf.concat([
+    tf.reshape(rag_item_embedding_64_pid, (-1, item_rag_size, 64)), 
+    tf.reshape(rag_item_embedding_64_aid, (-1, item_rag_size, 64))
+], axis=-1)
+rag_item_embedding_8_list = []
+rag_item_embedding_slot_list = [71, 141, 142, 143, 430, 417]
+rag_item_embedding_slot_list = [item_rag_magic_num + slot for slot in rag_item_embedding_slot_list]
+for slot_id in rag_item_embedding_slot_list:
     
-#     if slot_id == 93:
-#         expand_size = item_rag_size * 2
-#     elif slot_id == 418:
-#         expand_size = item_rag_size * 3
-#     else:
-#         expand_size = item_rag_size
-#     slot_embedding = config.new_embedding(f"rag_item_embedding_8_{slot_id}", dim=8, 
-#                             expand=expand_size, slots=[slot_id])
+    if slot_id == 93:
+        expand_size = item_rag_size * 2
+    elif slot_id == 418:
+        expand_size = item_rag_size * 3
+    else:
+        expand_size = item_rag_size
+    slot_embedding = config.new_embedding(f"rag_item_embedding_8_{slot_id}", dim=8, 
+                            expand=expand_size, slots=[slot_id])
     
-#     if slot_id == 93:
-#         slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 2, 8))
-#         slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
-#     elif slot_id == 418:
-#         slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 3, 8))
-#         slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
-#     else:
-#         slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
-#     rag_item_embedding_8_list.append(slot_embedding)
-# rag_item_embedding_8 = tf.concat(rag_item_embedding_8_list, axis=-1)
-# rag_item_nebula_stats_list = []
-# rag_item_nebula_stats_slot_list = [776, 777, 778, 779, 780, 781, 782]
-# rag_item_nebula_stats_slot_list = [item_rag_magic_num + slot for slot in rag_item_nebula_stats_slot_list]
-# for slot_id in rag_item_nebula_stats_slot_list:
-#     expand_size = item_rag_size
-#     slot_embedding = config.new_embedding(f"rag_item_nebula_stats_{slot_id}", dim=8, 
-#                             expand=expand_size, slots=[slot_id])
-#     slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
-#     rag_item_nebula_stats_list.append(slot_embedding)
-# rag_item_nebula_stats = tf.concat(rag_item_nebula_stats_list, axis=-1)
-# # rag_node_embedding = config.new_embedding("rag_node_embedding", dim=128, expand=item_rag_size, slots=[item_rag_magic_num + 6677])
-# # rag_node_embedding = tf.reshape(rag_node_embedding, (-1, item_rag_size, 128))
+    if slot_id == 93:
+        slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 2, 8))
+        slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
+    elif slot_id == 418:
+        slot_embedding = tf.reshape(slot_embedding, (-1, item_rag_size, 3, 8))
+        slot_embedding = tf.reduce_sum(slot_embedding, axis=2)
+    else:
+        slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
+    rag_item_embedding_8_list.append(slot_embedding)
+rag_item_embedding_8 = tf.concat(rag_item_embedding_8_list, axis=-1)
+rag_item_nebula_stats_list = []
+rag_item_nebula_stats_slot_list = [776, 777, 778, 779, 780, 781, 782]
+rag_item_nebula_stats_slot_list = [item_rag_magic_num + slot for slot in rag_item_nebula_stats_slot_list]
+for slot_id in rag_item_nebula_stats_slot_list:
+    expand_size = item_rag_size
+    slot_embedding = config.new_embedding(f"rag_item_nebula_stats_{slot_id}", dim=8, 
+                            expand=expand_size, slots=[slot_id])
+    slot_embedding = tf.reshape(slot_embedding, (-1, expand_size, 8))
+    rag_item_nebula_stats_list.append(slot_embedding)
+rag_item_nebula_stats = tf.concat(rag_item_nebula_stats_list, axis=-1)
+rag_node_embedding = config.new_embedding("rag_node_embedding", dim=128, expand=item_rag_size, slots=[item_rag_magic_num + 6677])
+rag_node_embedding = tf.reshape(rag_node_embedding, (-1, item_rag_size, 128))
+rag_node_embedding_2 = config.new_embedding("rag_node_embedding_2", dim=128, expand=item_rag_size, slots=[item_rag_magic_num + 6678])
+rag_node_embedding_2 = tf.reshape(rag_node_embedding_2, (-1, item_rag_size, 128))
+rag_node_embedding = tf.concat([rag_node_embedding, rag_node_embedding_2], axis=-1)
+
 if args.mode == "train":
     semantic_id_v2 = config.get_dense_fea("tokens", dim=senmantic_id_token_num, dtype=tf.int64)
     # rag_fea_ids, _, _, _ = config.get_sparse_fea('36677', dim=item_rag_size, dtype=tf.int64)
@@ -963,17 +959,17 @@ if args.mode == "train":
     semantic_id_v2 = tf.reshape(tf.cast(semantic_id_v2, tf.int32), (-1, senmantic_id_token_num))
     labels = [tf.reshape(tf.cast(labels_map[key], tf.float32), (-1, 1)) for key in labels_map]  
 else:
-    semantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.float16 if args.fp16 else tf.float32)
+    semantic_id_v2 = config.get_dense_fea("semantic_id_v2", dim=senmantic_id_token_num, dtype=tf.float32)
     labels = [
-        config.get_dense_fea('adp_effective_view_fix', 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("click", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("like", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("follow", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("forward", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("comment", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("long_view", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("short_view", 1, dtype=tf.float16 if args.fp16 else tf.float32),
-        config.get_dense_fea("play_complete", 1, dtype=tf.float16 if args.fp16 else tf.float32)
+        config.get_dense_fea('adp_effective_view_fix', 1, dtype=tf.float32),
+        config.get_dense_fea("click", 1, dtype=tf.float32),
+        config.get_dense_fea("like", 1, dtype=tf.float32),
+        config.get_dense_fea("follow", 1, dtype=tf.float32),
+        config.get_dense_fea("forward", 1, dtype=tf.float32),
+        config.get_dense_fea("comment", 1, dtype=tf.float32),
+        config.get_dense_fea("long_view", 1, dtype=tf.float32),
+        config.get_dense_fea("short_view", 1, dtype=tf.float32),
+        config.get_dense_fea("play_complete", 1, dtype=tf.float32)
     ]
     semantic_id_v2 = tf.reshape(tf.cast(semantic_id_v2, tf.int32), (-1, senmantic_id_token_num))    
     labels = [tf.reshape(l, (-1, 1)) for l in labels]
@@ -996,7 +992,7 @@ def token_proj_tokens(input, token_dim, name):
                             None, f"{name}_proj_tokens", f"{name}_proj_tokens_param",
                             bias=False)
     return input
-def prepare_item_tokens(semantic_id_v2, vocab_size, token_num, d_model):
+def prepare_item_tokens(vocab_size, token_num, d_model):
     # build item token embedding
     batch_size = tf.shape(semantic_id_v2)[0]
     item_token_embedding = tf.get_variable("item_token_embedding", (vocab_size, d_model))
@@ -1179,20 +1175,41 @@ def prepare_item_gsu_ctx(d_model):
     rag_items = rag_items[:, :rag_seq_len * token_rag_size, :]
     rag_items = mio_dense_layer(rag_items, d_model, None, "rag_items", "rag_items_param", bias=False) # [b, rag_seq_len, d_model]
     return rag_items
+
+def prepare_item_gsu_ctx_2(d_model):
+    bs = tf.shape(rag_node_embedding)[0]
+    rne_dim = rag_node_embedding.get_shape()[-1]
+    rag_list = [rag_item_local_life_emb, rag_item_embedding_64, 
+                rag_item_embedding_8, rag_item_nebula_stats]
+    rag_node_pid_emb = tf.concat(rag_list, axis=-1) # [b, item_rag_size, dim]
+    rag_node_pid_emb = tf.reshape(rag_node_pid_emb, (bs, rag_seq_len, token_rag_size, rag_node_pid_emb.get_shape()[-1])) # [b, item_rag_size, dim]
+
+    rag_node_pid_emb_list = tf.split(rag_node_pid_emb, rag_seq_len, axis=1) # [b, token_rag_size, -1]
+
+    rag_node_embedding_proj = mio_dense_layer(tf.reshape(rag_node_embedding, (bs, rag_seq_len, token_rag_size, rne_dim)), 
+                                              d_model, None, "rag_node_embedding_proj", "rag_node_embedding_proj_param", bias=False)
+    rag_node_embedding_list = tf.split(rag_node_embedding_proj, rag_seq_len, axis=1) # [b, token_rag_size, d_model]
+
+    rag_item_list = []  
+    with tf.variable_scope("rag_item_list", reuse=tf.AUTO_REUSE):
+        for i in range(rag_seq_len):
+            if i < pid_fea_seq_size:
+                rag_item_list.append(rag_node_embedding_list[i])
+            else:
+                pid_info_emb = mio_dense_layer(rag_node_pid_emb_list[i], d_model, None, f"rag_item_merge", f"rag_item_merge_param", bias=False)
+                rag_item = pid_info_emb + rag_node_embedding_list[i]
+                rag_item_list.append(rag_item)
+
+    rag_items = tf.concat(rag_item_list, axis=1) # [b, rag_seq_len * token_rag_size, d_model]
+    rag_items = tf.reshape(rag_items, (bs, rag_seq_len * token_rag_size, d_model))
+    return rag_items
+
 ########### feature prepare end ###########
 ########### llama layer utils ###########
 def rms_norm(x, scope_name, eps=1e-6):
-    if args.mode == "predict" and args.fp16:
-        scale = tf.get_variable(f'scale_{scope_name}', x.shape.as_list()[-1], initializer=tf.ones_initializer())
-        scale = tf.cast(scale, tf.float32)
-        x = tf.cast(x, tf.float32)
-        mean_square = tf.reduce_mean(x ** 2, -1, keep_dims=True)
-        return tf.cast(scale * x * tf.rsqrt(mean_square + eps), tf.float16)
-    else:
-        scale = tf.get_variable(f'scale_{scope_name}', x.shape.as_list()[-1], initializer=tf.ones_initializer())
-        mean_square = tf.reduce_mean(x ** 2, -1, keep_dims=True)
-        return scale * x * tf.rsqrt(mean_square + eps)
-
+    scale = tf.get_variable(f'scale_{scope_name}', x.shape.as_list()[-1], initializer=tf.ones_initializer())
+    mean_square = tf.reduce_mean(x ** 2, -1, keep_dims=True)
+    return scale * x * tf.rsqrt(mean_square + eps)
 def ffn_layer(x, ffn_dim, hidden_dim, name):
     g = mio_dense_layer(x, ffn_dim, None, 
                         f"{name}_ffn_gate", 
@@ -1218,32 +1235,23 @@ def attention_layer(query, key, value, num_heads, att_emb_size, name, kv_mask=No
     seq_len_q = query.get_shape()[1]
     seq_len_k = key.get_shape()[1]
     print(f"seq_len_q: {seq_len_q}, seq_len_k: {seq_len_k}")
-    print(f"query shape: {query.shape}, key shape: {key.shape}, value shape: {value.shape}")
     hidden_dim = int(num_heads * att_emb_size)
     q = mio_dense_layer(query, hidden_dim, None, f"{name}_q_weight", f"{name}_q_weight_param", bias=False)
     k = mio_dense_layer(key, hidden_dim, None, f"{name}_k_weight", f"{name}_k_weight_param", bias=False)
     v = mio_dense_layer(value, hidden_dim, None, f"{name}_v_weight", f"{name}_v_weight_param", bias=False)
-
-    q = tf.reshape(q, [-1, seq_len_q, num_heads, att_emb_size])
-    k = tf.reshape(k, [-1, seq_len_k, num_heads, att_emb_size])
-    v = tf.reshape(v, [-1, seq_len_k, num_heads, att_emb_size])
+    q = tf.reshape(q, [batch_size, seq_len_q, num_heads, att_emb_size])
+    k = tf.reshape(k, [batch_size, seq_len_k, num_heads, att_emb_size])
+    v = tf.reshape(v, [batch_size, seq_len_k, num_heads, att_emb_size])
     q = tf.transpose(q, [0, 2, 1, 3]) # [b, h, sq, head_dim]
     k = tf.transpose(k, [0, 2, 1, 3]) # [b, h, sk, head_dim]
     v = tf.transpose(v, [0, 2, 1, 3]) # [b, h, sk, head_dim]
     attn_scores = tf.matmul(q, k, transpose_b=True) / math.sqrt(att_emb_size) # [b, h, sq, sq]
-    if args.mode == "predict" and args.fp16:
-        attn_scores = tf.cast(attn_scores, tf.float32)
     if kv_mask is not None:
         kv_mask = 1 - tf.reshape(kv_mask, [1, 1, seq_len_q, seq_len_k]) # [1,1,s,s]
         kv_mask = tf.tile(kv_mask, [batch_size, num_heads, 1, 1]) * -1e9 # [b, h, s, s]
         attn_scores = attn_scores + kv_mask
     attn_weights = tf.nn.softmax(attn_scores, axis=-1)
-    if args.mode == "predict" and args.fp16:
-        attn_weights = tf.cast(attn_weights, tf.float16)
-
     attn_output = tf.matmul(attn_weights, v) # [b, h, sq, head_dim]
-    if args.mode == "predict" and args.fp16 is True:
-        attn_output = tf.cast(attn_output, tf.float16)
     
     attn_output = tf.transpose(attn_output, [0, 2, 1, 3]) # [b, sq, h, head_dim]
     attn_output = tf.reshape(attn_output, [batch_size, seq_len_q, num_heads * att_emb_size])
@@ -1446,22 +1454,37 @@ def cross_former_layer(q, kv, ffn_dim, hidden_dim,
         q = tf.nn.dropout(q, rate=dropout_rate)
     q = res + q
     return q
-def build_cross_former_self_layers(q, kv, cross_ffn_dim, self_ffn_dim, hidden_dim, 
+def build_cross_former_self_layers(q, kv, rag_kv, cross_ffn_dim, self_ffn_dim, hidden_dim, 
                               name, 
                               num_heads, num_layers, 
                               kv_mask=None, dropout_rate=0.0):
     batch_size = tf.shape(q)[0]
     seq_len = q.get_shape()[1]
     emb_size = q.get_shape()[2]
-    # pos_embedding = tf.get_variable(f"{name}_pos_embedding", (seq_len, emb_size))
-    pos_embedding = tf.get_variable(f"{name}_pos_embedding", (senmantic_id_token_num, emb_size))[:seq_len, :]
+    pos_embedding = tf.get_variable(f"{name}_pos_embedding", (seq_len, emb_size))
     pos_embedding = tf.tile(tf.expand_dims(pos_embedding, 0), [batch_size, 1, 1])
     q = q + pos_embedding
+    kv_seq_len = kv.get_shape()[1]
+    q_kv_mask = tf.ones([seq_len, kv_seq_len])
+    # rag_mask = tf.ones((senmantic_id_token_num, rag_seq_len), dtype=tf.float32)
+    # rag_mask = tf.linalg.band_part(rag_mask, -1, 0) # 1 for valid, 0 for invalid # [senmantic_id_token_num, rag_seq_len]
+    rag_mask = tf.ones((rag_seq_len), dtype=tf.float32)
+    rag_mask = tf.linalg.diag(rag_mask)
+    rag_mask = tf.tile(tf.expand_dims(rag_mask, -1), (1, 1, token_rag_size)) # [senmantic_id_token_num, rag_seq_len, token_rag_size]
+    rag_mask = tf.reshape(rag_mask, [senmantic_id_token_num, rag_seq_len * token_rag_size]) # [senmantic_id_token_num, rag_seq_len * token_rag_size]
+    # rag_mask = P(rag_mask, "rag_mask", summarize=1024, enable_print_in_training=True)
+    q_kv_mask = tf.concat([q_kv_mask, rag_mask], axis=1) # [seq_len, kv_seq_len + rag_seq_len * token_rag_size]
+    kv = tf.concat([kv, rag_kv], axis=1)
+    
+    print("kv_shape:", kv.get_shape()[1], "kv_seq_len:", kv_seq_len, "rag_seq_len:", rag_seq_len, "token_rag_size:", token_rag_size)
+    assert seq_len == senmantic_id_token_num, "q_seq_len should be equal to senmantic_id_token_num"
+    assert rag_kv.get_shape()[1] == rag_seq_len * token_rag_size, "rag_kv_len should be equal to rag_seq_len * token_rag_size"
+    assert kv.get_shape()[1] == kv_seq_len + rag_seq_len * token_rag_size, "kv_len should be equal to kv_seq_len + rag_seq_len * token_rag_size"
     kv = rms_norm(kv, f"{name}_kv_norm")
     for layer_idx in range(num_layers):
         q = cross_former_layer(q, kv, cross_ffn_dim, hidden_dim, 
                                f"{name}_cross_layer_{layer_idx}", 
-                               num_heads, None, dropout_rate,
+                               num_heads, q_kv_mask, dropout_rate,
                                use_flash_attention=use_flash_attention,
                                align_score=False)
         
@@ -1509,12 +1532,12 @@ def fr_model():
     cross_ffn_dim = int(4 * hidden_dim)
     with tf_name_scope("pre_process"), new_xla_jit_context():
         item_token_label = semantic_id_v2
-        item_token_embedding, all_zeros_mask = prepare_item_tokens(semantic_id_v2, vocab_size, item_seq_len, d_model)
+        item_token_embedding, all_zeros_mask = prepare_item_tokens(vocab_size, item_seq_len, d_model)
         # label_input = prepare_label_input(labels, d_model)
         user_profile_ctx = prepare_user_profile_ctx(token_dim=d_model)
         user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
+        rag_tokens = prepare_item_gsu_ctx(d_model)
         context = tf.concat([user_profile_ctx, user_long_term_history], axis=1)
-        print(f"context shape: {context.shape}")
         # batch_size = tf.shape(user_long_term_mask)[0]
         # ctx_seq_len = context.get_shape()[1]
         # ctx_kv_mask = tf.concat([tf.ones([batch_size, ctx_seq_len - user_long_term_mask.get_shape()[1]], dtype=tf.int32), user_long_term_mask], axis=1)
@@ -1525,6 +1548,7 @@ def fr_model():
         item_token_embedding = tf.concat([bos_token_emb, item_token_embedding[:, :-1, :]], axis=1) # [b, item_seq_len, d_model]
         qformer_res = build_cross_former_self_layers(item_token_embedding, 
                                                      context, 
+                                                     rag_tokens,
                                                      cross_ffn_dim, ffw_size, hidden_dim, 
                                                      "qformer", 
                                                      num_heads, num_layers, 
@@ -1540,97 +1564,6 @@ def fr_model():
         item_token_label,  # [b, item_seq_len]
         all_zeros_mask     # [b]
     )
-
-def predict():
-    # global config
-    d_model = 640
-    num_layers = 8
-    ffw_size = int(d_model * 4)
-    num_heads = 10
-    
-    vocab_size = 64
-    item_seq_len = senmantic_id_token_num
-    # field pre process
-    hidden_dim = d_model
-    cross_ffn_dim = int(4 * hidden_dim)
-
-    beam_width = 64
-    path_tokens = tf.ones([beam_width, 1], dtype=tf.int32)
-    path_probs = tf.zeros([beam_width, 1], dtype=tf.float32)
-
-
-    with tf_name_scope("pre_process"), new_xla_jit_context():
-        user_profile_ctx = prepare_user_profile_ctx(token_dim=d_model)
-        user_long_term_history, user_long_term_mask = prepare_user_long_term_history(d_model) # [user_batch_size, ***]
-        context = tf.concat([user_profile_ctx, user_long_term_history], axis=1)
-        print(f"context shape: {context.shape}")
-        
-    for i in range(item_seq_len):
-        print(f"============== decode step: {i} ==============")
-        with tf_name_scope("qformer"), new_xla_jit_context():
-            bos_token_emb = tf.get_variable(f"bos_token_emb", (1, 1, d_model))
-            
-        if i == 0:
-            item_token_embedding = bos_token_emb
-        else:
-            with tf_name_scope("pre_process"), new_xla_jit_context():
-                item_token_embedding, all_zeros_mask = prepare_item_tokens(semantic_id_v2, vocab_size, item_seq_len, d_model)
-
-            with tf_name_scope("qformer"), new_xla_jit_context():
-                bos_token_emb = tf.tile(bos_token_emb, [beam_width, 1, 1])
-                item_token_embedding = tf.concat([bos_token_emb, item_token_embedding], axis=1) # [b, item_seq_len, d_model]
-        
-        print(f"item_token_embedding shape: {item_token_embedding.shape}")
-        
-        with tf_name_scope("qformer"), new_xla_jit_context():
-            qformer_res = build_cross_former_self_layers(item_token_embedding, 
-                                                        context, 
-                                                        cross_ffn_dim, ffw_size, hidden_dim, 
-                                                        "qformer", 
-                                                        num_heads, num_layers, 
-                                                        kv_mask=None, dropout_rate=0.0)
-
-        with tf_name_scope("item_pred_head"), new_xla_jit_context():
-            b = tf.shape(qformer_res)[0]
-            qformer_res = qformer_res[:, -1, :]
-
-            item_pred_head = mio_dense_layer(qformer_res, vocab_size, 
-                                            None, "item_pred_head", "item_pred_head_param", bias=False)
-            item_pred_logits = tf.reshape(item_pred_head, (b, vocab_size))  # logits already shifted
-        
-        token_probs = tf.nn.log_softmax(item_pred_logits)
-        if i == 0:
-            topk_probs, topk_indices = tf.nn.top_k(token_probs, k=beam_width) # [1, topk] or [topk, topk]
-            topk_probs = tf.reshape(topk_probs, [beam_width, 1])
-            topk_indices = tf.reshape(topk_indices, [beam_width, 1])
-            path_tokens = topk_indices
-            path_probs = topk_probs
-            semantic_id_v2 = path_tokens
-        else:
-            accu_probs = path_probs + token_probs  #[k, n]
-            accu_probs = tf.reshape(accu_probs, [-1])
-            topk_probs, topk_indices = tf.nn.top_k(accu_probs, k=beam_width)
-            path_tokens = tf.reshape(path_tokens, [-1, 1, i])
-            path_tokens = tf.tile(path_tokens, [1, vocab_size, 1])
-
-            ntp_indices = tf.reshape(tf.range(vocab_size), [1, vocab_size, 1])
-            ntp_indices = tf.tile(ntp_indices, [beam_width, 1, 1])
-            path_tokens = tf.concat([path_tokens, ntp_indices], axis=-1)
-
-            path_tokens = tf.reshape(path_tokens, [-1, i+1]) # [topk * pre_cut_num, token_num + 1]
-            path_tokens = tf.gather(path_tokens, topk_indices) # [beam_width, token_num + 1]
-            semantic_id_v2 = path_tokens
-            path_probs = tf.reshape(topk_probs, [beam_width, 1])
-    
-    semantic_id_v2 =  tf.reshape(semantic_id_v2, [1, -1])
-    path_probs =  tf.reshape(path_probs, [1, -1])
-    return (
-        semantic_id_v2,  # [b, item_seq_len, vocab_size - 1]
-        path_probs,  # [b, item_seq_len]
-        all_zeros_mask     # [b]
-    )
-
-
 def select_tokens(sequence, indices):
     batch_size = tf.shape(sequence)[0]
     batch_indices = tf.range(batch_size, dtype=indices.dtype)
@@ -1640,7 +1573,6 @@ def select_tokens(sequence, indices):
     gather_indices = tf.concat([batch_indices, indices], axis=1)
     selected = tf.gather_nd(sequence, gather_indices)
     return selected
-
 if args.mode == "train":
     eval_targets = []
     tab_bits = tf.cast(config.get_dense_fea("tab_bits", 1, dtype=tf.int64), tf.int32)
@@ -1762,32 +1694,6 @@ if args.mode == "train":
     else:
         config.dump_training_config(
             "./training/conf", eval_targets, opts=[opt], text=args.text)
-        
-elif args.mode == "predict":
-    token_num = senmantic_id_token_num
-    pred_tokens, pred_scores, _ = predict()
-    targets = [
-        ("pred_tokens", tf.cast(pred_tokens, dtype=tf.float32)),
-        ("pred_scores", tf.cast(pred_scores, dtype=tf.float32))
-    ]
-    q_names, preds = zip(*targets)
-
-    if args.dryrun and not args.local_debug:
-        config.mock_and_profile(
-            preds, "./predict_log/", batch_sizes=[200], compressed_embedding_size={"USER": 4})
-    elif not args.local_debug:
-        config.dump_predict_config(
-            "./predict/norag_beam64_graph", targets, input_type=3, extra_preds=q_names, text=args.text)
-    else:
-        init_op = tf.global_variables_initializer()
-        sess_config = tf.ConfigProto()
-        sess_config.gpu_options.allow_growth = True
-        with tf.Session(config=sess_config) as sess:
-            sess.run(init_op)
-            res = sess.run(preds)
-            for name, pred in zip(q_names, res):
-                print(f"{name} shape: {pred.shape}")
-
 else:
     # item_pred_logits: [b, item_seq_len, vocab_size - 1]
     # item_token_mask: [b, item_seq_len]
@@ -1809,32 +1715,20 @@ else:
         item_logits = tf.reshape(item_pred_logits, (batch_size, pred_token_num * vocab_size))
         targets = [("logits", item_logits)]
     elif return_type == "beam":
-        if args.mode == "predict" and args.fp16:
-            cur_step = config.get_dense_fea("cur_step", 1, dtype=tf.float16)
-            batch_mask = config.get_dense_fea("batch_mask", 1, dtype=tf.float16)
-            p_temp = config.get_dense_fea("p_temp", 1, dtype=tf.float16)
-            beam_prob = config.get_dense_fea("beam_prob", 1, dtype=tf.float16) # [b, 1]
-
-            cur_step = tf.cast(cur_step, tf.int32)
-            batch_mask = tf.cast(batch_mask, tf.float32)
-            p_temp = tf.cast(p_temp, tf.float32)
-            beam_prob = tf.cast(beam_prob, tf.float32)
-
-        else:
-            cur_step = config.get_dense_fea("cur_step", 1, dtype=tf.int32)
-            batch_mask = config.get_dense_fea("batch_mask", 1, dtype=tf.float32)
-            p_temp = config.get_dense_fea("p_temp", 1, dtype=tf.float32)
-            beam_prob = config.get_dense_fea("beam_prob", 1, dtype=tf.float32) # [b, 1]
-        
+        cur_step = config.get_dense_fea("cur_step", 1, dtype=tf.int32)
         cur_step = tf.reshape(tf.cast(cur_step, tf.int32), (batch_size, 1))
+        batch_mask = config.get_dense_fea("batch_mask", 1, dtype=tf.float32)
         batch_mask = (1 - tf.reshape(batch_mask, (batch_size, 1))) * (-1e9)
         batch_mask = tf.tile(batch_mask, [1, vocab_size])
         batch_mask = tf.reshape(batch_mask, (1, batch_size * vocab_size))
         token_logits = select_tokens(item_pred_logits, cur_step)
         token_logits = tf.reshape(token_logits, (batch_size, vocab_size))
+        p_temp = config.get_dense_fea("p_temp", 1, dtype=tf.float32)
         p_temp = tf.cast(p_temp[0][0], tf.float32)
+        
         token_prob = tf.nn.softmax(token_logits / p_temp, axis=-1) # [b, vocab_size]
         token_logprob = tf.nn.log_softmax(token_logits / p_temp, axis=-1) # [b, vocab_size]
+        beam_prob = config.get_dense_fea("beam_prob", 1, dtype=tf.float32) # [b, 1]
         beam_probs = beam_prob + token_logprob # [b, vocab_size]
         beam_probs = tf.reshape(beam_probs, (1, batch_size * vocab_size))
         beam_probs = beam_probs + batch_mask
@@ -1880,7 +1774,7 @@ else:
             preds, "./predict_log/", batch_sizes=[200], compressed_embedding_size={"USER": 4})
     elif not args.local_debug:
         config.dump_predict_config(
-            "./predict/causal_norag_config_fp16", targets, input_type=3, extra_preds=q_names, text=args.text)
+            "./predict/causal_large_config", targets, input_type=3, extra_preds=q_names, text=args.text)
     else:
         init_op = tf.global_variables_initializer()
         sess_config = tf.ConfigProto()

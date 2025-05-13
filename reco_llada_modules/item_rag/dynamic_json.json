@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "2839075fcfcd74ae022107a86c454ea1_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-13 20:17:55",
+  "_CONFIG_VERSION": "ac011028715a867e225101b1f2fb048c_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-13 21:41:29",
   "_DRAGONFLY_VERSION": "0.8.3",
   "ann_config": {
     "ann_pool": {
@@ -107,14 +107,14 @@
   },
   "default_request_type": "user_seq_request",
   "kess_config": {
-    "service_name": "grpc_item_rag_server"
+    "service_name": "grpc_item_rag_user_longterm"
   },
   "pipeline_manager_config": {
     "base_pipeline": {
       "processor": {
         "_branch_controller_002A56FA": {
           "$branch_start": "_branch_controller_002A56FA",
-          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): .if_(\"target_as_result == 1\")",
+          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_18",
@@ -141,7 +141,7 @@
         },
         "_branch_controller_002A56FA_1": {
           "$branch_start": "_branch_controller_002A56FA_1",
-          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): .if_(\"target_as_result == 1\")",
+          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_28",
@@ -168,7 +168,7 @@
         },
         "_branch_controller_002A56FA_1_else": {
           "$branch_start": "_branch_controller_002A56FA_1",
-          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": 1 * 2 if attr == \"93\" else 1 * 3 if attr==\"418\" else 1} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_28",
@@ -195,7 +195,7 @@
         },
         "_branch_controller_002A56FA_2": {
           "$branch_start": "_branch_controller_002A56FA_2",
-          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): .if_(\"target_as_result == 1\")",
+          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_49",
@@ -222,7 +222,7 @@
         },
         "_branch_controller_002A56FA_2_else": {
           "$branch_start": "_branch_controller_002A56FA_2",
-          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": 1 * 2 if attr == \"93\" else 1 * 3 if attr==\"418\" else 1} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_49",
@@ -249,7 +249,7 @@
         },
         "_branch_controller_002A56FA_3": {
           "$branch_start": "_branch_controller_002A56FA_3",
-          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): .if_(\"target_as_result == 1\")",
+          "$code_info": "[if] 002A56FA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_70",
@@ -276,7 +276,7 @@
         },
         "_branch_controller_002A56FA_3_else": {
           "$branch_start": "_branch_controller_002A56FA_3",
-          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": 1 * 2 if attr == \"93\" else 1 * 3 if attr==\"418\" else 1} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_70",
@@ -303,7 +303,7 @@
         },
         "_branch_controller_002A56FA_else": {
           "$branch_start": "_branch_controller_002A56FA",
-          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": 1 * 2 if attr == \"93\" else 1 * 3 if attr==\"418\" else 1} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] 93FCC9C6 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_18",
@@ -330,7 +330,7 @@
         },
         "_branch_controller_21B66E71": {
           "$branch_start": "_branch_controller_21B66E71",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_11",
@@ -357,7 +357,7 @@
         },
         "_branch_controller_21B66E71_1": {
           "$branch_start": "_branch_controller_21B66E71_1",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_21",
@@ -384,7 +384,7 @@
         },
         "_branch_controller_21B66E71_1_else": {
           "$branch_start": "_branch_controller_21B66E71_1",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": kgnn_item_RAG_num_3x8192 * 2 if attr == \"93\" else kgnn_item_RAG_num_3x8192 * 3 if attr==\"418\" else kgnn_item_RAG_num_3x8192} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_26",
@@ -415,7 +415,7 @@
         },
         "_branch_controller_21B66E71_2": {
           "$branch_start": "_branch_controller_21B66E71_2",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in kgnn_retrieve(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_31",
@@ -442,7 +442,7 @@
         },
         "_branch_controller_21B66E71_2_else": {
           "$branch_start": "_branch_controller_21B66E71_2",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in kgnn_retrieve(): attr_map={\"loop_ids\": \"{2}\"}",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_33",
@@ -471,7 +471,7 @@
         },
         "_branch_controller_21B66E71_3": {
           "$branch_start": "_branch_controller_21B66E71_3",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_31",
@@ -498,7 +498,7 @@
         },
         "_branch_controller_21B66E71_3_else": {
           "$branch_start": "_branch_controller_21B66E71_3",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": kgnn_item_RAG_num_3x8192 * 2 if attr == \"93\" else kgnn_item_RAG_num_3x8192 * 3 if attr==\"418\" else kgnn_item_RAG_num_3x8192} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_47",
@@ -529,7 +529,7 @@
         },
         "_branch_controller_21B66E71_4": {
           "$branch_start": "_branch_controller_21B66E71_4",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in kgnn_retrieve(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_52",
@@ -556,7 +556,7 @@
         },
         "_branch_controller_21B66E71_4_else": {
           "$branch_start": "_branch_controller_21B66E71_4",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in kgnn_retrieve(): attr_map={\"loop_ids\": \"{2}\"}",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_54",
@@ -585,7 +585,7 @@
         },
         "_branch_controller_21B66E71_5": {
           "$branch_start": "_branch_controller_21B66E71_5",
-          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request'\")",
+          "$code_info": "[if] 21B66E71 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_52",
@@ -612,7 +612,7 @@
         },
         "_branch_controller_21B66E71_5_else": {
           "$branch_start": "_branch_controller_21B66E71_5",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": kgnn_item_RAG_num_3x8192 * 2 if attr == \"93\" else kgnn_item_RAG_num_3x8192 * 3 if attr==\"418\" else kgnn_item_RAG_num_3x8192} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_68",
@@ -643,7 +643,7 @@
         },
         "_branch_controller_21B66E71_else": {
           "$branch_start": "_branch_controller_21B66E71",
-          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): {\"from_common_attr\" : attr, \"to_item_attr\" : attr, \"by_list_size\": kgnn_item_RAG_num_3x8192 * 2 if attr == \"93\" else kgnn_item_RAG_num_3x8192 * 3 if attr==\"418\" else kgnn_item_RAG_num_3x8192} for attr in returned_item_rag_attrs",
+          "$code_info": "[else] AB53B7CA dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_16",
@@ -674,7 +674,7 @@
         },
         "_branch_controller_21C515DE": {
           "$branch_start": "_branch_controller_21B66E71",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_16",
@@ -705,7 +705,7 @@
         },
         "_branch_controller_21C515DE_1": {
           "$branch_start": "_branch_controller_21B66E71_1",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_26",
@@ -736,7 +736,7 @@
         },
         "_branch_controller_21C515DE_2": {
           "$branch_start": "_branch_controller_21B66E71_2",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in kgnn_retrieve(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_31",
@@ -765,7 +765,7 @@
         },
         "_branch_controller_21C515DE_3": {
           "$branch_start": "_branch_controller_21B66E71_3",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_47",
@@ -796,7 +796,7 @@
         },
         "_branch_controller_21C515DE_4": {
           "$branch_start": "_branch_controller_21B66E71_4",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in kgnn_retrieve(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in kgnn_retrieve(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_52",
@@ -825,7 +825,7 @@
         },
         "_branch_controller_21C515DE_5": {
           "$branch_start": "_branch_controller_21B66E71_5",
-          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] 21C515DE dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_68",
@@ -856,7 +856,7 @@
         },
         "_branch_controller_255DCA1A": {
           "$branch_start": "_branch_controller_255DCA1A",
-          "$code_info": "[if] 255DCA1A dynamic_json.py in kgnn_loop(): .if_(\"idx <= max_token_num\")",
+          "$code_info": "[if] 255DCA1A dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "idx",
@@ -883,7 +883,7 @@
         },
         "_branch_controller_255DCA1A_1": {
           "$branch_start": "_branch_controller_255DCA1A_1",
-          "$code_info": "[if] 255DCA1A dynamic_json.py in kgnn_loop(): .if_(\"idx <= max_token_num\")",
+          "$code_info": "[if] 255DCA1A dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "idx",
@@ -910,7 +910,7 @@
         },
         "_branch_controller_255DCA1A_1_else": {
           "$branch_start": "_branch_controller_255DCA1A_1",
-          "$code_info": "[else] ED292AA1 dynamic_json.py in kgnn_loop(): sample_without_replacement=True",
+          "$code_info": "[else] ED292AA1 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_56"
@@ -935,7 +935,7 @@
         },
         "_branch_controller_255DCA1A_else": {
           "$branch_start": "_branch_controller_255DCA1A",
-          "$code_info": "[else] ED292AA1 dynamic_json.py in kgnn_loop(): sample_without_replacement=True",
+          "$code_info": "[else] ED292AA1 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_35"
@@ -958,63 +958,9 @@
           "lua_script": "function evaluate() if (_if_control_attr_35 == 1) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "_branch_controller_2E1B6798": {
-          "$branch_start": "_branch_controller_2E1B6798",
-          "$code_info": "[if] 2E1B6798 extract_user_his.py in gpt_gsu(): self.if_(\"request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192'\")",
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_1",
-              "request_type"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_if_control_attr_4"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_if_control_attr_4"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "_if_control_attr_1",
-            "request_type"
-          ],
-          "lua_script": "function evaluate() if (_if_control_attr_1 == 0 and (request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192')) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "_branch_controller_2E1B6798_else": {
-          "$branch_start": "_branch_controller_2E1B6798",
-          "$code_info": "[else] FA3248A7 extract_user_his.py in gpt_gsu(): parameters_output=\"user_seq_parameters\"",
-          "$metadata": {
-            "$input_common_attrs": [
-              "_if_control_attr_1",
-              "_if_control_attr_4"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "_else_control_attr_5"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "_else_control_attr_5"
-          ],
-          "for_branch_control": true,
-          "function_for_common": "evaluate",
-          "import_common_attr": [
-            "_if_control_attr_1",
-            "_if_control_attr_4"
-          ],
-          "lua_script": "function evaluate() if (_if_control_attr_1 == 0 and (_if_control_attr_4 == 1)) then return false else return true end end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "_branch_controller_39B6E341": {
           "$branch_start": "_branch_controller_39B6E341",
-          "$code_info": "[if] 39B6E341 dynamic_json.py in tokenize_item_token(): .if_(\"use_ia_token == 1\")",
+          "$code_info": "[if] 39B6E341 dynamic_json.py in tokenize_item_token(): self",
           "$metadata": {
             "$input_common_attrs": [
               "use_ia_token"
@@ -1039,7 +985,7 @@
         },
         "_branch_controller_39B6E341_else": {
           "$branch_start": "_branch_controller_39B6E341",
-          "$code_info": "[else] 9D577FA1 dynamic_json.py in tokenize_item_token(): size=3",
+          "$code_info": "[else] 9D577FA1 dynamic_json.py in tokenize_item_token(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_7"
@@ -1064,7 +1010,7 @@
         },
         "_branch_controller_446BB679": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[else_if] 446BB679 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_train_request_7x64'\")",
+          "$code_info": "[else_if] 446BB679 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_35",
@@ -1093,7 +1039,7 @@
         },
         "_branch_controller_446BB679_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[else_if] 446BB679 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_train_request_7x64'\")",
+          "$code_info": "[else_if] 446BB679 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_56",
@@ -1122,7 +1068,7 @@
         },
         "_branch_controller_537AD58D": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[else_if] 537AD58D dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 537AD58D dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_37",
@@ -1157,7 +1103,7 @@
         },
         "_branch_controller_537AD58D_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[else_if] 537AD58D dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 537AD58D dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_58",
@@ -1192,7 +1138,7 @@
         },
         "_branch_controller_56B6A9BC": {
           "$branch_start": "_branch_controller_56B6A9BC",
-          "$code_info": "[if] 56B6A9BC dynamic_json.py in ann_retrieve(): .if_(\"request_type == 'train_request' and target_as_result == 1\")",
+          "$code_info": "[if] 56B6A9BC dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_11",
@@ -1221,7 +1167,7 @@
         },
         "_branch_controller_56B6A9BC_1": {
           "$branch_start": "_branch_controller_56B6A9BC_1",
-          "$code_info": "[if] 56B6A9BC dynamic_json.py in ann_retrieve(): .if_(\"request_type == 'train_request' and target_as_result == 1\")",
+          "$code_info": "[if] 56B6A9BC dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_21",
@@ -1250,7 +1196,7 @@
         },
         "_branch_controller_56B6A9BC_1_else": {
           "$branch_start": "_branch_controller_56B6A9BC_1",
-          "$code_info": "[else] 8972B1A2 dynamic_json.py in ann_retrieve(): {\"from_item_attr\": \"ann_score\", \"to_common_attr\": \"ann_scores\"}",
+          "$code_info": "[else] 8972B1A2 dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_21",
@@ -1277,7 +1223,7 @@
         },
         "_branch_controller_56B6A9BC_else": {
           "$branch_start": "_branch_controller_56B6A9BC",
-          "$code_info": "[else] 8972B1A2 dynamic_json.py in ann_retrieve(): {\"from_item_attr\": \"ann_score\", \"to_common_attr\": \"ann_scores\"}",
+          "$code_info": "[else] 8972B1A2 dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_11",
@@ -1304,7 +1250,7 @@
         },
         "_branch_controller_5F6798CA": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[if] 5F6798CA dynamic_json.py in kgnn_loop(): .if_(\"request_type == 'ntp_train_request'\")",
+          "$code_info": "[if] 5F6798CA dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_35",
@@ -1331,7 +1277,7 @@
         },
         "_branch_controller_5F6798CA_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[if] 5F6798CA dynamic_json.py in kgnn_loop(): .if_(\"request_type == 'ntp_train_request'\")",
+          "$code_info": "[if] 5F6798CA dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_56",
@@ -1385,7 +1331,7 @@
         },
         "_branch_controller_8C088380": {
           "$branch_start": "_branch_controller_21B66E71",
-          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_11",
@@ -1414,7 +1360,7 @@
         },
         "_branch_controller_8C088380_1": {
           "$branch_start": "_branch_controller_21B66E71_1",
-          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_21",
@@ -1443,7 +1389,7 @@
         },
         "_branch_controller_8C088380_2": {
           "$branch_start": "_branch_controller_21B66E71_3",
-          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_31",
@@ -1472,7 +1418,7 @@
         },
         "_branch_controller_8C088380_3": {
           "$branch_start": "_branch_controller_21B66E71_5",
-          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): .else_if_(\"request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64'\")",
+          "$code_info": "[else_if] 8C088380 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_52",
@@ -1501,7 +1447,7 @@
         },
         "_branch_controller_8D20F505": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[else_if] 8D20F505 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_train_request_3x8192'\")",
+          "$code_info": "[else_if] 8D20F505 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_37",
@@ -1532,7 +1478,7 @@
         },
         "_branch_controller_8D20F505_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[else_if] 8D20F505 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_train_request_3x8192'\")",
+          "$code_info": "[else_if] 8D20F505 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_58",
@@ -1563,7 +1509,7 @@
         },
         "_branch_controller_8F5F3533": {
           "$branch_start": "_branch_controller_8F5F3533",
-          "$code_info": "[if] 8F5F3533 extract_user_his.py in gpt_gsu(): .if_(\"request_gt_min > 0\")",
+          "$code_info": "[if] 8F5F3533 extract_user_his.py in gpt_gsu(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_1",
@@ -1590,7 +1536,7 @@
         },
         "_branch_controller_98D17BF7": {
           "$branch_start": "_branch_controller_CCD67F66",
-          "$code_info": "[else_if] 98D17BF7 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_7x64'\")",
+          "$code_info": "[else_if] 98D17BF7 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_42",
@@ -1619,7 +1565,7 @@
         },
         "_branch_controller_98D17BF7_1": {
           "$branch_start": "_branch_controller_CCD67F66_1",
-          "$code_info": "[else_if] 98D17BF7 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_7x64'\")",
+          "$code_info": "[else_if] 98D17BF7 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_63",
@@ -1648,7 +1594,7 @@
         },
         "_branch_controller_9986A82D": {
           "$branch_start": "_branch_controller_9986A82D",
-          "$code_info": "[if] 9986A82D dynamic_json.py in decode(): .if_(\"request_type == 'train_request'\")",
+          "$code_info": "[if] 9986A82D dynamic_json.py in decode(): self",
           "$metadata": {
             "$input_common_attrs": [
               "request_type"
@@ -1694,6 +1640,60 @@
             "use_user_seq"
           ],
           "lua_script": "function evaluate() if (use_user_seq == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_A5149FBE": {
+          "$branch_start": "_branch_controller_A5149FBE",
+          "$code_info": "[if] A5149FBE extract_user_his.py in gpt_gsu(): self.if_(\"request_type == 'user_seq_request' or request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_1",
+              "request_type"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_4"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_4"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_1",
+            "request_type"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_1 == 0 and (request_type == 'user_seq_request' or request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192')) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_A5149FBE_else": {
+          "$branch_start": "_branch_controller_A5149FBE",
+          "$code_info": "[else] D8D7B5D6 extract_user_his.py in gpt_gsu(): self.if_(\"request_type == 'user_seq_request' or request_type == 'infer_request' or request_type == 'ntp_infer_request' or request_type == 'test_infer_request' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_1",
+              "_if_control_attr_4"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_else_control_attr_5"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_else_control_attr_5"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "_if_control_attr_1",
+            "_if_control_attr_4"
+          ],
+          "lua_script": "function evaluate() if (_if_control_attr_1 == 0 and (_if_control_attr_4 == 1)) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_B8349E13": {
@@ -1798,7 +1798,7 @@
         },
         "_branch_controller_CCD67F66": {
           "$branch_start": "_branch_controller_CCD67F66",
-          "$code_info": "[if] CCD67F66 dynamic_json.py in kgnn_loop(): .if_(\"request_type == 'ntp_infer_request' or request_type == 'ntp_train_request'\")",
+          "$code_info": "[if] CCD67F66 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_42",
@@ -1825,7 +1825,7 @@
         },
         "_branch_controller_CCD67F66_1": {
           "$branch_start": "_branch_controller_CCD67F66_1",
-          "$code_info": "[if] CCD67F66 dynamic_json.py in kgnn_loop(): .if_(\"request_type == 'ntp_infer_request' or request_type == 'ntp_train_request'\")",
+          "$code_info": "[if] CCD67F66 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_else_control_attr_63",
@@ -1852,7 +1852,7 @@
         },
         "_branch_controller_CD590C17": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[else_if] CD590C17 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] CD590C17 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_37",
@@ -1889,7 +1889,7 @@
         },
         "_branch_controller_CD590C17_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[else_if] CD590C17 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[else_if] CD590C17 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_58",
@@ -1926,7 +1926,7 @@
         },
         "_branch_controller_E01211D5": {
           "$branch_start": "_branch_controller_E01211D5",
-          "$code_info": "[if] E01211D5 dynamic_json.py in ann_retrieve(): .if_(\"request_type == 'train_request' and target_as_result == 1\")",
+          "$code_info": "[if] E01211D5 dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "request_type",
@@ -1953,7 +1953,7 @@
         },
         "_branch_controller_E01211D5_else": {
           "$branch_start": "_branch_controller_E01211D5",
-          "$code_info": "[else] B2A1DB81 dynamic_json.py in ann_retrieve(): {\"from_item_attr\": \"ann_score\", \"to_common_attr\": \"ann_scores\"}",
+          "$code_info": "[else] B2A1DB81 dynamic_json.py in ann_retrieve(): self",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_9"
@@ -1978,7 +1978,7 @@
         },
         "_branch_controller_EDC8D654": {
           "$branch_start": "_branch_controller_EDC8D654",
-          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_11",
@@ -2005,7 +2005,7 @@
         },
         "_branch_controller_EDC8D654_1": {
           "$branch_start": "_branch_controller_EDC8D654_1",
-          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_21",
@@ -2032,7 +2032,7 @@
         },
         "_branch_controller_EDC8D654_2": {
           "$branch_start": "_branch_controller_EDC8D654_2",
-          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_31",
@@ -2059,7 +2059,7 @@
         },
         "_branch_controller_EDC8D654_3": {
           "$branch_start": "_branch_controller_EDC8D654_3",
-          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): .if_(\"request_type == 'ntp_train_request' or request_type == 'ntp_infer_request' or request_type == 'ntp_train_request_7x64' or request_type == 'ntp_infer_request_7x64' or request_type == 'ntp_train_request_3x8192' or request_type == 'ntp_infer_request_3x8192'\")",
+          "$code_info": "[if] EDC8D654 dynamic_json.py in extract_features(): self.enrich_attr_by_lua(",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_52",
@@ -2086,7 +2086,7 @@
         },
         "_branch_controller_FD88C539": {
           "$branch_start": "_branch_controller_5F6798CA",
-          "$code_info": "[else_if] FD88C539 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request'\")",
+          "$code_info": "[else_if] FD88C539 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_37",
@@ -2119,7 +2119,7 @@
         },
         "_branch_controller_FD88C539_1": {
           "$branch_start": "_branch_controller_5F6798CA_1",
-          "$code_info": "[else_if] FD88C539 dynamic_json.py in kgnn_loop(): .else_if_(\"request_type == 'ntp_infer_request'\")",
+          "$code_info": "[else_if] FD88C539 dynamic_json.py in kgnn_loop(): self.set_attr_value(",
           "$metadata": {
             "$input_common_attrs": [
               "_elseif_control_attr_58",
@@ -10289,7 +10289,7 @@
           ],
           "type_name": "CommonRecoKconfCommonAttrEnricher"
         },
-        "get_kconf_params_A01805": {
+        "get_kconf_params_D3217F": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [],
@@ -10303,6 +10303,7 @@
             {
               "default_value": 1,
               "export_common_attr": "use_ia_token",
+              "json_path": "use_ia_token",
               "kconf_key": "reco.model2.item_token_gen_kconf"
             }
           ],
@@ -10801,6 +10802,22 @@
           ],
           "for_debug_request_only": false,
           "skip": "{{_if_control_attr_1}}",
+          "type_name": "CommonRecoDebugInfoObserver"
+        },
+        "log_debug_info_7EC500": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "use_ia_token"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "use_ia_token"
+          ],
+          "for_debug_request_only": false,
           "type_name": "CommonRecoDebugInfoObserver"
         },
         "log_debug_info_81AEC1": {
@@ -14749,7 +14766,8 @@
       "tokenize_item_token_flow": {
         "__PARENT": "base_pipeline",
         "pipeline": [
-          "get_kconf_params_A01805",
+          "get_kconf_params_D3217F",
+          "log_debug_info_7EC500",
           "_branch_controller_39B6E341",
           "fetch_remote_embedding_59A57C",
           "_branch_controller_39B6E341_else",
@@ -14775,9 +14793,9 @@
           "enrich_attr_by_lua_C3A59E",
           "log_debug_info_DB9B7B",
           "perflog_attr_value_F3C965",
-          "_branch_controller_2E1B6798",
+          "_branch_controller_A5149FBE",
           "extract_kuiba_parameter_CABE11",
-          "_branch_controller_2E1B6798_else",
+          "_branch_controller_A5149FBE_else",
           "extract_kuiba_parameter_7E4F3D",
           "copy_attr_F1F070",
           "copy_attr_AD2286",
