@@ -102,8 +102,7 @@ read_log = (
     .fetch_message(output_attr="compressed_batched_samples",
                    group_id="onerec_eval",
                 #    onerec_eval
-                   kafka_topic="kaiworks_retrieval_eval_flow_hb1",
-                   begin_time_ms=1746624539000)
+                   kafka_topic="kaiworks_retrieval_eval_flow_hb1")
     .zstd(
         mode="decompress",
         input_common_attr="compressed_batched_samples",
