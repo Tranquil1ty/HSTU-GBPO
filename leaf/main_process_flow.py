@@ -129,7 +129,6 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
         }]
       ) \
       .end_if_() \
-      .if_("enable_use_fr_model_copy_v2 == 1") \
       .delegate_enrich(
         name = "delegate_enrich_main_model_copy",
         kess_service="{{fr_model_copy_kess_name}}",
@@ -148,26 +147,6 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
         partition_size=256,
         use_packed_item_attr = True
       ) \
-      .else_() \
-      .delegate_enrich(
-        name = "delegate_enrich_main_model",
-        kess_service="grpc_hqg24q4ModelComboFinal",
-        request_type="{{main_model_request_type}}",
-        timeout_ms="{{reward_model_timeout}}",
-        send_common_attrs = [
-            {"name": "user_info_attr", "as": "user_info_str"},
-            "tab_id",
-            "retr_type"
-        ],
-        send_item_attrs=[
-            { "name": "reco_photo_info_str", "as": "reco_photo_info_str" },
-            { "name": "is_living", "as": "living" },
-        ],
-        recv_item_attrs=self.main_model_pxtrs,
-        partition_size=256,
-        use_packed_item_attr = True
-      ) \
-      .end_if_() \
       .enrich_attr_by_lua(
         import_item_attr=["wtd_v2"],
         export_item_attr=["wtd"],
