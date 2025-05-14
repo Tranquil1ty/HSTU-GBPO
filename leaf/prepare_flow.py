@@ -129,11 +129,52 @@ class PrepareFlow(LeafFlow, NrApiMixin):
         {
           "param_name": "enable_use_nebula_request_type_new",
           "param_type": "int",
-          "default_value": "0"
+          "default_value": 0
+        },
+        {
+          "param_name": "one_rec_ab_model_group",
+          "param_type": "string",
+          "default_value": "default",
+          "attr_name": "exp_name"
+        },
+        {
+          "param_name": "one_rec_retr_timeout_ms",
+          "param_type": "int",
+          "default_value": 600,
+          "attr_name": "direct_retr_timeout_ms"
+        },
+        {
+          "param_name": "one_rec_retr_num",
+          "param_type": "int",
+          "default_value": 1024,
+          "attr_name": "direct_retr_num"
+        },
+        {
+          "param_name": "one_rec_retr_request_type",
+          "param_type": "string",
+          "default_value": "default",
+          "attr_name": "direct_retr_request_type"
+        },
+        {
+          "param_name": "one_rec_retr_kess_name",
+          "param_type": "string",
+          "default_value": "grpc_listll6_onerec_infer",
+          "attr_name": "direct_retr_kess_name"
         }
         ],
         deduplicate=True,
         parallel_get=32
+      )
+      .get_abtest_params(
+        biz_name = "KUAISHOU_APPS",
+        ab_params = [
+          ("fr_model_copy_kess_name", "grpc_hqg24q4ModelComboCopy"),
+          ("reward_model_timeout", 1000),
+          ("muw_frequency_control_item_gap_limit", 20),
+          ("muw_enable_use_forumua_one_v2", 0),
+          ("enable_frequency_control", 0),
+          ("one_rec_enable_use_nebula_formula_one", 0)
+        ]
       )
     )
   
