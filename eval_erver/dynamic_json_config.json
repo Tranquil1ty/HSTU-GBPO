@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "d6f7304caf6d0a8107f304701c506720_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-13 17:20:48",
+  "_CONFIG_VERSION": "0e9093df74a3e191983c4d27637c36a3_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-14 18:13:19",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1639,7 +1639,7 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "fetch_message_A4A1CA": {
+        "fetch_message_352AFF": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [],
@@ -1650,7 +1650,7 @@
             "$output_item_attrs": []
           },
           "begin_time_ms": 1746624539000,
-          "group_id": "g_r_m_eval",
+          "group_id": "onerec_eval",
           "kafka_topic": "kaiworks_retrieval_eval_flow_hb1",
           "output_attr": "compressed_batched_samples",
           "type_name": "OfflineMessageFetchEnricher"
@@ -4667,7 +4667,7 @@
       "read_log": {
         "__PARENT": "base_pipeline",
         "pipeline": [
-          "fetch_message_A4A1CA",
+          "fetch_message_352AFF",
           "zstd_B9F4B3",
           "read_cofea_sample_5D8AAB",
           "_branch_controller_749B65E6",

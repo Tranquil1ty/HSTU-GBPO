@@ -100,7 +100,7 @@ def load_feature_list_sign(filename):
 read_log = (
     DataReaderFlow(name="read_log")
     .fetch_message(output_attr="compressed_batched_samples",
-                   group_id="g_r_m_eval",
+                   group_id="onerec_eval",
                 #    onerec_eval
                    kafka_topic="kaiworks_retrieval_eval_flow_hb1",
                    begin_time_ms=1746624539000)
