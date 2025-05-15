@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "00391d75eaf4754dc4ecff0ad0c2d2fc_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-15 16:27:49",
+  "_CONFIG_VERSION": "7ba0105190a1c2d70052cd6eb162a63f_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-15 16:31:07",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -246,7 +246,7 @@
           "skip": "{{_if_control_attr_4}}",
           "type_name": "CommonRecoProtobufBuildAttrEnricher"
         },
-        "calc_by_formula1_9AFA12": {
+        "calc_by_formula1_F26760": {
           "$metadata": {
             "$downstream_item_attrs": [
               "adaptive_wtd",
@@ -364,6 +364,7 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
+              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
@@ -487,6 +488,7 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
+              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
@@ -586,6 +588,7 @@
             "fuse_score",
             "new_svr",
             "sppc_combine",
+            "wtd_finish_score",
             "cpr_wtd",
             "wtd_duration_score_v2",
             "wtd_v2",
@@ -872,12 +875,13 @@
               "watchlive_wtd_combine",
               "wtd_duration_score",
               "wtd_duration_score_v2",
+              "wtd_finish_score",
               "wtd_v2",
               "wtd_v2_playtime",
               "wtr"
             ]
           },
-          "downstream_processor": "calc_by_formula1_9AFA12",
+          "downstream_processor": "calc_by_formula1_F26760",
           "kess_service": "grpc_hqg24q4ModelComboCopy",
           "partition_size": 256,
           "recv_item_attrs": [
@@ -965,6 +969,7 @@
             "fuse_score",
             "new_svr",
             "sppc_combine",
+            "wtd_finish_score",
             "cpr_wtd",
             "wtd_duration_score_v2",
             "wtd_v2",
@@ -1295,9 +1300,10 @@
           "lua_script": "function calculate()\n            local common_eval_kess_list_size = #common_eval_kess_list\n            local common_eval_kess_list_index = 1\n            local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size\n            local common_eval_kess_name = \"\"\n            if (is_keep_call_eval) then\n                common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]\n            end\n            return common_eval_kess_list_size,\n                    common_eval_kess_list_index,\n                    common_eval_kess_name,\n                    is_keep_call_eval\n        end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_7A10DA": {
+        "enrich_attr_by_lua_77997F": {
           "$metadata": {
             "$input_common_attrs": [
+              "_if_control_attr_5",
               "common_eval_kess_list",
               "common_eval_kess_list_index",
               "common_eval_kess_list_size"
@@ -1323,6 +1329,7 @@
             "common_eval_kess_list_index"
           ],
           "lua_script": "function calculate()\n                    local common_eval_kess_list_index = common_eval_kess_list_index or 1\n                    common_eval_kess_list_index = common_eval_kess_list_index + 1\n                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size\n                    local common_eval_kess_name = \"\"\n                    if (is_keep_call_eval) then\n                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]\n                    end\n                    return common_eval_kess_list_index,\n                           common_eval_kess_name,\n                           is_keep_call_eval\n                end",
+          "skip": "{{_if_control_attr_5}}",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_7ABC25": {
@@ -4552,7 +4559,6 @@
           "truncate_5111BF",
           "delegate_retrieve_2A7FE2",
           "log_debug_info_BB82FF",
-          "enrich_attr_by_lua_7A10DA",
           "count_reco_result_F842BF",
           "log_debug_info_99A925",
           "_branch_controller_EB7701DB",
@@ -4562,7 +4568,7 @@
           "set_attr_value_6C647F",
           "enrich_attr_by_lua_58578D",
           "delegate_enrich_main_model",
-          "calc_by_formula1_9AFA12",
+          "calc_by_formula1_F26760",
           "enrich_attr_by_lua_6491BF",
           "perflog_attr_value_88EED3",
           "pack_item_attr_5018D3",
@@ -4654,7 +4660,8 @@
           "_branch_controller_0884D76F",
           "perflog_CFCD24C4",
           "_branch_controller_6BC03D97",
-          "perflog_A63D3888"
+          "perflog_A63D3888",
+          "enrich_attr_by_lua_77997F"
         ]
       },
       "finish_stage": {
