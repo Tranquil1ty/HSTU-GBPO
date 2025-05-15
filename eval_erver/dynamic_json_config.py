@@ -442,7 +442,7 @@ class CallEvalServer(LeafFlow):
         )
         .delegate_enrich(
             name="delegate_enrich_main_model",
-            kess_service="grpc_hqg24q4ModelComboFinal",
+            kess_service="grpc_hqg24q4ModelComboCopy",
             request_type="{{full_rank_req_type}}",
             timeout_ms=10000,
             send_common_attrs = [
