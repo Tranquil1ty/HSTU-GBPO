@@ -4,6 +4,7 @@ import os
 import sys
 from dragonfly.common_leaf_dsl import LeafService
 from prepare_flow import PrepareFlow
+from send_log_flow import SendLogFlow
 from direct_retrieval_flow import DirectRetrFlow
 from main_process_flow import MainProcessFlow
 from post_filter_flow import PostFilterFlow
@@ -15,6 +16,8 @@ prepare_flow = PrepareFlow(name="prepare")._default_flow()
 retr_flow = DirectRetrFlow(name="retr")._default_flow()
 # 中间层处理逻辑，获取 photo_info
 main_process_flow = MainProcessFlow(name="main_process")._default_flow()
+# 发送日志，在filter 之前
+send_log_flow = SendLogFlow(name="send_log")._default_flow()
 # 后置过滤逻辑
 filter_flow = PostFilterFlow(name="filter")._post_filter_flow()
 # 生成最终结果

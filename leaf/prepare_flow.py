@@ -173,7 +173,8 @@ class PrepareFlow(LeafFlow, NrApiMixin):
           ("muw_frequency_control_item_gap_limit", 20),
           ("muw_enable_use_forumua_one_v2", 0),
           ("enable_frequency_control", 0),
-          ("one_rec_enable_use_nebula_formula_one", 0)
+          ("one_rec_enable_use_nebula_formula_one", 0),
+          ("one_rec_enable_send_kafka_log", 0)
         ]
       )
     )
