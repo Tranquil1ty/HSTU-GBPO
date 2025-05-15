@@ -61,7 +61,7 @@ main_model_pxtrs = [
     "cpr", "evtr_exp", "lvtr_exp", "svr_exp", "vtr_exp", "kyplc", "post_at_comment_score",
     "screen_shot", "search_comment_highlight_click", "search_comment_highlight_trending",
     "watchlive_wtd_combine", "sppc_bottom_bar", "interest_evtr_playtime", "wtd_duration_score",
-    "vtr_calibration_score", "fuse_score", "new_svr", "sppc_combine",
+    "vtr_calibration_score", "fuse_score", "new_svr", "sppc_combine", "wtd_finish_score",
     "cpr_wtd", "wtd_duration_score_v2", "wtd_v2", "caption_searchpage", "click_live",
     "effective_watch_live_time", "setr3_low_active", "search_pure_cmt_highlight_ctr", "itr",
     "playlet_ctr", "adp_wtd", "hashtag_ctr", "peak_evtr", "search_comment_trending_click",
@@ -287,29 +287,6 @@ class CallEvalServer(LeafFlow):
                 for_debug_request_only=False,
                 respect_sample_logging=False
             )
-            .enrich_attr_by_lua(
-                import_common_attr=["common_eval_kess_list",
-                                    "common_eval_kess_list_size",
-                                    "common_eval_kess_list_index"],
-                export_common_attr=["common_eval_kess_list_index",
-                                    "common_eval_kess_name",
-                                    "is_keep_call_eval"],
-                function_for_common="calculate",
-                lua_script="""
-                function calculate()
-                    local common_eval_kess_list_index = common_eval_kess_list_index or 1
-                    common_eval_kess_list_index = common_eval_kess_list_index + 1
-                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size
-                    local common_eval_kess_name = ""
-                    if (is_keep_call_eval) then
-                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]
-                    end
-                    return common_eval_kess_list_index,
-                           common_eval_kess_name,
-                           is_keep_call_eval
-                end
-                """
-            )
         )
     
     def post_eval(self):
@@ -386,6 +363,29 @@ class CallEvalServer(LeafFlow):
             """
         )
         .hitrate_perf(namespace="common.leaf", subtag="onerec_hit_rate_eval")
+        .enrich_attr_by_lua(
+                import_common_attr=["common_eval_kess_list",
+                                    "common_eval_kess_list_size",
+                                    "common_eval_kess_list_index"],
+                export_common_attr=["common_eval_kess_list_index",
+                                    "common_eval_kess_name",
+                                    "is_keep_call_eval"],
+                function_for_common="calculate",
+                lua_script="""
+                function calculate()
+                    local common_eval_kess_list_index = common_eval_kess_list_index or 1
+                    common_eval_kess_list_index = common_eval_kess_list_index + 1
+                    local is_keep_call_eval = common_eval_kess_list_index <= common_eval_kess_list_size
+                    local common_eval_kess_name = ""
+                    if (is_keep_call_eval) then
+                        common_eval_kess_name = common_eval_kess_list[common_eval_kess_list_index]
+                    end
+                    return common_eval_kess_list_index,
+                           common_eval_kess_name,
+                           is_keep_call_eval
+                end
+                """
+            )
         .end_()
     )
 
