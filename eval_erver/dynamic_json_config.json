@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "e21853b587838c65911d832ce57645eb_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-15 19:15:26",
+  "_CONFIG_VERSION": "a69383267dab76c56cf001dd888baca2_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-15 19:45:33",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -1019,7 +1019,7 @@
           "type_name": "CommonRecoDelegateEnricher",
           "use_packed_item_attr": true
         },
-        "delegate_retrieve_EB7558": {
+        "delegate_retrieve_64167B": {
           "$metadata": {
             "$input_common_attrs": [
               "common_eval_kess_name",
@@ -1052,7 +1052,7 @@
             "follow_photo_id_list",
             "longview_photo_id_list"
           ],
-          "timeout_ms": 500,
+          "timeout_ms": 800,
           "type_name": "CommonRecoDelegateRetriever"
         },
         "enrich_attr_by_lua_0E3C5F": {
@@ -4557,7 +4557,7 @@
           "perflog_attr_value_151D3F",
           "pack_item_attr_68BEEC",
           "truncate_5111BF",
-          "delegate_retrieve_EB7558",
+          "delegate_retrieve_64167B",
           "log_debug_info_BB82FF",
           "count_reco_result_F842BF",
           "log_debug_info_99A925",

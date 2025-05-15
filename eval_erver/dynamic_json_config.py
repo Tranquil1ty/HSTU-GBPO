@@ -275,7 +275,7 @@ class CallEvalServer(LeafFlow):
                     "like_photo_id_list", "follow_photo_id_list", "longview_photo_id_list"
                 ],
                 request_type="default",
-                timeout_ms=500,
+                timeout_ms=800,
                 request_num=1000
             )
             .log_debug_info(
