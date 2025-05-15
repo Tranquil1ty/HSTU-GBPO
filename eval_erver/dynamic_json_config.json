@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "aa06057845dacd67afd4f57fd2070aeb_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-14 18:29:25",
+  "_CONFIG_VERSION": "e2ecdb2c99048de13a9a72a219312b98_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-15 10:11:37",
   "_DRAGONFLY_VERSION": "0.8.3",
   "kess_config": {},
   "pipeline_manager_config": {
@@ -878,7 +878,7 @@
             ]
           },
           "downstream_processor": "calc_by_formula1_9AFA12",
-          "kess_service": "grpc_hqg24q4ModelComboFinal",
+          "kess_service": "grpc_hqg24q4ModelComboCopy",
           "partition_size": 256,
           "recv_item_attrs": [
             "evtr",
