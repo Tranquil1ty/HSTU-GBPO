@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "f2e725480f98b928636360576c433ec9_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-14 17:44:55",
+  "_CONFIG_VERSION": "0c636e7c69d04f80c05170876d5fb76f_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-15 18:17:04",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -394,6 +394,7 @@
               "mus4",
               "mustc",
               "new_svr",
+              "onerec_mix_pxtr",
               "osftr",
               "peak_evtr",
               "playlet_ctr",
@@ -453,7 +454,7 @@
               "wtr"
             ]
           },
-          "downstream_processor": "enrich_attr_by_lua_C84603",
+          "downstream_processor": "enrich_attr_by_lua_BC639F",
           "kess_service": "{{fr_model_copy_kess_name}}",
           "partition_size": 256,
           "recv_item_attrs": [
@@ -576,7 +577,8 @@
             "bubble_sr",
             "search_page_photo_show",
             "search_page_photo_click",
-            "l2r_pxtr"
+            "l2r_pxtr",
+            "onerec_mix_pxtr"
           ],
           "request_type": "{{main_model_request_type}}",
           "send_common_attrs": [
@@ -829,7 +831,7 @@
           "lua_script": "function calculate()\n            local nebula_realshow_cnt = nebula_realshow_cnt or 0\n            local gamora_realshow_cnt = gamora_realshow_cnt or 0\n            return nebula_realshow_cnt + gamora_realshow_cnt\n          end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_C84603": {
+        "enrich_attr_by_lua_BC639F": {
           "$metadata": {
             "$downstream_item_attrs": [
               "adaptive_wtd",
@@ -895,6 +897,7 @@
               "mus4",
               "mustc",
               "new_svr",
+              "onerec_mix_pxtr",
               "osftr",
               "peak_evtr",
               "playlet_ctr",
@@ -2643,7 +2646,7 @@
           "_branch_controller_E93472C0",
           "set_attr_value_4DA3E3",
           "delegate_enrich_main_model_copy",
-          "enrich_attr_by_lua_C84603"
+          "enrich_attr_by_lua_BC639F"
         ]
       },
       "prepare": {

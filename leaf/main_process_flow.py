@@ -24,7 +24,7 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
       "bubble_cr", "hashtag_sppc", "bottom_bar_ctr", "ua_long_term_page_score", "session_play_time",
       "all_evtr", "avtt", "playtime_denoise", "pro_cpr", "total_watch_time", "total_watch_time_wtd",
       "adp_clevtr_pro", "pro_evtr", "watch_live", "wtd_v2_playtime", "cpr_duration_score", "setr2",
-      "bubble_sr", "search_page_photo_show", "search_page_photo_click", "l2r_pxtr"
+      "bubble_sr", "search_page_photo_show", "search_page_photo_click", "l2r_pxtr", "onerec_mix_pxtr"
   ]
   def __init__(self, name):
     LeafFlow.__init__(self, name)
