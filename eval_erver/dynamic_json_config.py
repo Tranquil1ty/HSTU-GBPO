@@ -275,7 +275,7 @@ class CallEvalServer(LeafFlow):
                     "like_photo_id_list", "follow_photo_id_list", "longview_photo_id_list"
                 ],
                 request_type="default",
-                timeout_ms=10000,
+                timeout_ms=500,
                 request_num=1000
             )
             .log_debug_info(
@@ -444,7 +444,7 @@ class CallEvalServer(LeafFlow):
             name="delegate_enrich_main_model",
             kess_service="grpc_hqg24q4ModelComboCopy",
             request_type="{{full_rank_req_type}}",
-            timeout_ms=10000,
+            timeout_ms=200,
             send_common_attrs = [
                 "user_info_str",
                 "tab_id",
