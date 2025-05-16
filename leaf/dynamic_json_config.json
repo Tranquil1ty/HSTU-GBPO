@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "b444b1f12334726043d7c6fa1cc34478_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-15 21:31:04",
+  "_CONFIG_VERSION": "e5aa59ea1c152e1125d3c7518e15ce71_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-16 10:49:54",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -122,6 +122,31 @@
             "_if_control_attr_6"
           ],
           "lua_script": "function evaluate() if (_if_control_attr_6 == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_B6CCFF71": {
+          "$branch_start": "_branch_controller_B6CCFF71",
+          "$code_info": "[if] B6CCFF71 send_log_flow.py in _default_flow(): self.if_(\"one_rec_enable_send_kafka_log == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "one_rec_enable_send_kafka_log"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_5"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_5"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "one_rec_enable_send_kafka_log"
+          ],
+          "lua_script": "function evaluate() if (one_rec_enable_send_kafka_log == 1) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_E93472C0": {
@@ -1065,6 +1090,76 @@
           ],
           "from_extra_var": "user_info_ptr",
           "type_name": "CommonRecoProtobufAttrEnricher"
+        },
+        "export_attr_to_kafka_0E6269": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_5",
+              "current_time_ms",
+              "device_id",
+              "direct_retr_kess_name",
+              "is_gamora_user",
+              "is_nebula_user",
+              "request_id",
+              "request_time",
+              "tab_id",
+              "user_id"
+            ],
+            "$input_item_attrs": [
+              "cmef",
+              "cmtr",
+              "cpr",
+              "evtr",
+              "ftr",
+              "l2r_pxtr",
+              "lsst",
+              "ltr",
+              "lvtr",
+              "onerec_mix_pxtr",
+              "ptr",
+              "qtr",
+              "retr_score",
+              "svr",
+              "vtr",
+              "wtr"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "common_attrs": [
+            "user_id",
+            "device_id",
+            "tab_id",
+            "request_id",
+            "current_time_ms",
+            "request_time",
+            "is_gamora_user",
+            "is_nebula_user",
+            "direct_retr_kess_name"
+          ],
+          "item_attrs": [
+            "retr_score",
+            "evtr",
+            "ltr",
+            "wtr",
+            "ftr",
+            "cmtr",
+            "lvtr",
+            "vtr",
+            "svr",
+            "ptr",
+            "cmef",
+            "qtr",
+            "cpr",
+            "lsst",
+            "l2r_pxtr",
+            "onerec_mix_pxtr"
+          ],
+          "kafka_topic": "reco_one_rec_result_log",
+          "single_json": true,
+          "skip": "{{_if_control_attr_5}}",
+          "type_name": "CommonRecoAttrExportObserver"
         },
         "filter_by_attr_203448": {
           "$metadata": {
@@ -2689,6 +2784,13 @@
           "count_reco_result_B061F6",
           "perflog_DEC7E36D"
         ]
+      },
+      "send_log": {
+        "__PARENT": "base_pipeline",
+        "pipeline": [
+          "_branch_controller_B6CCFF71",
+          "export_attr_to_kafka_0E6269"
+        ]
       }
     }
   },
@@ -2697,6 +2799,7 @@
       "prepare",
       "retr",
       "main_process",
+      "send_log",
       "filter",
       "gen_result"
     ]

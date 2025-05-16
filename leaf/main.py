@@ -37,7 +37,7 @@ service.CHECK_UNUSED_ATTR=False
 service.IGNORE_NO_SOURCE_ATTR = ['score', 'is_nebula_user', 'is_gamora_user']
 service.IGNORE_UNUSED_ATTR = ['user_info_ptr', 'request_id', "device_id", "request_time", "total_realshow_cnt", "duration_ms", 'session_score', 'retr_session_id', 'end2end_model_exp_name']
 
-service.add_leaf_flows(leaf_flows=[prepare_flow,retr_flow, main_process_flow, filter_flow, gen_result_flow], request_type="default", as_default=True)
+service.add_leaf_flows(leaf_flows=[prepare_flow,retr_flow, main_process_flow, send_log_flow, filter_flow, gen_result_flow], request_type="default", as_default=True)
 
 # Build json config
 current_folder = os.path.dirname(os.path.abspath(__file__))
