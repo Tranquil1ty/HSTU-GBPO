@@ -26,6 +26,22 @@ class PrepareFlow(LeafFlow, NrApiMixin):
       save_request_time_to_attr="request_time",
       save_current_time_ms_to_attr="current_time_ms",
     ) \
+    .enrich_attr_by_lua(
+      import_common_attr = ["is_gamora_user", "is_nebula_user"],
+      export_common_attr = ["abtest_user_tag"],
+      function_for_common = "calculate",
+      lua_script = '''
+        function calculate()
+          local abtest_user_tag = "default"
+          if is_gamora_user == 1 then
+            abtest_user_tag = "gamora"
+          elseif is_nebula_user == 1 then
+            abtest_user_tag = "nebula"
+          end
+          return abtest_user_tag
+        end
+      '''
+    ) \
     .enrich_with_protobuf(
       from_extra_var="user_info_ptr",
       attrs=[
@@ -148,19 +164,35 @@ class PrepareFlow(LeafFlow, NrApiMixin):
           "param_type": "int",
           "default_value": 1024,
           "attr_name": "direct_retr_num"
-        },
-        {
-          "param_name": "one_rec_retr_request_type",
-          "param_type": "string",
-          "default_value": "default",
-          "attr_name": "direct_retr_request_type"
-        },
-        {
-          "param_name": "one_rec_retr_kess_name",
-          "param_type": "string",
-          "default_value": "grpc_listll6_onerec_infer",
-          "attr_name": "direct_retr_kess_name"
         }
+        ],
+        deduplicate=True,
+        parallel_get=32
+      )
+      .get_abtest_params(
+        biz_name = "KUAISHOU_APPS",
+        prioritized_suffix = "{{abtest_user_tag}}",
+        ab_params = [
+          {
+            "param_name": {
+                "default": "one_rec_retr_request_type",
+                "gamora": "one_rec_retr_request_type_gamora",
+                "nebula": "one_rec_retr_request_type_nebula"
+            },
+            "param_type": "string",
+            "default_value": "default",
+            "attr_name": "direct_retr_request_type"
+          },
+          {
+            "param_name": {
+                "default": "one_rec_retr_kess_name",
+                "gamora": "one_rec_retr_kess_name_gamora",
+                "nebula": "one_rec_retr_kess_name_nebula"
+            },
+            "param_type": "string",
+            "default_value": "grpc_listll6_onerec_infer",
+            "attr_name": "direct_retr_kess_name"
+          }
         ],
         deduplicate=True,
         parallel_get=32

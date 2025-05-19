@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "e5aa59ea1c152e1125d3c7518e15ce71_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-16 10:49:54",
+  "_CONFIG_VERSION": "585bc0612807e0731b507cbb82ba0e03_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-19 20:01:44",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -49,7 +49,7 @@
         },
         "_branch_controller_2CFC0311_else": {
           "$branch_start": "_branch_controller_2CFC0311",
-          "$code_info": "[else] 8E2D5054 direct_retrieval_flow.py in _do_retr(): .return_(0)",
+          "$code_info": "[else] 8E2D5054 direct_retrieval_flow.py in _do_retr(): .else_()",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_1"
@@ -101,7 +101,7 @@
         },
         "_branch_controller_7A652D83_else": {
           "$branch_start": "_branch_controller_7A652D83",
-          "$code_info": "[else] B4FCC900 gen_result_flow.py in _default_flow(): abtest_biz_name=\"KUAISHOU_APPS\"",
+          "$code_info": "[else] B4FCC900 gen_result_flow.py in _default_flow(): .else_()",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_6"
@@ -730,6 +730,30 @@
             "current_time_ms"
           ],
           "lua_script": "function calculate()\n              local hate_time_list = hate_time_list or {}\n              local hate_hetu_one_list = hate_hetu_one_list or {}\n              local hate_hetu_two_list = hate_hetu_two_list or {}\n              local hate_hetu_three_list = hate_hetu_three_list or {}\n              local one_day_hate_hetu_one_list = {}\n              local one_day_hate_hetu_two_list = {}\n              local one_day_hate_hetu_three_list = {}\n              if #hate_time_list ~= #hate_hetu_one_list then \n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list\n              else\n                for i=1, #hate_time_list do \n                  if current_time_ms - hate_time_list[i] <= 86400000 then \n                    one_day_hate_hetu_one_list.insert(hate_hetu_one_list[i])\n                    if hate_hetu_two_list[i] ~= nil then \n                      one_day_hate_hetu_two_list.insert(hate_hetu_two_list[i])\n                    end \n                    if hate_hetu_three_list[i] ~= nil then \n                      one_day_hate_hetu_three_list.insert(hate_hetu_three_list[i])\n                    end\n                  end\n                end\n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list \n              end\n            end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_384007": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_gamora_user",
+              "is_nebula_user"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "abtest_user_tag"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "abtest_user_tag"
+          ],
+          "function_for_common": "calculate",
+          "import_common_attr": [
+            "is_gamora_user",
+            "is_nebula_user"
+          ],
+          "lua_script": "function calculate()\n          local abtest_user_tag = \"default\"\n          if is_gamora_user == 1 then\n            abtest_user_tag = \"gamora\"\n          elseif is_nebula_user == 1 then\n            abtest_user_tag = \"nebula\"\n          end\n          return abtest_user_tag\n        end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_419004": {
@@ -1866,7 +1890,50 @@
           "on_item_attr": "catorgery_level_1",
           "type_name": "CommonRecoCommonAttrFilterArranger"
         },
-        "get_abtest_params_C53FDB": {
+        "get_abtest_params_62E17D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_ABTEST_USER_TAG_NAMES_",
+              "_ABTEST_USER_TAG_VALUES_",
+              "abtest_user_tag"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "direct_retr_kess_name",
+              "direct_retr_request_type"
+            ],
+            "$output_item_attrs": []
+          },
+          "ab_params": [
+            {
+              "attr_name": "direct_retr_request_type",
+              "default_value": "default",
+              "param_name": {
+                "default": "one_rec_retr_request_type",
+                "gamora": "one_rec_retr_request_type_gamora",
+                "nebula": "one_rec_retr_request_type_nebula"
+              },
+              "param_type": "string"
+            },
+            {
+              "attr_name": "direct_retr_kess_name",
+              "default_value": "grpc_listll6_onerec_infer",
+              "param_name": {
+                "default": "one_rec_retr_kess_name",
+                "gamora": "one_rec_retr_kess_name_gamora",
+                "nebula": "one_rec_retr_kess_name_nebula"
+              },
+              "param_type": "string"
+            }
+          ],
+          "biz_name": "KUAISHOU_APPS",
+          "deduplicate": true,
+          "parallel_get": 32,
+          "prioritized_suffix": "{{abtest_user_tag}}",
+          "type_name": "CommonRecoAbtestCommonAttrEnricher"
+        },
+        "get_abtest_params_863879": {
           "$metadata": {
             "$input_common_attrs": [
               "_ABTEST_USER_TAG_NAMES_",
@@ -1878,9 +1945,7 @@
               "audit_b_second_tag_expand_normal",
               "audit_risk_immd_tag_filter_str_gamora",
               "author_type_vv_thresh_type_string",
-              "direct_retr_kess_name",
               "direct_retr_num",
-              "direct_retr_request_type",
               "direct_retr_timeout_ms",
               "enable_use_nebula_request_type_new",
               "exp_name",
@@ -1949,18 +2014,6 @@
               "default_value": 1024,
               "param_name": "one_rec_retr_num",
               "param_type": "int"
-            },
-            {
-              "attr_name": "direct_retr_request_type",
-              "default_value": "default",
-              "param_name": "one_rec_retr_request_type",
-              "param_type": "string"
-            },
-            {
-              "attr_name": "direct_retr_kess_name",
-              "default_value": "grpc_listll6_onerec_infer",
-              "param_name": "one_rec_retr_kess_name",
-              "param_type": "string"
             }
           ],
           "biz_name": "KUAISHOU_APPS",
@@ -2755,11 +2808,13 @@
         "pipeline": [
           "parse_protobuf_from_string_5F9EFF",
           "copy_user_meta_info_D8585E",
+          "enrich_attr_by_lua_384007",
           "enrich_with_protobuf_2CC9DE",
           "enrich_attr_by_lua_171426",
           "get_kconf_params_B3F91C",
           "get_kconf_params_DEA748",
-          "get_abtest_params_C53FDB",
+          "get_abtest_params_863879",
+          "get_abtest_params_62E17D",
           "get_abtest_params_D403B4",
           "split_string_list_60E188",
           "split_string_list_151641",
