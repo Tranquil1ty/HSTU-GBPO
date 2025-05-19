@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "585bc0612807e0731b507cbb82ba0e03_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-19 20:01:44",
+  "_CONFIG_VERSION": "0dc027d44e827911b1d6f1b8551ba6db_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-19 21:14:31",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -732,30 +732,6 @@
           "lua_script": "function calculate()\n              local hate_time_list = hate_time_list or {}\n              local hate_hetu_one_list = hate_hetu_one_list or {}\n              local hate_hetu_two_list = hate_hetu_two_list or {}\n              local hate_hetu_three_list = hate_hetu_three_list or {}\n              local one_day_hate_hetu_one_list = {}\n              local one_day_hate_hetu_two_list = {}\n              local one_day_hate_hetu_three_list = {}\n              if #hate_time_list ~= #hate_hetu_one_list then \n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list\n              else\n                for i=1, #hate_time_list do \n                  if current_time_ms - hate_time_list[i] <= 86400000 then \n                    one_day_hate_hetu_one_list.insert(hate_hetu_one_list[i])\n                    if hate_hetu_two_list[i] ~= nil then \n                      one_day_hate_hetu_two_list.insert(hate_hetu_two_list[i])\n                    end \n                    if hate_hetu_three_list[i] ~= nil then \n                      one_day_hate_hetu_three_list.insert(hate_hetu_three_list[i])\n                    end\n                  end\n                end\n                return one_day_hate_hetu_one_list, one_day_hate_hetu_two_list, one_day_hate_hetu_three_list \n              end\n            end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_384007": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "is_gamora_user",
-              "is_nebula_user"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "abtest_user_tag"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "abtest_user_tag"
-          ],
-          "function_for_common": "calculate",
-          "import_common_attr": [
-            "is_gamora_user",
-            "is_nebula_user"
-          ],
-          "lua_script": "function calculate()\n          local abtest_user_tag = \"default\"\n          if is_gamora_user == 1 then\n            abtest_user_tag = \"gamora\"\n          elseif is_nebula_user == 1 then\n            abtest_user_tag = \"nebula\"\n          end\n          return abtest_user_tag\n        end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
         "enrich_attr_by_lua_419004": {
           "$metadata": {
             "$input_common_attrs": [
@@ -781,6 +757,30 @@
             "slide_punish_city"
           ],
           "lua_script": "function calculate()\n              local is_city_punish_photo = 0\n              if (slide_punish_city ~= nil) then \n                for i = 1, #slide_punish_city do\n                    if slide_punish_city[i] == city_id then\n                        is_city_punish_photo = 1\n                    end\n                end\n              end\n              return is_city_punish_photo\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_651BDD": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "is_gamora_user",
+              "is_nebula_user"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "abtest_user_tag"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "abtest_user_tag"
+          ],
+          "function_for_common": "calculate",
+          "import_common_attr": [
+            "is_gamora_user",
+            "is_nebula_user"
+          ],
+          "lua_script": "function calculate()\n          local abtest_user_tag = {}\n          if is_gamora_user == 1 then\n            table.insert(abtest_user_tag, \"gamora\")\n          elseif is_nebula_user == 1 then\n            table.insert(abtest_user_tag, \"nebula\")\n          end\n          table.insert(abtest_user_tag, \"default\")\n          return abtest_user_tag\n        end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_attr_by_lua_6C1CCF": {
@@ -2808,7 +2808,7 @@
         "pipeline": [
           "parse_protobuf_from_string_5F9EFF",
           "copy_user_meta_info_D8585E",
-          "enrich_attr_by_lua_384007",
+          "enrich_attr_by_lua_651BDD",
           "enrich_with_protobuf_2CC9DE",
           "enrich_attr_by_lua_171426",
           "get_kconf_params_B3F91C",

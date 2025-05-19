@@ -32,12 +32,13 @@ class PrepareFlow(LeafFlow, NrApiMixin):
       function_for_common = "calculate",
       lua_script = '''
         function calculate()
-          local abtest_user_tag = "default"
+          local abtest_user_tag = {}
           if is_gamora_user == 1 then
-            abtest_user_tag = "gamora"
+            table.insert(abtest_user_tag, "gamora")
           elseif is_nebula_user == 1 then
-            abtest_user_tag = "nebula"
+            table.insert(abtest_user_tag, "nebula")
           end
+          table.insert(abtest_user_tag, "default")
           return abtest_user_tag
         end
       '''
