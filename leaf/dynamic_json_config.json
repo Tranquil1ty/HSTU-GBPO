@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "0dc027d44e827911b1d6f1b8551ba6db_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-19 21:14:31",
+  "_CONFIG_VERSION": "e6eb9bc881ac02bd1d3cec2d03361e51_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-22 13:54:00",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -420,6 +420,9 @@
               "mustc",
               "new_svr",
               "onerec_mix_pxtr",
+              "onerec_mix_pxtr_all",
+              "onerec_mix_pxtr_gamora",
+              "onerec_mix_pxtr_nebula",
               "osftr",
               "peak_evtr",
               "playlet_ctr",
@@ -479,7 +482,7 @@
               "wtr"
             ]
           },
-          "downstream_processor": "enrich_attr_by_lua_BC639F",
+          "downstream_processor": "enrich_attr_by_lua_6FDC1C",
           "kess_service": "{{fr_model_copy_kess_name}}",
           "partition_size": 256,
           "recv_item_attrs": [
@@ -603,7 +606,10 @@
             "search_page_photo_show",
             "search_page_photo_click",
             "l2r_pxtr",
-            "onerec_mix_pxtr"
+            "onerec_mix_pxtr",
+            "onerec_mix_pxtr_gamora",
+            "onerec_mix_pxtr_nebula",
+            "onerec_mix_pxtr_all"
           ],
           "request_type": "{{main_model_request_type}}",
           "send_common_attrs": [
@@ -805,82 +811,7 @@
           "lua_script": "function calculate()\n              local is_same_frame_filter_photo = 0\n              if same_frame_sources ~= nil and #same_frame_sources > 0 then \n                is_same_frame_filter_photo = 1 \n              end\n              return is_same_frame_filter_photo\n          end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
-        "enrich_attr_by_lua_781F3D": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "muw_frequency_control_item_gap_limit",
-              "video_playing_reason"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "frequency_enable"
-            ],
-            "$output_item_attrs": []
-          },
-          "export_common_attr": [
-            "frequency_enable"
-          ],
-          "function_for_common": "calc",
-          "import_common_attr": [
-            "video_playing_reason",
-            "muw_frequency_control_item_gap_limit"
-          ],
-          "lua_script": "function calc()\n          local reason = ''\n          local start = -1\n          local finish = -1\n          for i = 1, #video_playing_reason do\n            if i < muw_frequency_control_item_gap_limit then\n              reason = video_playing_reason[i]\n              start, finish = string.find(reason, '1024')\n              if start ~= nil and start > 0 then\n                return 0\n              end\n            end\n          end\n          return 1\n        end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_78CAB3": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "user_id"
-            ],
-            "$input_item_attrs": [
-              "invisible_friends"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": [
-              "is_invisible_friend_photo"
-            ]
-          },
-          "export_item_attr": [
-            "is_invisible_friend_photo"
-          ],
-          "function_for_item": "calculate",
-          "import_common_attr": [
-            "user_id"
-          ],
-          "import_item_attr": [
-            "invisible_friends"
-          ],
-          "lua_script": "function calculate()\n              local is_invisible_friend_photo = 0\n              if (invisible_friends ~= nil) then \n                for i = 1, #invisible_friends do\n                    if invisible_friends[i] == user_id then\n                        is_invisible_friend_photo = 1\n                    end\n                end\n              end\n              return is_invisible_friend_photo\n          end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_B28F31": {
-          "$metadata": {
-            "$input_common_attrs": [],
-            "$input_item_attrs": [
-              "gamora_realshow_cnt",
-              "nebula_realshow_cnt"
-            ],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [],
-            "$output_item_attrs": [
-              "total_realshow_cnt"
-            ]
-          },
-          "export_item_attr": [
-            "total_realshow_cnt"
-          ],
-          "function_for_item": "calculate",
-          "import_item_attr": [
-            "nebula_realshow_cnt",
-            "gamora_realshow_cnt"
-          ],
-          "lua_script": "function calculate()\n            local nebula_realshow_cnt = nebula_realshow_cnt or 0\n            local gamora_realshow_cnt = gamora_realshow_cnt or 0\n            return nebula_realshow_cnt + gamora_realshow_cnt\n          end",
-          "type_name": "CommonRecoLuaAttrEnricher"
-        },
-        "enrich_attr_by_lua_BC639F": {
+        "enrich_attr_by_lua_6FDC1C": {
           "$metadata": {
             "$downstream_item_attrs": [
               "adaptive_wtd",
@@ -947,6 +878,9 @@
               "mustc",
               "new_svr",
               "onerec_mix_pxtr",
+              "onerec_mix_pxtr_all",
+              "onerec_mix_pxtr_gamora",
+              "onerec_mix_pxtr_nebula",
               "osftr",
               "peak_evtr",
               "playlet_ctr",
@@ -1026,6 +960,81 @@
           ],
           "lua_script": "function calc()\n            local wtd = wtd_v2 or 0\n            return wtd\n          end",
           "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_781F3D": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "muw_frequency_control_item_gap_limit",
+              "video_playing_reason"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "frequency_enable"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "frequency_enable"
+          ],
+          "function_for_common": "calc",
+          "import_common_attr": [
+            "video_playing_reason",
+            "muw_frequency_control_item_gap_limit"
+          ],
+          "lua_script": "function calc()\n          local reason = ''\n          local start = -1\n          local finish = -1\n          for i = 1, #video_playing_reason do\n            if i < muw_frequency_control_item_gap_limit then\n              reason = video_playing_reason[i]\n              start, finish = string.find(reason, '1024')\n              if start ~= nil and start > 0 then\n                return 0\n              end\n            end\n          end\n          return 1\n        end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_78CAB3": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "user_id"
+            ],
+            "$input_item_attrs": [
+              "invisible_friends"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_invisible_friend_photo"
+            ]
+          },
+          "export_item_attr": [
+            "is_invisible_friend_photo"
+          ],
+          "function_for_item": "calculate",
+          "import_common_attr": [
+            "user_id"
+          ],
+          "import_item_attr": [
+            "invisible_friends"
+          ],
+          "lua_script": "function calculate()\n              local is_invisible_friend_photo = 0\n              if (invisible_friends ~= nil) then \n                for i = 1, #invisible_friends do\n                    if invisible_friends[i] == user_id then\n                        is_invisible_friend_photo = 1\n                    end\n                end\n              end\n              return is_invisible_friend_photo\n          end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "enrich_attr_by_lua_B28F31": {
+          "$metadata": {
+            "$input_common_attrs": [],
+            "$input_item_attrs": [
+              "gamora_realshow_cnt",
+              "nebula_realshow_cnt"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "total_realshow_cnt"
+            ]
+          },
+          "export_item_attr": [
+            "total_realshow_cnt"
+          ],
+          "function_for_item": "calculate",
+          "import_item_attr": [
+            "nebula_realshow_cnt",
+            "gamora_realshow_cnt"
+          ],
+          "lua_script": "function calculate()\n            local nebula_realshow_cnt = nebula_realshow_cnt or 0\n            local gamora_realshow_cnt = gamora_realshow_cnt or 0\n            return nebula_realshow_cnt + gamora_realshow_cnt\n          end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "enrich_with_protobuf_2CC9DE": {
@@ -2800,7 +2809,7 @@
           "_branch_controller_E93472C0",
           "set_attr_value_4DA3E3",
           "delegate_enrich_main_model_copy",
-          "enrich_attr_by_lua_BC639F"
+          "enrich_attr_by_lua_6FDC1C"
         ]
       },
       "prepare": {
