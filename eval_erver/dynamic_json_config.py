@@ -99,6 +99,16 @@ def load_feature_list_sign(filename):
 # 第一步，消费无 Lag 采样流量
 read_log = (
     DataReaderFlow(name="read_log")
+    .get_kconf_params(
+        kconf_configs = [{
+            "kconf_key": "rinf.rlRunner.OneRecEvalDegradeRate",
+            "export_common_attr": "eval_degrade_rate",
+            "default_value": 0.0
+        }]
+    )
+    .if_("eval_degrade_rate > util.Random()")
+        .return_()
+    .end_()
     .fetch_message(output_attr="compressed_batched_samples",
                    group_id="onerec_eval",
                 #    onerec_eval
