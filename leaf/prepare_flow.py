@@ -202,7 +202,7 @@ class PrepareFlow(LeafFlow, NrApiMixin):
         biz_name = "KUAISHOU_APPS",
         ab_params = [
           ("fr_model_copy_kess_name", "grpc_hqg24q4ModelComboCopy"),
-          ("reward_model_timeout", 1000),
+          ("onerec_reward_model_timeout", 250),
           ("muw_frequency_control_item_gap_limit", 20),
           ("muw_enable_use_forumua_one_v2", 0),
           ("enable_frequency_control", 0),

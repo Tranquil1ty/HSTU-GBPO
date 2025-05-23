@@ -133,7 +133,7 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
         name = "delegate_enrich_main_model_copy",
         kess_service="{{fr_model_copy_kess_name}}",
         request_type="{{main_model_request_type}}",
-        timeout_ms="{{reward_model_timeout}}",
+        timeout_ms="{{onerec_reward_model_timeout}}",
         send_common_attrs = [
             {"name": "user_info_attr", "as": "user_info_str"},
             "tab_id",
