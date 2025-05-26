@@ -1,6 +1,6 @@
 {
-  "_CONFIG_VERSION": "4a08c656f37efc18d1c11643f4ac6952_local",
-  "_DRAGONFLY_CREATE_TIME": "2025-05-23 21:21:52",
+  "_CONFIG_VERSION": "2895dc06c98323c274dd3c513ac4abf6_local",
+  "_DRAGONFLY_CREATE_TIME": "2025-05-26 17:57:45",
   "_DRAGONFLY_VERSION": "0.8.3",
   "attrs_from_request": {
     "common_attr": [
@@ -49,7 +49,7 @@
         },
         "_branch_controller_2CFC0311_else": {
           "$branch_start": "_branch_controller_2CFC0311",
-          "$code_info": "[else] 8E2D5054 direct_retrieval_flow.py in _do_retr(): .return_(0)",
+          "$code_info": "[else] 8E2D5054 direct_retrieval_flow.py in _do_retr(): .else_()",
           "$metadata": {
             "$input_common_attrs": [
               "_if_control_attr_1"
@@ -83,12 +83,12 @@
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_if_control_attr_6"
+              "_if_control_attr_7"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_if_control_attr_6"
+            "_if_control_attr_7"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
@@ -101,27 +101,27 @@
         },
         "_branch_controller_7A652D83_else": {
           "$branch_start": "_branch_controller_7A652D83",
-          "$code_info": "[else] B4FCC900 gen_result_flow.py in _default_flow(): abtest_biz_name=\"KUAISHOU_APPS\"",
+          "$code_info": "[else] B4FCC900 gen_result_flow.py in _default_flow(): .else_()",
           "$metadata": {
             "$input_common_attrs": [
-              "_if_control_attr_6"
+              "_if_control_attr_7"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
             "$output_common_attrs": [
-              "_else_control_attr_7"
+              "_else_control_attr_8"
             ],
             "$output_item_attrs": []
           },
           "export_common_attr": [
-            "_else_control_attr_7"
+            "_else_control_attr_8"
           ],
           "for_branch_control": true,
           "function_for_common": "evaluate",
           "import_common_attr": [
-            "_if_control_attr_6"
+            "_if_control_attr_7"
           ],
-          "lua_script": "function evaluate() if (_if_control_attr_6 == 1) then return false else return true end end",
+          "lua_script": "function evaluate() if (_if_control_attr_7 == 1) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_B6CCFF71": {
@@ -147,6 +147,31 @@
             "one_rec_enable_send_kafka_log"
           ],
           "lua_script": "function evaluate() if (one_rec_enable_send_kafka_log == 1) then return false else return true end end",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
+        "_branch_controller_C81999B4": {
+          "$branch_start": "_branch_controller_C81999B4",
+          "$code_info": "[if] C81999B4 post_filter_flow.py in _post_filter_flow(): .if_(\"enable_markcodes_filter == 1\")",
+          "$metadata": {
+            "$input_common_attrs": [
+              "enable_markcodes_filter"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "_if_control_attr_6"
+            ],
+            "$output_item_attrs": []
+          },
+          "export_common_attr": [
+            "_if_control_attr_6"
+          ],
+          "for_branch_control": true,
+          "function_for_common": "evaluate",
+          "import_common_attr": [
+            "enable_markcodes_filter"
+          ],
+          "lua_script": "function evaluate() if (enable_markcodes_filter == 1) then return false else return true end end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
         "_branch_controller_E93472C0": {
@@ -231,10 +256,10 @@
           "output_item_attr": "reco_photo_info_str",
           "type_name": "CommonRecoProtobufBuildAttrEnricher"
         },
-        "calc_by_formula1_1F7593": {
+        "calc_by_formula1_3A1C21": {
           "$metadata": {
             "$input_common_attrs": [
-              "_else_control_attr_7"
+              "_else_control_attr_8"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -248,13 +273,13 @@
             "f1_score"
           ],
           "kconf_key": "formula.scenarioKey15.retrieval_leaf_xtr_filter_f1_nebula",
-          "skip": "{{_else_control_attr_7}}",
+          "skip": "{{_else_control_attr_8}}",
           "type_name": "CommonRecoFormulaOneEnricher"
         },
-        "calc_by_formula1_422052": {
+        "calc_by_formula1_5CC0B8": {
           "$metadata": {
             "$input_common_attrs": [
-              "_if_control_attr_6"
+              "_if_control_attr_7"
             ],
             "$input_item_attrs": [],
             "$modify_item_tables": [],
@@ -268,7 +293,7 @@
             "f1_score"
           ],
           "kconf_key": "formula.scenarioKey55.one_rec_fusion_nebula_v1",
-          "skip": "{{_if_control_attr_6}}",
+          "skip": "{{_if_control_attr_7}}",
           "type_name": "CommonRecoFormulaOneEnricher"
         },
         "copy_item_meta_info_863564": {
@@ -1037,6 +1062,35 @@
           "lua_script": "function calculate()\n            local nebula_realshow_cnt = nebula_realshow_cnt or 0\n            local gamora_realshow_cnt = gamora_realshow_cnt or 0\n            return nebula_realshow_cnt + gamora_realshow_cnt\n          end",
           "type_name": "CommonRecoLuaAttrEnricher"
         },
+        "enrich_attr_by_lua_E5AA63": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "markcodes_filter_list"
+            ],
+            "$input_item_attrs": [
+              "markcodes"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": [
+              "is_need_filter_markcode_item"
+            ]
+          },
+          "export_item_attr": [
+            "is_need_filter_markcode_item"
+          ],
+          "function_for_item": "filter",
+          "import_common_attr": [
+            "markcodes_filter_list"
+          ],
+          "import_item_attr": [
+            "markcodes"
+          ],
+          "lua_script": "function filter()\n            local markcodes = markcodes or {}\n            local markcodes_filter_list = markcodes_filter_list or {}\n            for _, markcode in ipairs(markcodes) do\n              if table.contains(markcodes_filter_list, markcode) then\n                return 1\n              end\n            end\n            return 0\n          end",
+          "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoLuaAttrEnricher"
+        },
         "enrich_with_protobuf_2CC9DE": {
           "$metadata": {
             "$input_common_attrs": [
@@ -1446,6 +1500,27 @@
           "compare_to": -999,
           "remove_if": "==",
           "remove_if_attr_missing": true,
+          "type_name": "CommonRecoAttrFilterArranger"
+        },
+        "filter_by_attr_D72134": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_6"
+            ],
+            "$input_item_attrs": [
+              "is_need_filter_markcode_item"
+            ],
+            "$modify_item_tables": [
+              ""
+            ],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "attr_name": "is_need_filter_markcode_item",
+          "compare_to": 1,
+          "remove_if": "==",
+          "remove_if_attr_missing": false,
+          "skip": "{{_if_control_attr_6}}",
           "type_name": "CommonRecoAttrFilterArranger"
         },
         "filter_by_attr_FBC88D": {
@@ -1899,65 +1974,6 @@
           "on_item_attr": "catorgery_level_1",
           "type_name": "CommonRecoCommonAttrFilterArranger"
         },
-        "get_abtest_params_2C7249": {
-          "$metadata": {
-            "$input_common_attrs": [
-              "_ABTEST_USER_TAG_NAMES_",
-              "_ABTEST_USER_TAG_VALUES_"
-            ],
-            "$input_item_attrs": [],
-            "$modify_item_tables": [],
-            "$output_common_attrs": [
-              "enable_frequency_control",
-              "fr_model_copy_kess_name",
-              "muw_enable_use_forumua_one_v2",
-              "muw_frequency_control_item_gap_limit",
-              "one_rec_enable_send_kafka_log",
-              "one_rec_enable_use_nebula_formula_one",
-              "onerec_reward_model_timeout"
-            ],
-            "$output_item_attrs": []
-          },
-          "ab_params": [
-            {
-              "default_value": "grpc_hqg24q4ModelComboCopy",
-              "param_name": "fr_model_copy_kess_name",
-              "param_type": "string"
-            },
-            {
-              "default_value": 250,
-              "param_name": "onerec_reward_model_timeout",
-              "param_type": "int"
-            },
-            {
-              "default_value": 20,
-              "param_name": "muw_frequency_control_item_gap_limit",
-              "param_type": "int"
-            },
-            {
-              "default_value": 0,
-              "param_name": "muw_enable_use_forumua_one_v2",
-              "param_type": "int"
-            },
-            {
-              "default_value": 0,
-              "param_name": "enable_frequency_control",
-              "param_type": "int"
-            },
-            {
-              "default_value": 0,
-              "param_name": "one_rec_enable_use_nebula_formula_one",
-              "param_type": "int"
-            },
-            {
-              "default_value": 0,
-              "param_name": "one_rec_enable_send_kafka_log",
-              "param_type": "int"
-            }
-          ],
-          "biz_name": "KUAISHOU_APPS",
-          "type_name": "CommonRecoAbtestCommonAttrEnricher"
-        },
         "get_abtest_params_62E17D": {
           "$metadata": {
             "$input_common_attrs": [
@@ -2089,7 +2105,78 @@
           "parallel_get": 32,
           "type_name": "CommonRecoAbtestCommonAttrEnricher"
         },
-        "get_item_attr_by_distributed_index_4AB9B0": {
+        "get_abtest_params_CD84B7": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "_ABTEST_USER_TAG_NAMES_",
+              "_ABTEST_USER_TAG_VALUES_"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "enable_frequency_control",
+              "enable_markcodes_filter",
+              "fr_model_copy_kess_name",
+              "markcodes_filter_list_str",
+              "muw_enable_use_forumua_one_v2",
+              "muw_frequency_control_item_gap_limit",
+              "one_rec_enable_send_kafka_log",
+              "one_rec_enable_use_nebula_formula_one",
+              "onerec_reward_model_timeout"
+            ],
+            "$output_item_attrs": []
+          },
+          "ab_params": [
+            {
+              "default_value": "grpc_hqg24q4ModelComboCopy",
+              "param_name": "fr_model_copy_kess_name",
+              "param_type": "string"
+            },
+            {
+              "default_value": 250,
+              "param_name": "onerec_reward_model_timeout",
+              "param_type": "int"
+            },
+            {
+              "default_value": 20,
+              "param_name": "muw_frequency_control_item_gap_limit",
+              "param_type": "int"
+            },
+            {
+              "default_value": 0,
+              "param_name": "muw_enable_use_forumua_one_v2",
+              "param_type": "int"
+            },
+            {
+              "default_value": 0,
+              "param_name": "enable_frequency_control",
+              "param_type": "int"
+            },
+            {
+              "default_value": 0,
+              "param_name": "one_rec_enable_use_nebula_formula_one",
+              "param_type": "int"
+            },
+            {
+              "default_value": 0,
+              "param_name": "one_rec_enable_send_kafka_log",
+              "param_type": "int"
+            },
+            {
+              "default_value": 0,
+              "param_name": "enable_markcodes_filter",
+              "param_type": "int"
+            },
+            {
+              "default_value": "2291144,2291146,2287789,2291145",
+              "param_name": "markcodes_filter_list_str",
+              "param_type": "string"
+            }
+          ],
+          "biz_name": "KUAISHOU_APPS",
+          "type_name": "CommonRecoAbtestCommonAttrEnricher"
+        },
+        "get_item_attr_by_distributed_index_A3B704": {
           "$metadata": {
             "$input_common_attrs": [],
             "$input_item_attrs": [],
@@ -2117,6 +2204,7 @@
               "is_living",
               "level_hot_online",
               "long_term_high_level_photo",
+              "markcodes",
               "nebula_realshow_cnt",
               "original_photo_id",
               "photo_level",
@@ -2193,9 +2281,13 @@
             {
               "name": "is_living",
               "path": "live_photo_info.is_living"
+            },
+            {
+              "name": "markcodes",
+              "path": "sirius_distribution_info.mark_cod"
             }
           ],
-          "downstream_processor": "parse_hetu_tag_3B36C2",
+          "downstream_processor": "parse_hetu_tag_98F145",
           "photo_store_kconf_key": "reco.distributedIndex.hotPhotoStoreConfig",
           "type_name": "CommonRecoDistributedIndexItemAttrEnricher",
           "use_dynamic_photo_store": true
@@ -2238,7 +2330,7 @@
           ],
           "type_name": "CommonRecoKconfCommonAttrEnricher"
         },
-        "parse_hetu_tag_3B36C2": {
+        "parse_hetu_tag_98F145": {
           "$metadata": {
             "$downstream_item_attrs": [
               "audit_b_second_tag",
@@ -2262,6 +2354,7 @@
               "is_living",
               "level_hot_online",
               "long_term_high_level_photo",
+              "markcodes",
               "nebula_realshow_cnt",
               "original_photo_id",
               "photo_level",
@@ -2437,6 +2530,30 @@
           "subtag": "onerec",
           "type_name": "CommonRecoPerflogObserver",
           "value": "{{item_num}}"
+        },
+        "perflog_attr_value_060C6E": {
+          "$eval_common_attrs": [
+            "exp_name"
+          ],
+          "$metadata": {
+            "$input_common_attrs": [
+              "_if_control_attr_3",
+              "exp_name"
+            ],
+            "$input_item_attrs": [
+              "is_need_filter_markcode_item"
+            ],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [],
+            "$output_item_attrs": []
+          },
+          "aggregator": "avg",
+          "check_point": "{{return 'onerec.need_filter_markcodes' .. exp_name}}",
+          "item_attrs": [
+            "is_need_filter_markcode_item"
+          ],
+          "skip": "{{_if_control_attr_3}}",
+          "type_name": "CommonRecoAttrValuePerflogObserver"
         },
         "perflog_attr_value_4CA779": {
           "$eval_common_attrs": [
@@ -2728,6 +2845,24 @@
           "output_common_attr": "impression_audit_second_level_black_tag_list",
           "parse_to_int": true,
           "type_name": "SlideLeafStringListSplitEnricher"
+        },
+        "split_string_list_FC35A0": {
+          "$metadata": {
+            "$input_common_attrs": [
+              "markcodes_filter_list_str"
+            ],
+            "$input_item_attrs": [],
+            "$modify_item_tables": [],
+            "$output_common_attrs": [
+              "markcodes_filter_list"
+            ],
+            "$output_item_attrs": []
+          },
+          "delimiters": ",",
+          "input_common_attr": "markcodes_filter_list_str",
+          "output_common_attr": "markcodes_filter_list",
+          "parse_to_int": true,
+          "type_name": "SlideLeafStringListSplitEnricher"
         }
       },
       "type_name": "CommonRecoPipeline"
@@ -2779,6 +2914,8 @@
           "filter_by_common_attr_584B99",
           "filter_by_common_attr_C3A875",
           "filter_by_common_attr_C13FBF",
+          "_branch_controller_C81999B4",
+          "filter_by_attr_D72134",
           "count_reco_result_B061F6",
           "perflog_03D75469"
         ]
@@ -2787,9 +2924,9 @@
         "__PARENT": "base_pipeline",
         "pipeline": [
           "_branch_controller_7A652D83",
-          "calc_by_formula1_422052",
+          "calc_by_formula1_5CC0B8",
           "_branch_controller_7A652D83_else",
-          "calc_by_formula1_1F7593",
+          "calc_by_formula1_3A1C21",
           "perflog_attr_value_4CA779",
           "perflog_attr_value_8C6404",
           "sort_by_score_FB8439"
@@ -2798,8 +2935,8 @@
       "main_process": {
         "__PARENT": "base_pipeline",
         "pipeline": [
-          "get_item_attr_by_distributed_index_4AB9B0",
-          "parse_hetu_tag_3B36C2",
+          "get_item_attr_by_distributed_index_A3B704",
+          "parse_hetu_tag_98F145",
           "enrich_attr_by_lua_B28F31",
           "copy_item_meta_info_863564",
           "build_protobuf_640AD3",
@@ -2809,7 +2946,9 @@
           "_branch_controller_E93472C0",
           "set_attr_value_4DA3E3",
           "delegate_enrich_main_model_copy",
-          "enrich_attr_by_lua_6FDC1C"
+          "enrich_attr_by_lua_6FDC1C",
+          "enrich_attr_by_lua_E5AA63",
+          "perflog_attr_value_060C6E"
         ]
       },
       "prepare": {
@@ -2824,13 +2963,14 @@
           "get_kconf_params_DEA748",
           "get_abtest_params_863879",
           "get_abtest_params_62E17D",
-          "get_abtest_params_2C7249",
+          "get_abtest_params_CD84B7",
           "split_string_list_60E188",
           "split_string_list_151641",
           "split_string_list_EC5996",
           "split_string_list_025629",
           "split_string_list_7CDD9D",
-          "split_string_list_81CFCF"
+          "split_string_list_81CFCF",
+          "split_string_list_FC35A0"
         ]
       },
       "retr": {

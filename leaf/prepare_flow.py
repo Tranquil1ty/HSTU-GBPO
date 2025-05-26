@@ -207,7 +207,9 @@ class PrepareFlow(LeafFlow, NrApiMixin):
           ("muw_enable_use_forumua_one_v2", 0),
           ("enable_frequency_control", 0),
           ("one_rec_enable_use_nebula_formula_one", 0),
-          ("one_rec_enable_send_kafka_log", 0)
+          ("one_rec_enable_send_kafka_log", 0),
+          ("enable_markcodes_filter", 0),
+          ("markcodes_filter_list_str", "2291144,2291146,2287789,2291145"),
         ]
       )
     )
@@ -248,5 +250,11 @@ class PrepareFlow(LeafFlow, NrApiMixin):
           input_common_attr = "author_type_vv_thresh_type_string",
           output_common_attr = "author_type_vv_thresh_type_string_list",
           delimiters=",",
+      )
+      .split_string_list(
+          input_common_attr = "markcodes_filter_list_str",
+          output_common_attr = "markcodes_filter_list",
+          delimiters=",",
+          parse_to_int=True
       )
     )

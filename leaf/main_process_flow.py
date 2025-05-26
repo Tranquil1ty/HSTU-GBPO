@@ -70,6 +70,7 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
         { "name": "nebula_realshow_cnt", "path": "nebula_stats.real_show_count" },
         { "name": "gamora_realshow_cnt", "path": "thanos_stats.real_show_count" },
         { "name": "is_living", "path": "live_photo_info.is_living" },
+        { "name": "markcodes", "path": "sirius_distribution_info.mark_cod"}
       ]
     ) \
     .parse_hetu_tag(
@@ -158,5 +159,28 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
           end
         """
       ) \
-    .end_if_()
+      .enrich_attr_by_lua(
+        import_item_attr=["markcodes"],
+        import_common_attr=["markcodes_filter_list"],
+        export_item_attr=["is_need_filter_markcode_item"],
+        function_for_item="filter",
+        lua_script="""
+          function filter()
+            local markcodes = markcodes or {}
+            local markcodes_filter_list = markcodes_filter_list or {}
+            for _, markcode in ipairs(markcodes) do
+              if table.contains(markcodes_filter_list, markcode) then
+                return 1
+              end
+            end
+            return 0
+          end
+        """
+      ) \
+      .perflog_attr_value(
+        check_point="{{return 'onerec.need_filter_markcodes' .. exp_name}}",
+        item_attrs= ["is_need_filter_markcode_item"],
+        aggregator='avg'
+      ) \
+      .end_if_()
     return self
