@@ -216,6 +216,14 @@ class PostFilterFlow(LeafFlow):
     .filter_by_common_attr(common_attr=["one_day_hate_hetu_one_list"], on_item_attr='hetu_tag_level_one') \
     .filter_by_common_attr(common_attr=["one_day_hate_hetu_two_list"], on_item_attr='hetu_tag_level_two') \
     .filter_by_common_attr(common_attr=["one_day_hate_hetu_three_list"], on_item_attr='hetu_tag_level_three') \
+    .if_("enable_markcodes_filter == 1") \
+    .filter_by_attr(
+        attr_name="is_need_filter_markcode_item",
+        remove_if="==",
+        compare_to=1,
+        remove_if_attr_missing=False,
+    ) \
+    .end_if_() \
     .count_reco_result(save_count_to="item_num") \
     .perflog(mode='interval', value='{{item_num}}', namespace='common.leaf', subtag='onerec', extra1="item_cnt_after_filter", extra2="{{exp_name}}")
     return self

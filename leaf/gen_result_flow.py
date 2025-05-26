@@ -25,7 +25,6 @@ class GenResultFlow(LeafFlow):
                 abtest_biz_name="KUAISHOU_APPS"
             ) \
             .end_if_()
-
         self.perflog_attr_value(
             check_point="{{return 'onerec.pxtr.avg.' .. exp_name}}",
             item_attrs=pxtrs + ["f1_score"],
