@@ -168,9 +168,11 @@ class MainProcessFlow(LeafFlow, SlideApiMixin):
           function filter()
             local markcodes = markcodes or {}
             local markcodes_filter_list = markcodes_filter_list or {}
-            for _, markcode in ipairs(markcodes) do
-              if table.contains(markcodes_filter_list, markcode) then
-                return 1
+            for i=1, #markcodes do 
+              for j=1, #markcodes_filter_list do
+                if tonumber(markcodes[i]) == tonumber(markcodes_filter_list[j]) then
+                  return 1
+                end
               end
             end
             return 0

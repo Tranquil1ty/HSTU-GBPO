@@ -216,45 +216,44 @@ class PrepareFlow(LeafFlow, NrApiMixin):
   
   def _process_ab_params(self):
     return (
-      self.split_string_list(
+      self.split_string(
           input_common_attr = "audit_risk_immd_tag_filter_str_gamora",
           output_common_attr = "audit_risk_immd_tag_list",
           delimiters=",",
           parse_to_int=True
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "sexy_content_filter_str_gamora",
           output_common_attr = "sexy_content_filter_list",
           delimiters=",",
           parse_to_int=True
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "impression_audit_second_level_black_tags",
           output_common_attr = "impression_audit_second_level_black_tag_list",
           delimiters=",",
           parse_to_int=True
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "high_hot_audit_second_level_black_tags",
           output_common_attr = "high_hot_audit_second_level_black_tag_list",
           delimiters=",",
           parse_to_int=True
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "topk_audit_second_level_black_tags",
           output_common_attr = "topk_audit_second_level_black_tag_list",
           delimiters=",",
           parse_to_int=True
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "author_type_vv_thresh_type_string",
           output_common_attr = "author_type_vv_thresh_type_string_list",
           delimiters=",",
       )
-      .split_string_list(
+      .split_string(
           input_common_attr = "markcodes_filter_list_str",
           output_common_attr = "markcodes_filter_list",
-          delimiters=",",
-          parse_to_int=True
+          delimiters=","
       )
     )
