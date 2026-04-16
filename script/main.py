@@ -71,6 +71,7 @@ def set_random_seeds(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+    torch.use_deterministic_algorithms(True)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
@@ -135,6 +136,7 @@ def main():
     args = parser.parse_args()
 
     args.verbose = (args.verbose.lower() == "true")
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
     local_rank = int(os.environ.get("LOCAL_RANK", args.local_rank))
     world_size = int(os.environ.get("WORLD_SIZE", 1))

@@ -2,6 +2,7 @@
 
 # --- 1. Runtime Environment ---
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
 GPUS=8
 PORT=29502
 SCRIPT="./main.py"
@@ -17,9 +18,11 @@ HIDDEN_SIZE=${10:-"128"}
 NUM_HEADS=${11:-"2"}
 NUM_LAYERS=${12:-"2"}
 MAX_SEQ_LEN="20"
+SEED=${13:-"42"}
+export PYTHONHASHSEED=$SEED
 
 # --- 4. Build Python Args ---
-PY_ARGS="--dataset $DATASET --mode $MODE --base_path $BASE_PATH"
+PY_ARGS="--dataset $DATASET --mode $MODE --base_path $BASE_PATH --seed $SEED"
 PY_ARGS="$PY_ARGS --hidden_size $HIDDEN_SIZE --num_heads $NUM_HEADS --num_layers $NUM_LAYERS --max_seq_len $MAX_SEQ_LEN"
 
 BATCH_SIZE=256
