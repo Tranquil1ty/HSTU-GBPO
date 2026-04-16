@@ -229,10 +229,11 @@ class HSTUForRL(nn.Module):
         # Output projection
         seqs = self.out_proj(seqs)
 
-        # Extract last valid position
-        hist_len = attention_mask.sum(dim=1)
-        hist_len = torch.where(hist_len > 0, hist_len, torch.ones_like(hist_len))
-        last_indices = (hist_len - 1).clamp(min=0)
+        # Left-padded sequences need the rightmost valid position, not hist_len - 1.
+        has_history = attention_mask.any(dim=1)
+        last_from_end = attention_mask.long().flip(dims=[1]).argmax(dim=1)
+        last_indices = (seq_len - 1 - last_from_end).clamp(min=0)
+        last_indices = torch.where(has_history, last_indices, torch.zeros_like(last_indices))
         batch_indices = torch.arange(batch_size, device=input_seq.device)
         hidden = seqs[batch_indices, last_indices]  # [B, D]
 
