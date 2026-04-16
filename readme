@@ -1,0 +1,12 @@
+都使用dev-hstu分支、不管是push到origin还是kuaishou
+# 环境
+source activate
+conda activate /project-share/zhengpengfei/env/qwen
+cd /home/zhengpengfei/EXP/GBPO/onerec/script
+nvidia-smi
+
+
+git add .
+git commit -m "update"
+git push origin dev-hstu
+git push kuaishou dev-hstu
