@@ -1,7 +1,0 @@
---log_dir=../log/
---grpc_thread_num=32
-# kafka 消费线程
---thread_num=256
---logging_switch_uid_mod_divisor=20000
-
-
