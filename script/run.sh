@@ -25,7 +25,7 @@ PY_ARGS="$PY_ARGS --hidden_size $HIDDEN_SIZE --num_heads $NUM_HEADS --num_layers
 BATCH_SIZE=256
 LR="1e-3"
 if [ "$MODE" == "SFT" ]; then
-    BATCH_SIZE=256
+    BATCH_SIZE=1024
     LR="1e-3"
 fi
 
