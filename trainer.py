@@ -489,7 +489,7 @@ class Trainer:
             loss = self.train_epoch(train_loader, optimizer, epoch, mode=self.cfg.MODE)
             self.log(f"Epoch {epoch} Loss: {loss:.4f}")
 
-            if self.cfg.MODE == "SFT" and epoch < 15: continue
+            #if self.cfg.MODE == "SFT" and epoch < 15: continue
 
             metrics = self.evaluate(valid_data, self.cfg.K_LIST_EVAL)
             key_metric = metrics.get('HitRate@10', 0)
