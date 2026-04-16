@@ -13,5 +13,5 @@ nvidia-smi
 
 git add .
 git commit -m "update"
-git push origin dev-hstu
-git push kuaishou dev-hstu
+git push origin dev-hstu -f 
+git push kuaishou dev-hstu -f
