@@ -67,6 +67,25 @@ def load_loo_data(data_dir):
     return train_x, train_y, valid_x, valid_y, test_x, test_y, num_items
 
 
+def set_random_seeds(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+
+
+def seed_worker(worker_id):
+    worker_seed = torch.initial_seed() % (2 ** 32)
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="Beauty", help="Dataset name")
@@ -105,6 +124,7 @@ def main():
     parser.add_argument("--reward_topk", type=int, default=5)
     parser.add_argument("--verbose", type=str, default="true", choices=["true", "false"])
     parser.add_argument("--use_bf16", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
 
     # Paths
     parser.add_argument("--pretrained_path", type=str, default="")
@@ -127,14 +147,8 @@ def main():
     else:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    seed = 42
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
-
     cfg = Config(args)
+    set_random_seeds(cfg.SEED)
 
     if local_rank == 0:
         print(f"\n" + "="*30 + " HSTU Config " + "="*30)
@@ -149,13 +163,17 @@ def main():
 
     train_dataset = TensorDataset(torch.LongTensor(tx), torch.LongTensor(ty).unsqueeze(-1))
 
-    train_sampler = DistributedSampler(train_dataset) if ddp else None
+    data_loader_generator = torch.Generator()
+    data_loader_generator.manual_seed(cfg.SEED)
+    train_sampler = DistributedSampler(train_dataset, seed=cfg.SEED) if ddp else None
     train_loader = DataLoader(
         train_dataset,
         batch_size=cfg.BATCH_SIZE,
         sampler=train_sampler,
         shuffle=(train_sampler is None),
-        num_workers=4
+        num_workers=4,
+        worker_init_fn=seed_worker,
+        generator=data_loader_generator,
     )
 
     valid_data = list(zip(vx, vy))
