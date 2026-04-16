@@ -11,31 +11,65 @@ HSTU/
 ├── RL/               # 强化学习模块 (GRPO/GBPO/GUPO/GSPO/GPPO/DUAL_PPO/SAPO/DAPO/DPO)
 ├── DIN/functions/    # DIN 奖励模型
 ├── script/
-│   ├── main.py       # 入口脚本
-│   └── run.sh        # 启动脚本 (torchrun 多卡)
-└── data -> ../GBPO/data  # 软链接到 GBPO 数据
+│   ├── main.py           # 入口脚本
+│   ├── run.sh            # 训练启动脚本 (torchrun 多卡)
+│   └── data_process.sh   # 数据预处理脚本
+└── data/
+    ├── raw_data/         # 原始 JSON 数据 (Beauty, Sports, Toys)
+    ├── processed_data/   # 处理后的 LOO .npy 文件
+    └── process/          # 数据处理脚本
+        └── generate_sasrec_files.py
 ```
 
 ## 数据准备
 
-项目通过软链接复用 GBPO 的数据。确保 `../GBPO/data/processed_data/{Dataset}/processed_loo/` 下存在以下文件：
+项目自带原始数据，首次使用需要运行预处理脚本生成 LOO 格式的训练数据。
 
-- `train_x_loo.npy`, `train_y_loo.npy`
-- `valid_x_loo.npy`, `valid_y_loo.npy`
-- `test_x_loo.npy`, `test_y_loo.npy`
+### 原始数据
 
-如果软链接失效，手动重建：
+`data/raw_data/{Dataset}/` 下包含：
+- `{Dataset}.inter.json` — 用户交互序列 `{"user_id": [item_id1, item_id2, ...]}`
+- `{Dataset}.item.json` — 物品元数据
+
+支持的数据集：Beauty, Sports, Toys
+
+### 生成 LOO 数据
+
 ```bash
-ln -sf ../GBPO/data data
+cd HSTU/script
+
+# 处理全部数据集
+bash data_process.sh
+
+# 只处理某个数据集
+bash data_process.sh Beauty
 ```
 
-## 启动方式
+脚本会在 `data/processed_data/{Dataset}/processed_loo/` 下生成：
+- `train_x_loo.npy`, `train_y_loo.npy` — 训练集（滑动窗口）
+- `valid_x_loo.npy`, `valid_y_loo.npy` — 验证集（倒数第二个 item）
+- `test_x_loo.npy`, `test_y_loo.npy` — 测试集（最后一个 item）
+
+已处理过的数据集会自动跳过，不会重复生成。
+
+## 快速开始
 
 所有命令在 `script/` 目录下执行：
 
 ```bash
 cd HSTU/script
+
+# 1. 数据预处理（首次必须执行）
+bash data_process.sh
+
+# 2. SFT 训练
+bash run.sh Beauty SFT torchrun
+
+# 3. RL 训练（需先完成 SFT）
+bash run.sh Beauty GBPO torchrun
 ```
+
+## 启动方式详解
 
 ### SFT 训练
 
