@@ -13,7 +13,8 @@ HSTU/
 ├── script/
 │   ├── main.py           # 入口脚本
 │   ├── run.sh            # 训练启动脚本 (torchrun 多卡)
-│   └── data_process.sh   # 数据预处理脚本
+│   ├── data_process.sh   # 数据预处理脚本
+│   └── train_din.sh      # DIN 奖励模型训练脚本
 └── data/
     ├── raw_data/         # 原始 JSON 数据 (Beauty, Sports, Toys)
     ├── processed_data/   # 处理后的 LOO .npy 文件
@@ -65,7 +66,10 @@ bash data_process.sh
 # 2. SFT 训练
 bash run.sh Beauty SFT torchrun
 
-# 3. RL 训练（需先完成 SFT）
+# 3. 训练 DIN 奖励模型（RL 前必须执行）
+bash train_din.sh Beauty 0
+
+# 4. RL 训练（需先完成 SFT + DIN）
 bash run.sh Beauty GBPO torchrun
 ```
 
@@ -84,6 +88,21 @@ bash run.sh Beauty SFT nohup
 bash run.sh Sports SFT torchrun
 bash run.sh Toys SFT torchrun
 ```
+
+### DIN 奖励模型训练
+
+RL 训练前需要先训练 DIN 模型作为奖励函数。
+
+```bash
+# 训练单个数据集（指定 GPU）
+bash train_din.sh Beauty 0
+
+# 训练全部数据集（默认在 GPU 0,1,2 上并行）
+bash train_din.sh
+```
+
+模型保存到 `DIN/checkpoint/{Dataset}/best_model_fixed.pth`，日志在 `logs/din/`。
+已有 checkpoint 的数据集会自动跳过。
 
 ### GBPO 强化学习训练
 
@@ -144,7 +163,8 @@ GPUS=8
 
 ## 注意事项
 
-- RL 模式需要先完成 SFT 训练，生成 checkpoint 到 `results/{Dataset}/sft_checkpoints/best_checkpoint.pth`
-- RL 模式使用 DIN 奖励模型，需要 `DIN/checkpoint/{Dataset}/best_model_fixed.pth`
+- 完整流程顺序：**数据预处理 → SFT 训练 → DIN 训练 → RL 训练**
+- RL 模式需要 SFT checkpoint（`results/{Dataset}/sft_checkpoints/best_checkpoint.pth`）
+- RL 模式需要 DIN checkpoint（`DIN/checkpoint/{Dataset}/best_model_fixed.pth`）
 - SFT 默认 batch_size=1024，RL 默认 batch_size=256
-- 日志输出到 `logs_rl/{Dataset}/` 目录
+- HSTU 训练日志输出到 `logs_rl/{Dataset}/`，DIN 训练日志输出到 `logs/din/`
