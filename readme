@@ -17,6 +17,12 @@ git push origin dev-hstu
 git push kuaishou dev-hstu 
 
 
+bash run.sh Beauty SFT nohup
+
+bash run.sh Sports SFT nohup
+
+bash run.sh Toys SFT nohup
+
 
 # 强化学习
 # GBPO
