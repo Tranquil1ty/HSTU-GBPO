@@ -121,7 +121,7 @@ def main():
     parser.add_argument("--eval_batch_size", type=int, default=16)
     parser.add_argument("--eval_beam_size", type=int, default=256)
     parser.add_argument("--sft_patience", type=int, default=20)
-    parser.add_argument("--grpo_patience", type=int, default=100)
+    parser.add_argument("--grpo_patience", type=int, default=30)
     parser.add_argument("--reward_topk", type=int, default=5)
     parser.add_argument("--verbose", type=str, default="true", choices=["true", "false"])
     parser.add_argument("--use_bf16", action="store_true")
