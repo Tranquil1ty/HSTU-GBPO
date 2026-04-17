@@ -15,3 +15,19 @@ git add .
 git commit -m "update"
 git push origin dev-hstu 
 git push kuaishou dev-hstu 
+
+
+
+# 强化学习
+# GBPO
+bash run.sh Beauty GBPO nohup false false beam 5 32
+
+bash run.sh Beauty GRPO nohup false false beam 5 32
+
+bash run.sh Beauty DAPO nohup false false beam 5 32
+
+bash run.sh Beauty GSPO nohup false false beam 5 32
+
+bash run.sh Beauty DUAL_PPO nohup false false beam 5 32
+
+bash run.sh Beauty GPPO nohup false false beam 5 32

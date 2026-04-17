@@ -47,7 +47,7 @@ PY_ARGS="$PY_ARGS --num_candidates $NUM_CANDIDATES --rollout_batch_size $NUM_CAN
 PY_ARGS="$PY_ARGS --verbose $IS_VERBOSE"
 PY_ARGS="$PY_ARGS --reward_topk $REWARD_TOPK"
 if [ "$MODE" != "SFT" ]; then
-    PY_ARGS="$PY_ARGS --gen_strategy $GEN_STRATEGY --dropout 0"
+    PY_ARGS="$PY_ARGS --gen_strategy $GEN_STRATEGY --dropout 0.1"
 fi
 
 # --- 5. Log Path ---
