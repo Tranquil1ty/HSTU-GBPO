@@ -25,7 +25,7 @@ export PYTHONHASHSEED=$SEED
 PY_ARGS="--dataset $DATASET --mode $MODE --base_path $BASE_PATH --seed $SEED"
 PY_ARGS="$PY_ARGS --hidden_size $HIDDEN_SIZE --num_heads $NUM_HEADS --num_layers $NUM_LAYERS --max_seq_len $MAX_SEQ_LEN"
 
-BATCH_SIZE=128
+BATCH_SIZE=256
 LR="1e-3"
 if [ "$MODE" == "SFT" ]; then
     BATCH_SIZE=1024

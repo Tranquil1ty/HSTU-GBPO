@@ -26,21 +26,21 @@ bash run.sh Toys SFT nohup
 
 # 强化学习
 # Beauty
-bash run.sh Beauty GBPO nohup false false beam 5 32 1
+bash run.sh Beauty GBPO nohup false false beam 5 32 
 
-bash run.sh Beauty GRPO nohup false false beam 5 32   1
+bash run.sh Beauty GRPO nohup false false beam 5 32   
 
-bash run.sh Beauty DAPO nohup false false beam 5 32   1
+bash run.sh Beauty DAPO nohup false false beam 5 32   
  
-bash run.sh Beauty GSPO nohup false false beam 5 32  1
+bash run.sh Beauty GSPO nohup false false beam 5 32  
 
-bash run.sh Beauty DUAL_PPO nohup false false beam 5 32  1
+bash run.sh Beauty DUAL_PPO nohup false false beam 5 32  
 
-bash run.sh Beauty GPPO nohup false false beam 5 32 1
+bash run.sh Beauty GPPO nohup false false beam 5 32 
 
 # Sports
 
-bash run.sh Sports GBPO nohup false false beam 5 32 1
+bash run.sh Sports GBPO nohup false false beam 5 32 
 
 bash run.sh Sports GRPO nohup false false beam 5 32
 
@@ -48,20 +48,20 @@ bash run.sh Sports DAPO nohup false false beam 5 32
 
 bash run.sh Sports GSPO nohup false false beam 5 32
 
-bash run.sh Sports DUAL_PPO nohup false false beam 5 32 1
+bash run.sh Sports DUAL_PPO nohup false false beam 5 32 
 
-bash run.sh Sports GPPO nohup false false beam 5 32  1
+bash run.sh Sports GPPO nohup false false beam 5 32  
 
 # Toys
 
-bash run.sh Toys GBPO nohup false false beam 5 32 1
+bash run.sh Toys GBPO nohup false false beam 5 32 
 
 bash run.sh Toys GRPO nohup false false beam 5 32 
 
-bash run.sh Toys DAPO nohup false false beam 5 32 1
+bash run.sh Toys DAPO nohup false false beam 5 32 
 
-bash run.sh Toys GSPO nohup false false beam 5 32 1
+bash run.sh Toys GSPO nohup false false beam 5 32 
 
-bash run.sh Toys DUAL_PPO nohup false false beam 5 32 1
+bash run.sh Toys DUAL_PPO nohup false false beam 5 32 
 
-bash run.sh Toys GPPO nohup false false beam 5 32 1
+bash run.sh Toys GPPO nohup false false beam 5 32 
